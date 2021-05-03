@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;zhang-xiaoxue.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Gemini&quot;,&quot;version&quot;:&quot;8.4.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;Searching...&quot;,&quot;empty&quot;:&quot;We didn&#39;t find any results for the search: ${query}&quot;,&quot;hits_time&quot;:&quot;${hits} results found in ${time} ms&quot;,&quot;hits&quot;:&quot;${hits} results found&quot;}}</script>
+<meta name="description" content="IntroductionA formulation of an optimization problem.  Ensure the probability of meeting constraints is above a certain level. AKA. Restrict the feasible region so that the confidence level of solutio">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Chance Constrained Problem">
+<meta property="og:url" content="https://zhang-xiaoxue.github.io/2020/06/30/Chance%20Constraints/Chance%20Constrained%20Problem/index.html">
+<meta property="og:site_name" content="Xiaoxue Zhang&#39;s Blog">
+<meta property="og:description" content="IntroductionA formulation of an optimization problem.  Ensure the probability of meeting constraints is above a certain level. AKA. Restrict the feasible region so that the confidence level of solutio">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/Lisnol1/PicGo--/master/20190827220601.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Lisnol1/PicGo--/master/20190828190059.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Lisnol1/PicGo--/master/20190828190347.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Lisnol1/PicGo--/master/20190828190706.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Lisnol1/PicGo--/master/20190828190545.png">
+<meta property="og:image" content="c:/Users/adminnus/AppData/Roaming/Typora/typora-user-images/1566959194981.png">
+<meta property="article:published_time" content="2020-06-30T04:00:00.000Z">
+<meta property="article:modified_time" content="2021-05-02T12:54:32.920Z">
+<meta property="article:author" content="Xiaoxue Zhang">
+<meta property="article:tag" content="Reinforcement Learning, Optimization and Control, Intellegent Systems">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Lisnol1/PicGo--/master/20190827220601.png">
+
+
+<link rel="canonical" href="https://zhang-xiaoxue.github.io/2020/06/30/Chance%20Constraints/Chance%20Constrained%20Problem/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;en&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;zhang-xiaoxue.github.io&#x2F;2020&#x2F;06&#x2F;30&#x2F;Chance%20Constraints&#x2F;Chance%20Constrained%20Problem&#x2F;&quot;,&quot;path&quot;:&quot;2020&#x2F;06&#x2F;30&#x2F;Chance Constraints&#x2F;Chance Constrained Problem&#x2F;&quot;,&quot;title&quot;:&quot;Chance Constrained Problem&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>Chance Constrained Problem | Xiaoxue Zhang's Blog</title><script src="/js/config.js"></script>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Xiaoxue Zhang's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">NUS Ph.D.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Deterministic-Reformulations"><span class="nav-number">1.1.</span> <span class="nav-text">Deterministic Reformulations:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Chance-constraints"><span class="nav-number">1.2.</span> <span class="nav-text">Chance constraints</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Single-vs-Joint-Chance-Constraint"><span class="nav-number">1.2.1.</span> <span class="nav-text">Single vs. Joint Chance Constraint</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Solving-Method"><span class="nav-number">1.2.2.</span> <span class="nav-text">Solving Method:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Challenges"><span class="nav-number">1.3.</span> <span class="nav-text">Challenges:</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Structural-Challenges"><span class="nav-number">1.3.1.</span> <span class="nav-text">Structural Challenges</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Structural-Property"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">Structural Property:</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Numerical-Challenges"><span class="nav-number">1.3.2.</span> <span class="nav-text">Numerical Challenges:</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Partial-derivatives"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">Partial derivatives:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Derivatives-for-separated-model-with-Gaussian-data"><span class="nav-number">1.3.2.2.</span> <span class="nav-text">Derivatives for separated model with Gaussian data:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Derivatives-for-bilinear-model-with-Gaussian-data"><span class="nav-number">1.3.2.3.</span> <span class="nav-text">Derivatives for bilinear model with Gaussian data</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Convexity-Challenges"><span class="nav-number">1.3.3.</span> <span class="nav-text">Convexity Challenges</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Stability-Challenges"><span class="nav-number">1.3.4.</span> <span class="nav-text">Stability Challenges</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Applications"><span class="nav-number">1.4.</span> <span class="nav-text">Applications</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Engineering"><span class="nav-number">1.4.1.</span> <span class="nav-text">Engineering:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Power-system-management"><span class="nav-number">1.4.2.</span> <span class="nav-text">Power system management:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Risk-management"><span class="nav-number">1.4.3.</span> <span class="nav-text">Risk management</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Conclusion"><span class="nav-number">1.5.</span> <span class="nav-text">Conclusion</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Xiaoxue Zhang"
+      src="/images/one-piece-1-1.jpg">
+  <p class="site-author-name" itemprop="name">Xiaoxue Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Zhang-Xiaoxue" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Zhang-Xiaoxue" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:xiaoxuezhang@u.nus.edu" title="E-Mail → mailto:xiaoxuezhang@u.nus.edu" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.zhihu.com/people/lisnol" title="https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;lisnol" rel="noopener" target="_blank">知乎</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zhang-xiaoxue.github.io/2020/06/30/Chance%20Constraints/Chance%20Constrained%20Problem/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/one-piece-1-1.jpg">
+      <meta itemprop="name" content="Xiaoxue Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Xiaoxue Zhang's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Chance Constrained Problem
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-06-30 12:00:00" itemprop="dateCreated datePublished" datetime="2020-06-30T12:00:00+08:00">2020-06-30</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-05-02 20:54:32" itemprop="dateModified" datetime="2021-05-02T20:54:32+08:00">2021-05-02</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Chance-Constraints/" itemprop="url" rel="index"><span itemprop="name">Chance Constraints</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>A formulation of an optimization problem.</p>
+<ul>
+<li>Ensure the probability of meeting constraints is above a certain level.</li>
+<li>AKA. Restrict the feasible region so that the confidence level of solution is high.</li>
+</ul>
+<p>$$<br>\begin{aligned}<br>\min &amp;\  f(x, \xi) \<br>\text{s.t. } &amp;\  g(x,\xi) = 0\<br>&amp; \ h(x,\xi) \geq 0<br>\end{aligned}<br>$$</p>
+<p>where $x$ is decision variables, $\xi$ is the vector of uncertainty.</p>
+<h2 id="Deterministic-Reformulations"><a href="#Deterministic-Reformulations" class="headerlink" title="Deterministic Reformulations:"></a>Deterministic Reformulations:</h2><ul>
+<li><p>expectation constraints:<br>$$<br>h(x,\xi) \geq 0 \ \rightarrow \ h(x,\mathbb{E} \xi) \ge 0<br>$$<br>easy to solve, solutions at low costs; But, solutions not robust</p>
+</li>
+<li><p>Worst-case constraints:<br>$$<br>h(x,\xi) \geq 0 \ \rightarrow \ h(x, \xi) \ge 0 \ \  \forall \xi<br>$$<br>absolutely robust solution; But, solutions expensive or not exit</p>
+</li>
+<li><p>Chance Constraints:<br>$$<br>h(x,\xi)\ge 0 \rightarrow \ \ \underbrace{P(h(x,\xi)\ge 0)}_{\phi(x)} \ge p, \  p\in[0,1]<br>$$<br>robust solutions, not too expensive; But, difficult to solve</p>
+</li>
+</ul>
+<h2 id="Chance-constraints"><a href="#Chance-constraints" class="headerlink" title="Chance constraints"></a>Chance constraints</h2><p>Inequality constraints: $P(h(x, \xi) \geq 0) \geq p$ </p>
+<blockquote>
+<p>in some practice, output variables $y$ (belongs to $x$) should be $y_\min \leq y(\xi) \leq y_\max$. Then, $P(y_\min \leq y(\xi) \leq y_\max) \geq p$</p>
+</blockquote>
+<p>Random Right-hand Side: Use distribution function $F_\xi (h(\xi \ge p))$</p>
+<h3 id="Single-vs-Joint-Chance-Constraint"><a href="#Single-vs-Joint-Chance-Constraint" class="headerlink" title="Single vs. Joint Chance Constraint"></a>Single vs. Joint Chance Constraint</h3><p>since both $h(x,\xi)$ and $y(\xi)$ are vectors,</p>
+<ul>
+<li><p>individual chance constraint:<br>$$<br>h_i(x,\xi) \geq 0 \rightarrow P(h_i(x,\xi) \geq 0)\geq p \quad (i=1,\cdots, m)<br>$$<br>Random right-hand side: $h_i(x,\xi) = f_i(x)-\xi_i  $</p>
+<p>$P(f_i(x)\ge \xi_i) = P(h_i(x-\xi)\ge 0)\ge p, (i=1,\cdots,m) \iff f_i(x)\ge \underbrace{q_i(p)}_{p-\text{quantile of } \xi_i} \ (i=1, \cdots, m)$</p>
+<p>Individual chance constraints are easy to solve, however, they only guarantee that each line satisfies the constraint to a certain confidence level.</p>
+</li>
+<li><p>Joint chance constraint:<br>$$<br>h_i(x,\xi) \geq 0 \rightarrow P(h_i(x,\xi) \geq 0 \ (i=1,\cdots, m))\geq p \quad<br>$$<br> Joint chance constraint ensures that the constraint as a whole is satisfied to a certain confidence level, however, it is incredibly difficult to solve, even numerically.</p>
+</li>
+</ul>
+<h3 id="Solving-Method"><a href="#Solving-Method" class="headerlink" title="Solving Method:"></a>Solving Method:</h3><ul>
+<li><p>Simple case (decision and random variables can be decoupled):</p>
+<p>chance constraints can be relaxed into deterministic constraints using probability density functions (pdf). Then, use LP or NLP to solve.</p>
+<ul>
+<li><p>Linear <u>( $h$ is leaner in $\xi$ )</u>, i.e., $P(h(x)\ge 0)\ge p$</p>
+</li>
+<li><p>Two types:</p>
+<ul>
+<li>separable model: $P(y(x)\ge A\xi)\ge p$</li>
+<li>bilinear model: $P(\Xi \cdot x \geq b) \geq p$</li>
+</ul>
+</li>
+<li><p>calculate the probability by using the probability density function (pdf) and substitute the left hand side of the constraint with a deterministic expression</p>
+<ul>
+<li>PDF :<ul>
+<li>statistical regression (abundant data), </li>
+<li>interpolation and extrapolation (few data)</li>
+<li>Marginal distribution function (when uncertain variables has correlations)</li>
+</ul>
+</li>
+<li>Feasible region depends on confidence level<ul>
+<li>high confidence level $\rightarrow$ small feasible region</li>
+<li>low confidence level $\rightarrow$ larger feasible region</li>
+<li>can make different confidence level with important</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Nonlinear</p>
+<p>relax problem by transforming into deterministic NLP problem.</p>
+<ul>
+<li>Solving nonlinear chance constrained problem is difficult, because nonlinear propogation makes it hard to obtain the distribution if output variables when distribution of uncertainty is unknown.<ul>
+<li>strategy: back-mapping </li>
+<li>robust optimization</li>
+<li>sample average approximation</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Complex case (decision and random variables interact and cannot decouple)</p>
+<ul>
+<li>impossible to solve.</li>
+</ul>
+</li>
+</ul>
+<h2 id="Challenges"><a href="#Challenges" class="headerlink" title="Challenges:"></a>Challenges:</h2><h3 id="Structural-Challenges"><a href="#Structural-Challenges" class="headerlink" title="Structural Challenges"></a>Structural Challenges</h3><h4 id="Structural-Property"><a href="#Structural-Property" class="headerlink" title="Structural Property:"></a>Structural Property:</h4><ul>
+<li><p>Probability function: $\varphi(x) :=P(h(x, \xi) \geq 0)$</p>
+</li>
+<li><p>set of feasible decisions: $M :=\left{x \in \mathbb{R}^{n} | \varphi(x) \geq p\right}$</p>
+<p>Proposition ====(Upper Semicontinuity, closeness)<br>if $h_i$ are usc, then so is $\varphi$. Then, $M$ is closed</p>
+<img src="https://raw.githubusercontent.com/Lisnol1/PicGo--/master/20190827220601.png" style="zoom:40%">
+
+<p>==Proposition==<br>if $h_i$ are continuous, and $P(h_i(x,\xi)=0)=0, \forall x \in R^n \forall i \in {1,\cdots,s}$, then $\phi$ is continuous too.</p>
+<p>==Proposition==<br>if $\xi$ has pdf $f_\xi$, i.e., $F_\xi(z)=\int_{-\inf}^{z} f_\xi(x) dx$, then $F_\xi$ is continuous.</p>
+</li>
+</ul>
+<p>==Theorem== (Wang 1985, Romisch/Schultz 1993)<br>  If $\xi$ has a density $f_\xi$, then $F_\xi$ is Lipschitz continuous if and only if all marginal densities $f_{\xi_i}$ are essentially bounded.</p>
+<p>  ==Theorem (R.H./R¨omisch 2010)==<br>  If $\xi$ has a density $f_\xi$ such that $f^{−1/s}_\xi$ is convex, then $F_\xi$ is Lipschitz continuous</p>
+<p>  Assumption satisfied by most prominent multivariate distributions:<br>  Gaussian, Dirichlet, t, Wishart, Gamma, lognormal, uniform</p>
+<h3 id="Numerical-Challenges"><a href="#Numerical-Challenges" class="headerlink" title="Numerical Challenges:"></a>Numerical Challenges:</h3><p>$$<br>P(y(x)\ge \xi)\ge p = P(h(\xi \leq x)\ge p) = F_\xi (h(x) \ge p)<br>$$</p>
+<p>If $\xi \sim \mathcal{N}(\mu, \Sigma)$ with $\Sigma$ positive definite (regular Gaussian),<br>$$<br>\frac{\partial F_{\xi}}{\partial z_{i}}(z)=f_{\xi_{i}}\left(z_{i}\right) \cdot F_{\tilde{\xi}\left(z_{i}\right)}\left(z_{1}, \ldots, z_{i-1}, z_{i+1} \ldots, z_{s}\right) \quad(i=1, \ldots, s)<br>$$<br>Efficient method to compute $F_\xi$ (and $\nabla F_{\xi}$) :</p>
+<ul>
+<li><p>code by A. Genz. computes Gaussian probabilities of rectangles:</p>
+<p>$\mathbb{P}(\xi \in[a, b]) \quad\left(F_{\xi}(z)=\mathbb{P}(\xi \in(-\infty, z])\right.$</p>
+<p>allows to consider problems with up to a few hundred random variables.</p>
+</li>
+<li><p>cope with more complicated models, like $\mathbb{P}(h(x) \geq A \xi) \geq p, \quad \mathbb{P}(\Xi \cdot x \geq b) \geq p$:</p>
+</li>
+</ul>
+<p>Compute Derivatives for Gaussian Probabilities of Rectangles</p>
+<p>Let $\xi \sim \mathcal{N}(\mu, \Sigma)$ with $\Sigma$ positive definite.  Consider a two-sided probabilistic constraint: $\mathbb{P}(\xi \in[a(x), b(x)]) \geq p$. Then,     $\alpha_{\xi}(a(x), b(x)) \geq p, \quad$ where $\quad \alpha_{\xi}(a, b) :=\mathbb{P}(\xi \in[a, b])$</p>
+<h4 id="Partial-derivatives"><a href="#Partial-derivatives" class="headerlink" title="Partial derivatives:"></a>Partial derivatives:</h4><ul>
+<li><p>Method 1:</p>
+<p>Reduction to distribution functions, then use known gradient formula.<br>$$<br>\alpha_{\xi}(a, b)=\sum\limits_{i_{1}, \ldots, i_{s} \in{0,1}}(-1)^{\left[s+\sum_{j=1}^{s} i_{j}\right]} F_{\xi}\left(y_{i_{1}}, \ldots, y_{i_{s}}\right), \quad y_{i_{j}} :=\left{<br>\begin{array}{ll}<br>{a_{j}} &amp; {\text { if } i_{j}=0} \<br>{b_{j}} &amp; {\text { if } i_{j}=1}<br>\end{array}<br>\right.<br>$$<br>For dimension $s$, there are $2^s$ terms in the sum. Not practicable!</p>
+</li>
+<li><p>Method 2:<br>$$<br>\alpha_{\xi}(a, b)=\mathbb{P}\left(\left(\begin{array}{c}{\xi} \ {-\xi}\end{array}\right) \leq\left(\begin{array}{c}{b} \ {-a}\end{array}\right)\right), \quad\left(\begin{array}{c}{\xi} \ {-\xi}\end{array}\right) \sim \mathcal{N}\left(\left(\begin{array}{c}{\mu} \ {-\mu}\end{array}\right),\left(\begin{array}{cc}{\Sigma} &amp; {-\Sigma} \ {-\Sigma} &amp; {\Sigma}\end{array}\right)\right)<br>$$<br>$\Longrightarrow$ Singular normal distribution, gradient formula not available</p>
+<p>==<strong>Proposition (Ackooij/R.H./M¨ oller/Zorgati 2010)</strong>==<br>Let $\xi \sim \mathcal{N}(\mu, \Sigma)$ with $\Sigma$ positive definite and $f_\xi$ the corresponding density. Then, $\frac{\partial \alpha_{\xi}}{\partial b_{i}}(a, b)=f_{\xi_{i}}\left(b_{i}\right) \alpha_{\tilde{\xi}}\left(b_{i}\right)(\tilde{a}, \tilde{b}) ; \quad \frac{\partial \alpha_{\xi}}{\partial a_{i}}(a, b)=-f_{\xi_{i}}\left(a_{i}\right) \alpha_{\tilde{\xi}}\left(a_{i}\right)(\tilde{a}, \tilde{b})$ with the tilda-quantities defined as in the gradient formula for Gaussian distribution functions.</p>
+<p>$\Longrightarrow$ Use Genz’ code to calculate $\alpha_\xi$ and $\nabla_{a, b} \alpha_{\xi}$ at a time.</p>
+</li>
+</ul>
+<h4 id="Derivatives-for-separated-model-with-Gaussian-data"><a href="#Derivatives-for-separated-model-with-Gaussian-data" class="headerlink" title="Derivatives for separated model with Gaussian data:"></a>Derivatives for separated model with Gaussian data:</h4><p>Let $\xi \sim \mathcal{N}(\mu, \Sigma)$ with $\Sigma$ positive definite and consider the probability function:<br>$$<br>\beta_{\xi, A}(x) :=\mathbb{P}(A \xi \leq x)<br>$$<br>If the rows of $A$ are linearly independent, then put $\eta :=A \xi \sim \mathcal{N}\left(A \mu, A \Sigma A^{T}\right)$, then<br>$$<br>\Longrightarrow \quad \beta_{\xi, A}(x)=F_{\eta}(x)\quad   \text{regular Gaussian distribution function}<br>$$<br>otherwise, $F_\eta$ is a singular Gaussian distribution function (gradient formula not available)</p>
+<p>==<strong>Theorem (R.H./M¨ oller 2010, see talk by A. M¨ oller, Thursday, 3.20 p.m., R. 1020)</strong>==<br>$\frac{\partial \beta_{\xi, A}}{\partial x_{i}}(x)=f_{A_{i} \xi}\left(x_{i}\right) \beta_{\tilde{\xi}, \tilde{A}}(\tilde{x})$ where $\tilde{\xi} \sim \mathcal{N}\left(0, l_{s-1}\right)$ and $\tilde{A}$, $\tilde{x}$ can be calculated explicitly from $A$ and $x$.</p>
+<p>use e.g., Deak’s code for calculating normal probabilities of convex sets.</p>
+<h4 id="Derivatives-for-bilinear-model-with-Gaussian-data"><a href="#Derivatives-for-bilinear-model-with-Gaussian-data" class="headerlink" title="Derivatives for bilinear model with Gaussian data"></a>Derivatives for bilinear model with Gaussian data</h4><p>probability function: $\gamma(x) :=\mathbb{P}(\Xi x \leq a)$ with normally distributed $(m,s)$ coefficient matrix. Let $\xi_i$ be the $i$th row of $\Xi$\</p>
+<p>$$<br>\begin{array}{rCl}<br>\gamma(x) &amp;=F_{\eta}(a) \ \nabla \gamma(x) &amp;=\sum_{i=1}^{m} \frac{\partial F_{\eta}}{\partial z_{i}}(\beta(x)) \nabla \beta_{i}(x)+\sum_{i, j=1}^{m} \frac{\partial^{2} F_{\eta}}{\partial z_{i} \partial z_{j}}(\beta(x)) \nabla R_{i j}(x)<br>\end{array}<br>$$</p>
+<p>$$<br>\begin{aligned} \eta &amp; \sim \mathcal{N}(0, R(x)) \ \mu(x) &amp;=\left(\mathbb{E} \xi_{i}^{T} x\right)<em>{i=1}^{m} \ \Sigma(x) &amp;=\left(x^{T} \operatorname{Cov}\left(\xi</em>{i}, \xi_{j}\right) x\right)<em>{i, j=1}^{m} \ D(x) &amp;=\operatorname{diag}\left(\Sigma</em>{i i}^{-1 / 2}(x)\right)_{i=1}^{m} \ R(x) &amp;=D(x) \Sigma(x) D(x) \ \beta(x) &amp;=D(x)(a-\mu(x)) \end{aligned}<br>$$</p>
+<p><img src="https://raw.githubusercontent.com/Lisnol1/PicGo--/master/20190828190059.png" style="zoom:35%"> <img src="https://raw.githubusercontent.com/Lisnol1/PicGo--/master/20190828190347.png" style="zoom: 35%">  </p>
+<p><img src="https://raw.githubusercontent.com/Lisnol1/PicGo--/master/20190828190706.png" style="zoom:38%"> <img src="https://raw.githubusercontent.com/Lisnol1/PicGo--/master/20190828190545.png" style="zoom: 36%"></p>
+<blockquote>
+<p>e.g. hold constraints and gradients constant while calculating probabilities. [No closed-form analytical representation of probabilities]</p>
+</blockquote>
+<h3 id="Convexity-Challenges"><a href="#Convexity-Challenges" class="headerlink" title="Convexity Challenges"></a>Convexity Challenges</h3><p>$$<br>P(y(x)\ge \xi)\ge p = P(h(\xi \leq x)\ge p) = F_\xi (h(x) \ge p)<br>$$</p>
+<ul>
+<li><p>Global optimization: if the optimization problem is convex, the local optimum is global optimum; otherwise, methods such as McCormick Envelope Approximation should be used.</p>
+<p>if $F_\xi (h(x) \ge p)$ is concave, the optimization problem is convex.</p>
+<p><u>Sufficient:</u></p>
+<ol>
+<li>components $h_j$ concave: e.g., $h$ is a linear mapping</li>
+<li>$F_\xi $ increasing: automatic (distribution function)</li>
+<li>$F_\xi$ concave: Never, because pdf bounded by 0 and 1.</li>
+</ol>
+<p>If <u>exist a strictly increasing function</u> $\varphi: \mathbb{R}<em>{+} \rightarrow \mathbb{R} $ such that $\varphi \circ F</em>{\xi}$ is concave:</p>
+<p>​    i.e., $F_\xi (h(x) \ge p) \iff \varphi(F_\xi (h(x)) \ge \varphi(p)$. </p>
+<p>​    then,  $\underbrace{\varphi \circ F_{\xi}}_{\text {increasing } \atop \text { concave }} \circ h$ is concave if the components $h_i$ are concave</p>
+<ul>
+<li><p>potential candidates: $\varphi = \log$, $\varphi=-(\cdot)^{-n}$</p>
+<img src="C:\Users\adminnus\AppData\Roaming\Typora\typora-user-images\1566959194981.png" style="zoom: 80%"></li>
+</ul>
+<p>==<strong>Theorem (Pr´ekopa 1973 )</strong>==<br>Log-concavity of the density implies log-concavity of the distribution function.</p>
+<p><u>example log-concave distribution</u>: Normal, Gaussian, Dirichlet, Student, lognormal, Gamma, uniform, Wishart</p>
+<p><strong>Separable model:</strong></p>
+<p>==<strong>Corollary (Convexity in the separable model)</strong>==<br>Consider the feasible set $M := {x \in \mathbb{R}^n | P(A\xi \leq h(x)) \geq p}$. Let $\xi$ have a density $f_\xi$ such that $\log f_\xi$ is concave and let the $h_i$ be concave (e.g., $h$ linear). Then, $M$ is convex for any $p\in[0, 1]$.</p>
+<p><strong>Bilinear model:</strong></p>
+<p>feasible set $M :=\left{x \in \mathbb{R}^{n} | \mathbb{P}(\Xi x \leq a) \geq p\right}$</p>
+</li>
+</ul>
+<p>==<strong>Theorem (Van de Panne/Popp, Kataoka 1963, Kan 2002, Lagoa/Sznaier 2005)</strong>==<br>  Let $\Xi$  have one row only which has an elliptically symmetric or log-concave symmetric distribution (e.g., Gaussian). Then, $M$ is convex for $p\ge 0.5$.</p>
+<p>  ==<strong>Theorem (R.H./Strugarek 2008)</strong>==<br>Let the rows $\xi_i$ of $\Xi$ be Gaussian according to $\xi_i \sim \mathcal{N}(\mu_i,\Sigma_i)$. If the $\xi_i$ are pairwise independent, then $M$ is convex for $p &gt; \Phi(\max{\sqrt{3},\tao}), where</p>
+<ul>
+<li>$\Phi =$ 1-dimensional standard normal distribution function</li>
+<li>$\tau=\max <em>{i} \lambda</em>{\max }^{(i)}\left[\lambda_{\min }^{(i)}\right]^{-3 / 2}\left|\mu_{i}\right|$<br>-$\lambda_{\max }^{(i)}, \lambda_{\min }^{(i)} :=$ largest and smallest eigenvalue of $\Sigma_i$.<br>Moreover, $M$ is compact for $p&gt;\min <em>{i} \Phi\left(\left|\mu</em>{i}\right|<em>{\Sigma</em>{i}^{-1}}\right)$</li>
+</ul>
+<blockquote>
+<p>A challenging issue comes in when the distribution is uniform or normal with independent components, since these may lack strong log concavity in certain circumstances. Furthermore, it should be noted that the Student’s t-distribution, the Cauchy distribution, the Pareto distribution, and the log-normal distribution are not log concave.</p>
+</blockquote>
+<h3 id="Stability-Challenges"><a href="#Stability-Challenges" class="headerlink" title="Stability Challenges"></a>Stability Challenges</h3><p>Distribution of $\xi$ rarely known $\Longrightarrow$ Approximation by some $\eta$ $\Longrightarrow$ Stability?</p>
+<p>==<strong>Theorem (R.H./W.R¨omisch 2004)</strong>==</p>
+<ul>
+<li>$f$ convex, $C$ convex, closed, $\xi$ has log-concave density</li>
+<li>\Psi(\xi)$ nonempty and bounded</li>
+<li>$\exists x \in C : \quad \mathbb{P}(\xi \leq A x)&gt;p$ (Slater point)<br>Then, $\Psi$ is upper semicontinuous at $\xi$:<br>$$<br>\Psi(\eta) \subseteq \Psi(\xi)+\varepsilon \mathbb{B} \quad \text { for } \quad \sup <em>{z \in \mathbb{R}^{s}}\left|F</em>{\xi}(z)-F_{\eta}(z)\right|&lt;\delta<br>$$<br>If in addition</li>
+<li>$f$ convex-quadratic, $C$ polyhedron,</li>
+<li>$\xi$ has strongly log-concave distribution function,<br>then $\Psi$ is locally Hausdorff-Holder continuous at $\xi$:</li>
+</ul>
+<p>$$<br>\left.d_{\text {Haus }}(\psi(\eta), \psi(\xi)) \leq L \sqrt{\sup <em>{z \in \mathbb{R}^{s}}\left|F</em>{\xi}(z)-F_{\eta}(z)\right|} \quad \text { (locally around } \xi\right)<br>$$</p>
+<p>pdf is nor precise, most is approximation. </p>
+<ul>
+<li>slight changes in distribution may cause major changes to optimum</li>
+<li>if assumed distribution is slightly different from actual distribution, not stable.</li>
+<li> In order to achieve Hölder- or Lipschitz stability one has to impose further structural conditions, such as strong log-concavity, strict complementarity, and C1,1-differentiability.</li>
+</ul>
+<h2 id="Applications"><a href="#Applications" class="headerlink" title="Applications"></a>Applications</h2><h3 id="Engineering"><a href="#Engineering" class="headerlink" title="Engineering:"></a>Engineering:</h3><p>UGV, UAV: Optimal Navigation and Reliable Obstacles Avoidance</p>
+<p>System description:<br>$$<br>\begin{aligned}<br>\dot x &amp; = f(x,u,\xi)\<br>0 &amp; = g(x,u,\xi)<br>\end{aligned}<br>$$<br>$\xi$ may be:</p>
+<ul>
+<li>random obstacles</li>
+<li>sensor measurement errors</li>
+<li>state generated errors</li>
+</ul>
+<p>Probability density function of these variables are estimated based on previous data. and formulated into chance constraints.</p>
+<p> Based on these constraints, unmanned vehicles can travel through a specific region with the shortest distance while avoiding random obstacles at a high confidence level.2</p>
+<h3 id="Power-system-management"><a href="#Power-system-management" class="headerlink" title="Power system management:"></a>Power system management:</h3><h3 id="Risk-management"><a href="#Risk-management" class="headerlink" title="Risk management"></a>Risk management</h3><h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>The chance-constraint method is a great way to solve optimization problems due to its robustness. It allows one to set a desired confidence level and take into account trade-off between two or more objectives. However, it can be extremely difficult to solve. Probability density functions are often difficult to formulate, especially for the nonlinear problems. Issues with convexity and stability of these questions mean that small deviations from the actual density function could cause major changes in the optimal solution. Further complications are added when the variables with and without uncertainty can not be decoupled. Due to these complications, there’s no single approach to solving chance-constraint problems. <u>Though the most common approach to simple questions is to transform the chance constraints into deterministic functions by decoupling the variables with and without uncertainty and using probability density functions.</u></p>
+<p>This approach has many applications in the engineering field and the finance field. Namely, it is widely used in energy management, risk management, and more recently, determination of production level, performance of industrial robots, and performance of unmanned vehicle. A lot of research in the area focuses on solving nonlinear dynamic questions with chance constraints.</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>Xiaoxue Zhang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://zhang-xiaoxue.github.io/2020/06/30/Chance%20Constraints/Chance%20Constrained%20Problem/" title="Chance Constrained Problem">https://zhang-xiaoxue.github.io/2020/06/30/Chance Constraints/Chance Constrained Problem/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/07/30/Model%20Predictive%20Control/Variational%20Inference/" rel="next" title="Variational Inference">
+                  Variational Inference <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+<script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xiaoxue Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div><script color="0,0,255" opacity="0.5" zIndex="-1" count="199" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{&quot;enable&quot;:true,&quot;tags&quot;:&quot;none&quot;,&quot;single_dollars&quot;:true,&quot;cjk_width&quot;:0.9,&quot;normal_width&quot;:0.6,&quot;append_css&quot;:true,&quot;js&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;mathjax@3.1.4&#x2F;es5&#x2F;tex-mml-chtml.js&quot;}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
