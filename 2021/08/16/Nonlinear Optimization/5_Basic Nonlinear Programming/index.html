@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/Academy-favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Academy-favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/Academy-favicon.png">
+  <link rel="mask-icon" href="/images/Academy-favicon" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;zhang-xiaoxue.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Muse&quot;,&quot;version&quot;:&quot;8.4.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;right&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;Searching...&quot;,&quot;empty&quot;:&quot;We didn&#39;t find any results for the search: ${query}&quot;,&quot;hits_time&quot;:&quot;${hits} results found in ${time} ms&quot;,&quot;hits&quot;:&quot;${hits} results found&quot;}}</script>
+<meta name="description" content="Karush-Kuhn-Tucker (KKT) necessary conditions for local minimizers that generalize the Lagrange Multiplier Method. The KKT necessary conditions are useful in locating possible candidates for a global">
+<meta property="og:type" content="article">
+<meta property="og:title" content="5. Basic Nonlinear Programming">
+<meta property="og:url" content="https://zhang-xiaoxue.github.io/2021/08/16/Nonlinear%20Optimization/5_Basic%20Nonlinear%20Programming/index.html">
+<meta property="og:site_name" content="Xiaoxue Zhang - NUS">
+<meta property="og:description" content="Karush-Kuhn-Tucker (KKT) necessary conditions for local minimizers that generalize the Lagrange Multiplier Method. The KKT necessary conditions are useful in locating possible candidates for a global">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/Lisnol1/PicGo--/master/20190924224456.png">
+<meta property="article:published_time" content="2021-08-16T04:00:00.000Z">
+<meta property="article:modified_time" content="2021-08-16T07:01:34.380Z">
+<meta property="article:author" content="Xiaoxue Zhang">
+<meta property="article:tag" content="Reinforcement Learning, Optimization and Control, Intellegent Systems">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Lisnol1/PicGo--/master/20190924224456.png">
+
+
+<link rel="canonical" href="https://zhang-xiaoxue.github.io/2021/08/16/Nonlinear%20Optimization/5_Basic%20Nonlinear%20Programming/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;en&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;zhang-xiaoxue.github.io&#x2F;2021&#x2F;08&#x2F;16&#x2F;Nonlinear%20Optimization&#x2F;5_Basic%20Nonlinear%20Programming&#x2F;&quot;,&quot;path&quot;:&quot;2021&#x2F;08&#x2F;16&#x2F;Nonlinear Optimization&#x2F;5_Basic Nonlinear Programming&#x2F;&quot;,&quot;title&quot;:&quot;5. Basic Nonlinear Programming&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>5. Basic Nonlinear Programming | Xiaoxue Zhang - NUS</title><script src="/js/config.js"></script>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Xiaoxue Zhang - NUS</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">NUS Ph.D.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#5-1-KKT-necessary-conditions"><span class="nav-number">1.</span> <span class="nav-text">5.1 KKT necessary conditions</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-1-KKT-first-order-necessary-conditions"><span class="nav-number">1.1.</span> <span class="nav-text">5.1.1 KKT first order necessary conditions:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-2-KKT-second-order-necessary-condition"><span class="nav-number">1.2.</span> <span class="nav-text">5.1.2 KKT second order necessary condition:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-2-Steps"><span class="nav-number">1.3.</span> <span class="nav-text">5.1.2 Steps:</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-2-Interpretation-of-Lagrange-Multipliers"><span class="nav-number">2.</span> <span class="nav-text">5.2 Interpretation of Lagrange Multipliers</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-3-KKT-sufficient-conditions"><span class="nav-number">3.</span> <span class="nav-text">5.3 KKT sufficient conditions</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-4-KKT-for-constrained-convex-programming-problems"><span class="nav-number">4.</span> <span class="nav-text">5.4 KKT for constrained convex programming problems</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-4-1-Linear-equality-constrained-convex-program"><span class="nav-number">4.1.</span> <span class="nav-text">5.4.1 Linear equality constrained convex program</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-4-2-Linear-amp-Convex-quadratic-programming-problems"><span class="nav-number">4.2.</span> <span class="nav-text">5.4.2 Linear &amp; Convex quadratic programming problems</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-5-Proof-of-KKT-1st-necessary-conditions"><span class="nav-number">5.</span> <span class="nav-text">5.5 Proof of KKT 1st necessary conditions</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-6-Summary"><span class="nav-number">6.</span> <span class="nav-text">5.6 Summary</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Xiaoxue Zhang"
+      src="/images/photo_blue.jpg">
+  <p class="site-author-name" itemprop="name">Xiaoxue Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Zhang-Xiaoxue" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Zhang-Xiaoxue" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:xiaoxuezhang@u.nus.edu" title="E-Mail → mailto:xiaoxuezhang@u.nus.edu" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.linkedin.com/in/xiaoxue-zhang-5233b611a/" title="https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;xiaoxue-zhang-5233b611a&#x2F;" rel="noopener" target="_blank">Linkedin</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.zhihu.com/people/lisnol" title="https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;lisnol" rel="noopener" target="_blank">知乎</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/Zhang-Xiaoxue" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zhang-xiaoxue.github.io/2021/08/16/Nonlinear%20Optimization/5_Basic%20Nonlinear%20Programming/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/photo_blue.jpg">
+      <meta itemprop="name" content="Xiaoxue Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Xiaoxue Zhang - NUS">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          5. Basic Nonlinear Programming
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-08-16 12:00:00 / Modified: 15:01:34" itemprop="dateCreated datePublished" datetime="2021-08-16T12:00:00+08:00">2021-08-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Nonlinear-Optimization/" itemprop="url" rel="index"><span itemprop="name">Nonlinear Optimization</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>Karush-Kuhn-Tucker (KKT) necessary conditions for local minimizers that generalize the Lagrange Multiplier Method. The KKT necessary conditions are useful in locating possible candidates for a global minimizer.</p>
+<p>Constraint qualification</p>
+<ul>
+<li><p>Active constraints</p>
+</li>
+<li><p><strong>Regular point :</strong> </p>
+<p>$x^*$ be feasible point of NLP, Let $J(x^*) = \left{ j\in {1, \cdots, p} : h_j(x^*)=0 \right}$ be index set of active constraints at $x^*$. The set of gradient vectors<br>$$<br>{ \nabla g_i(x^*) : i=1, 2, \cdots, m } \cup {\nabla h_j(x^*) : j\in J(x^*) }<br>$$<br>is linearly independent. $x^*$ is regular point.</p>
+</li>
+</ul>
+<p>Linearly Independence Constraint Qualification (LICQ)</p>
+<ul>
+<li>check whether linear independence, check whether the matrix of all gradient vector of active constraints is full rank.</li>
+</ul>
+<h1 id="5-1-KKT-necessary-conditions"><a href="#5-1-KKT-necessary-conditions" class="headerlink" title="5.1 KKT necessary conditions"></a>5.1 KKT necessary conditions</h1><p>We state the <u>Karush-Kuhn-Tucker necessary conditions</u> for a local minimizer $x^∗$ at which the <u>regularity condition</u> holds</p>
+<h2 id="5-1-1-KKT-first-order-necessary-conditions"><a href="#5-1-1-KKT-first-order-necessary-conditions" class="headerlink" title="5.1.1 KKT first order necessary conditions:"></a>5.1.1 KKT first order necessary conditions:</h2><p>$$<br>\begin{aligned} \nabla f\left(\mathrm{x}^{<em>}\right)+\sum_{i=1}^{m} \lambda_{i}^{</em>} \nabla g_{i}\left(\mathrm{x}^{<em>}\right)+\sum_{j=1}^{p} \mu_{j}^{</em>} \nabla h_{j}\left(\mathrm{x}^{<em>}\right)  = 0 \ \mu_{j}^{</em>} \geq 0,  &amp;\ \forall j=1,2, \cdots, p \ \mu_{j}^{<em>}=0,  &amp; \ \forall j \notin J\left(\mathrm{x}^{</em>}\right) \end{aligned}<br>$$</p>
+<blockquote>
+<ol>
+<li><p>For NLP with no equality constraints, active constraint is only $h_1(x)\leq 0$. So, $\nabla f(x^*) + \mu_1^* \nabla h_1(x^*) = 0$,</p>
+<p>the direction of steep descent $-\nabla f(x^*)$ must be in same direction as $\nabla h_1(x^*)$ onward normal to boundary.</p>
+</li>
+<li><p>For NLP with no equality constraints, only two active constraints, $\nabla f(x^*) + \mu_1^* \nabla h_1(x^*) + \mu_2^* \nabla h_2(x^*) = 0$.</p>
+<p>the direction of steep descent $-\nabla f(x^*)$ must lie in the cone spanned by the outward normals $\nabla h_1(x^*), \nabla h_2(x^*)$ to the boundaries $h_1(x)=0$ and $h_2(x)=0$.</p>
+</li>
+<li><p>For NLP with no equality constraints, $x^*$ is interior of feasible region, $\nabla f(x^*)=0$, as unconstrained minimization problem.</p>
+</li>
+</ol>
+</blockquote>
+<h2 id="5-1-2-KKT-second-order-necessary-condition"><a href="#5-1-2-KKT-second-order-necessary-condition" class="headerlink" title="5.1.2 KKT second order necessary condition:"></a>5.1.2 KKT second order necessary condition:</h2><p>$$<br>{\qquad H_{L}\left(\mathrm{x}^{<em>}\right) :=H_{f}\left(\mathrm{x}^{</em>}\right)+\sum_{i=1}^{m} \lambda_{i}^{<em>} H_{g_{i}}\left(\mathrm{x}^{</em>}\right)+\sum_{j=1}^{p} \mu_{j}^{<em>} H_{h_{j}}\left(\mathrm{x}^{</em>}\right)}<br>$$</p>
+<p>If $\mathbb x^* $ is a local minimizer, then<br>$$<br>{\mathrm{y}^{T} H_{L}\left(\mathrm{x}^{<em>}\right) \mathrm{y} \geq 0}<br>$$<br>for all $\mathbb y\in T(\mathbb x^</em>)$, where<br>$$<br>T(\mathbb x^*) = \left{ \mathbb y\in \mathbb{R}^n:<br>\begin{array}{}<br>\nabla g_{i}\left(\mathrm{x}^{<em>}\right)^{T} \mathbf{y} = 0, i=1,2, \cdots, m \<br>\nabla h_{j}\left(\mathrm{x}^{</em>}\right)^{T} \mathrm{y} =  0, j \in J\left(\mathrm{x}^{*}\right)<br>\end{array} \right}<br>$$</p>
+<blockquote>
+<p>in fact, $T(\mathbb x^*)$ is tangent plane</p>
+<ol>
+<li><p>set $T(x^*)$ consists of vectors in the tangent space to $S$ at $x^*$.</p>
+<p>Normal space $N(x^*)$ is subspace spanned by $\nabla g_1(x^*), \cdots, \nabla g_m (x^*), \nabla h_j(x^*), \forall j \in J(x^*)$.</p>
+<p>Tangent space $T(x^*) = { \mathbb y: \mathbb u^T \mathbb y = 0, \forall \mathbb u \in N(\mathbb x^*) }$.</p>
+</li>
+<li><p>For NLP with no equality constraints, if $x^*$ is in interior of feasible region, $T(x^*) = \mathbb R^*$. 2nd KKT becomes $H_L(x^*) = H_f(x^*)$ must be positive semidefinite.</p>
+</li>
+</ol>
+</blockquote>
+<p>​    easier check for 2nd KKT.</p>
+<p>​    matrix $\mathcal D(\mathbb x^*) = \left( \nabla g_1(\mathbb x^*), \cdots, \nabla g_m(\mathbb x^*), [\nabla h_j(\mathbb x^*) : j \in J(\mathbb x^*)] \right)$<br>$$<br>\mathbb y^T H_L(\mathbb x^*) \mathbb y \ge 0, \forall \mathbb y \in T(\mathbb x^*) \iff Z(\mathbb x^*)^T H_L(\mathbb x^*) Z(\mathbb x^*) \text{ is positive semidefinite}<br>$$<br>​    where $Z(\mathbb x^*)$ is a matrix whose columns forms a basis of the null space of $\mathcal D (\mathbb x^*)$. $T(x) = Z(x) u$</p>
+<h2 id="5-1-2-Steps"><a href="#5-1-2-Steps" class="headerlink" title="5.1.2 Steps:"></a>5.1.2 Steps:</h2><ol>
+<li>Check regularity condition</li>
+<li>verify KKT first order necessary condition.</li>
+<li>verify KKT second order necessary condition<ol>
+<li>Hessian matrix</li>
+<li>basis of null space of $\mathcal D(\mathbb x^*)^T$</li>
+<li>definiteness check</li>
+</ol>
+</li>
+</ol>
+<p>Since the regularity condition for the KKT Theorem is not satisfied, the global minimizer $x^∗$ may not be found among the KKT points.</p>
+<p><u><em><strong>KKT necessary conditions can be used to find global minimizers.</strong></em></u></p>
+<p>==Corollary 2.3==</p>
+<p>Suppose the following two conditions hold:</p>
+<ol>
+<li>a global minimizer $x^∗$ is known to exist for an NLP.</li>
+<li>$x^∗$ is a regular point.</li>
+</ol>
+<p>Then $x^∗$ is a KKT point, i.e. there exists $λ^∗ ∈ \mathbb R^m$ and $μ^∗ ∈ \mathbb R^p$ such that the following conditions hold.<br>$$<br>\begin{array}{l}{[1] \quad \nabla f\left(\mathrm{x}^{<em>}\right)+\sum_{i=1}^{m} \lambda_{i}^{</em>} \nabla g_{i}\left(\mathrm{x}^{<em>}\right)+\sum_{j=1}^{p} \mu_{j}^{</em>} \nabla h_{j}\left(\mathrm{x}^{<em>}\right)=0} \ {[2] \quad g_{i}\left(\mathrm{x}^{</em>}\right)=0, \quad \forall i=1,2, \cdots, m} \ {[3] \quad \mu_{j}^{<em>} \geq 0, h_{j}\left(\mathrm{x}^{</em>}\right) \leq 0, \quad \mu_{j}^{<em>} h_{j}\left(\mathrm{x}^{</em>}\right)=0, \quad \forall j=1,2, \cdots, p}\end{array}<br>$$<br><u>One approach to use the necessary conditions for solving an NLP is to consider separately all the possible combinations of constraints being active or inactive.</u></p>
+<h1 id="5-2-Interpretation-of-Lagrange-Multipliers"><a href="#5-2-Interpretation-of-Lagrange-Multipliers" class="headerlink" title="5.2 Interpretation of Lagrange Multipliers"></a>5.2 Interpretation of Lagrange Multipliers</h1><p>Relax constraints –&gt; relax objective function with the rate of multipliers</p>
+<h1 id="5-3-KKT-sufficient-conditions"><a href="#5-3-KKT-sufficient-conditions" class="headerlink" title="5.3 KKT sufficient conditions"></a>5.3 KKT sufficient conditions</h1><p><strong>the sufficient conditions for a strict local minimizer (or maximizer) do not require regularity conditions.</strong></p>
+<p>Let $f, g_i, h_j : \mathbb R^n → \mathbb R, i = 1, 2, · · · ,m$ and $j = 1, 2, · · · , p$, be functions with continuous second partial derivatives. Let $S$ be the feasible set of (NLP). Suppose $\mathbb x^∗ ∈ S$ is a KKT point, i.e., there exist $λ^∗ ∈ \mathbb R^m$ and $μ^∗ ∈ \mathbb R^p$ such that<br>$$<br>\nabla f\left(\mathrm{x}^{<em>}\right)+\sum_{i=1}^{m} \lambda_{i}^{</em>} \nabla g_{i}\left(\mathrm{x}^{<em>}\right)+\sum_{j=1}^{p} \mu_{j}^{</em>} \nabla h_{j}\left(\mathrm{x}^{<em>}\right)  = 0 \ \mu_{j}^{</em>} \geq 0,  \ \forall j=1,2, \cdots, p \ \mu_{j}^{<em>}=0,  \ \forall j \notin J\left(\mathrm{x}^{</em>}\right)<br>$$<br>where $J(\mathbb x^∗)$ is the index set of active constraints at $\mathbb x^∗$. Let<br>$$<br>{\qquad H_{L}\left(\mathrm{x}^{<em>}\right) =H_{f}\left(\mathrm{x}^{</em>}\right)+\sum_{i=1}^{m} \lambda_{i}^{<em>} H_{g_{i}}\left(\mathrm{x}^{</em>}\right)+\sum_{j=1}^{p} \mu_{j}^{<em>} H_{h_{j}}\left(\mathrm{x}^{</em>}\right)}<br>$$<br>suppose<br>$$<br>{\mathrm{y}^{T} H_{L}\left(\mathrm{x}^{<em>}\right) \mathrm{y} &gt; 0}, \forall \mathbb y \in T(\mathbb x^</em>) - {0}<br>$$<br>where $T(\mathbb x^*)$ is tangent space. $\mathbb x^*$ is a strict local minimizer.</p>
+<p><strong>steps:</strong></p>
+<ol>
+<li>verify it’s KKT point. </li>
+<li>verify it satisfy the second order sufficient condition<ol>
+<li>Hessian matrix</li>
+<li>$Z(\mathbf x^*)$</li>
+<li>Determine definiteness</li>
+</ol>
+</li>
+</ol>
+<h1 id="5-4-KKT-for-constrained-convex-programming-problems"><a href="#5-4-KKT-for-constrained-convex-programming-problems" class="headerlink" title="5.4 KKT for constrained convex programming problems"></a>5.4 KKT for constrained convex programming problems</h1><p>For a convex problem, a feasible point $x^∗$ is a KKT point implies it is a global minimizer.<br>$$<br>\begin{array}{ll}{\min } &amp; {f(\mathrm{x})} \ {\text { s.t. }} &amp; {g_{i}(\mathrm{x}) :=\mathbf{a}<em>{i}^{T} \mathrm{x}-b</em>{i}=0, \quad i=1, \ldots, m} \ {} &amp; {h_{j}(\mathrm{x}) \leq 0, \quad j=1, \ldots, p}\end{array}<br>$$<br>where $f, h_j : \mathbb{R}^n \rightarrow \mathbb{R}$ are convex function. </p>
+<p><u><strong>KKT point is an optimal solution under convexity</strong></u></p>
+<p><strong>but a global minimizer of a convex program may not be a KKT point.</strong></p>
+<p><strong><u>With regularity condition</u></strong>, a global minimizer is a KKT point. For convex programming problem with at least one inequality constraints, the Slater’s condition ensures that a global minimizer is a KKT point.</p>
+<p><strong><u>slater’s condition</u>:</strong> there exists $\hat{\mathbb x} ∈ \mathbb R^n$ such that $g_i(\hat{\mathbb x}) = 0, ∀ i = 1,\cdots, m$ and $h_j(\hat{\mathbb x}) &lt; 0, ∀ j = 1, . . . , p$.</p>
+<pre><code> Slater&#39;s condition states that the feasible region must have an [interior point](https://en.wikipedia.org/wiki/Interior_(topology)).
+</code></pre>
+<h2 id="5-4-1-Linear-equality-constrained-convex-program"><a href="#5-4-1-Linear-equality-constrained-convex-program" class="headerlink" title="5.4.1 Linear equality constrained convex program"></a>5.4.1 Linear equality constrained convex program</h2><p>Theorem 5.5. (Linear equality constrained convex program)</p>
+<p>Consider the following linear equality constrained convex NLP:<br>$$<br>\begin{array}{rl}<br>\text{(ECP)} &amp;<br>\begin{array}{l}<br>{\min f(\mathbb{x})} \<br>\text{s.t. } \mathbf A \mathbb x = \mathbb b<br>\end{array}<br>\end{array}<br>$$<br>where $\mathbf A$ is an $m × n$ matrix whose $i$-row is $\mathbb a_i^T$ and $f : \mathbb R^n → \mathbb R$ is a differentiable <del>convex</del> function. Suppose the feasible region $S$ is non-empty. Then a point $x^∗ ∈ S$ is a KKT point if and only if $x^∗$ is a global minimizer of $f$ on $S$.</p>
+<blockquote>
+<p>KKT point $\iff$ global minimizer</p>
+</blockquote>
+<p>==Note: no regularity or Slater’s condition is needed.==</p>
+<p>Facts:</p>
+<ol>
+<li>$\mathbb x \in S \iff \mathbb x = \mathbb x^* + \mathbb z$ for some $\mathbb z \in \operatorname{Null}(A)$.  【space of x】</li>
+<li>$\mathbb y^T \mathbb z = 0$, $\forall \mathbb z \in \operatorname{Null}(\mathbf A) \iff \exist \lambda^* \in \mathbb R^m$ s.t. $\mathbb y+ \mathbf A^T \lambda^*=0$.</li>
+</ol>
+<h2 id="5-4-2-Linear-amp-Convex-quadratic-programming-problems"><a href="#5-4-2-Linear-amp-Convex-quadratic-programming-problems" class="headerlink" title="5.4.2 Linear &amp; Convex quadratic programming problems"></a>5.4.2 Linear &amp; Convex quadratic programming problems</h2><ol>
+<li><p>Linear programming<br>$$<br>\begin{array}{rl}{\min } &amp; {f(\mathrm{x}) :=\mathrm{c}^{T} \mathrm{x}} \ {(\mathrm{LP}) \quad \text { s.t. }} &amp; {\mathrm{b}-\mathrm{A} \mathrm{x}=0} \ {} &amp; {\mathrm{x} \geq 0}\end{array}<br>$$<br>where $\mathbf A$ is $m\times n$, $\mathbb b\in \mathbb R^m$, $\mathbb a_i^T$ is $i$th row of $\mathbf A$.</p>
+<p>KKT conditions are:<br>$$<br>\begin{array}{l}{[1] \quad \mathrm{c}-\mathrm{A}^{T} \lambda-\mu=0} \ {[2] \quad \mathrm{b}-\mathrm{Ax}=0} \ {[3] \quad \mu \geq 0, \mathrm{x} \geq 0, \mu \circ \mathrm{x}=0}\end{array}<br>$$<br>where<br>$$<br>\mu \circ \mathrm{x} :=\left[\begin{array}{c}{\mu_{1} x_{1}} \ {\mu_{2} x_{2}} \ {\vdots} \ {\mu_{n} x_{n}}\end{array}\right]<br>$$</p>
+</li>
+<li><p>Convex quadratic programming<br>$$<br>\begin{array}{rl}{\min } &amp; {f(\mathbf{x}) :=\frac{1}{2} \mathbf{x}^{T} \mathbf{Q} \mathbf{x}+\mathbf{c}^{T} \mathbf{x}} \ {(\mathrm{QP})\quad  \text { s.t. }} &amp; {\mathbf{A} \mathbf{x}-\mathbf{b} \leq \mathbf{0}} \ {} &amp; {\mathbf{x} \geq \mathbf{0}, \mathbf{x} \in \mathbb{R}^{n}}\end{array}<br>$$<br>where $\mathbf Q$ is positive semidefinite, $\mathbf A$ is $m\times n$, $\mathbb b\in \mathbb R^m$, $\mathbb a_i^T$ is $i$th row of $\mathbf A$.</p>
+<p>KKT conditions are:<br>$$<br>\begin{array}{l}{[1] \quad \mathrm{Qx+c}+\mathrm{A}^{T} \mu-\hat\mu=0} \<br>{[2] \quad \mu \geq 0,\ \mathrm{Ax} \leq \mathbb b,\ \mu \circ \mathrm{(Ax-b)}=0}\<br>{[2] \quad \hat\mu \geq 0,\ \mathrm{x} \geq 0,\  \hat\mu \circ \mathrm{x}=0}\<br>\end{array}<br>$$<br>Let $\mathbb z = \mathrm{b-Ax}$, rewriteen:<br>$$<br>\begin{array}{c}<br>{\mathrm{Qx+c}+\mathrm{A}^{T} \mu-\hat\mu=0} \<br>{\mathrm{Ax+z}=\mathbb b} \<br>{\mu \circ \mathrm{z}=0}\<br>{\hat\mu \circ \mathrm{x}=0}\<br>{\mu, \hat\mu, \mathbb x, \mathbb z \geq 0}.<br>\end{array}<br>$$<br>Example:</p>
+<p><strong>Sparse Regression Problem</strong>: $\frac{1}{2} | Ax-b|^2 + \rho |x|_1$ where $\rho &gt; 0$.</p>
+<p>Reformulated as:<br>$$<br>\begin{array}{ll}{\min } &amp; {f\left(x, u^{(1)}, u^{(2)}\right) :=\frac{1}{2}|A x-b|^{2}+\rho\left\langle e, u^{(1)}+u^{(2)}\right\rangle} \ {\text { s.t. }} &amp; { g\left(x, u^{(1)}, u^{(2)}\right) :=x-u^{(1)}+u^{(2)}=0} \ {} &amp; {h_{1}\left(x, u^{(1)}, u^{(2)}\right) :=-u^{(1)} \leq 0} \ {} &amp; {h_{2}\left(x, u^{(1)}, u^{(2)}\right) :=-u^{(2)} \leq 0}\end{array}<br>$$<br>KKT conditions:<br>$$<br>\begin{array}{c}<br>{\left(\begin{array}{c}{A^{T}(A x-b)} \ {\rho e} \ {\rho e}\end{array}\right)+\left(\begin{array}{c}{I} \ {-I} \ {I}\end{array}\right) \lambda+\left(\begin{array}{c}{0} \ {-I} \ {0}\end{array}\right) \mu^{(1)}+\left(\begin{array}{c}{0} \ {0} \ {-I}\end{array}\right) \mu^{(2)}=\left(\begin{array}{c}{0} \ {0} \ {0}\end{array}\right)} \<br>{\qquad \begin{array}{c}{x-u^{(1)}+u^{(2)}=0} \<br>{\mu^{(1)} \circ u^{(2)} = 0, \quad \mu^{(2)} \circ u^{(2)}=0} \<br>{u^{(1)} , u^{(2)}, \mu^{(1)}, \mu^{(2)} \geq 0}<br>\end{array}}\end{array}<br>$$<br>eliminated the system, we have:<br>$$<br>\begin{array}{c}<br>{u^{T}(A x-b)+\lambda=0} \<br>{-\rho e \leq \lambda \leq \rho e} \<br>{(\rho e-\lambda) \circ \max {x, 0}=0, \quad(\rho e+\lambda) \circ \max {-x, 0}=0} \<br>\iff \lambda_i \in \begin{cases} { \rho } &amp; \text{if } x_i&gt;0, \ [-\rho, \rho] \quad &amp; \text{if } x_i = 0 \ { -\rho } \quad &amp; \text{if } x_i &lt; 0 \end{cases} \quad i=1,\cdots, n.<br>\end{array}<br>$$</p>
+</li>
+</ol>
+<h1 id="5-5-Proof-of-KKT-1st-necessary-conditions"><a href="#5-5-Proof-of-KKT-1st-necessary-conditions" class="headerlink" title="5.5 Proof of KKT 1st necessary conditions"></a>5.5 Proof of KKT 1st necessary conditions</h1><p>via the Penalty Approach</p>
+<h1 id="5-6-Summary"><a href="#5-6-Summary" class="headerlink" title="5.6 Summary"></a>5.6 Summary</h1><img src="https://raw.githubusercontent.com/Lisnol1/PicGo--/master/20190924224456.png" style="zoom:70%">
+
+
+
+
+
+
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>Xiaoxue Zhang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://zhang-xiaoxue.github.io/2021/08/16/Nonlinear%20Optimization/5_Basic%20Nonlinear%20Programming/" title="5. Basic Nonlinear Programming">https://zhang-xiaoxue.github.io/2021/08/16/Nonlinear Optimization/5_Basic Nonlinear Programming/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/08/16/Nonlinear%20Optimization/6_Basic%20Lagrangian%20duality%20and%20Saddle%20point/" rel="prev" title="6. Basic Lagrangian Duality and Saddle Point">
+                  <i class="fa fa-chevron-left"></i> 6. Basic Lagrangian Duality and Saddle Point
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/08/16/Nonlinear%20Optimization/4_Gradient%20Method/" rel="next" title="4. Gradient Method">
+                  4. Gradient Method <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+<script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xiaoxue Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div><script color="0,0,255" opacity="0.5" zIndex="-1" count="199" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{&quot;enable&quot;:true,&quot;tags&quot;:&quot;none&quot;,&quot;single_dollars&quot;:true,&quot;cjk_width&quot;:0.9,&quot;normal_width&quot;:0.6,&quot;append_css&quot;:true,&quot;js&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;mathjax@3.1.4&#x2F;es5&#x2F;tex-mml-chtml.js&quot;}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

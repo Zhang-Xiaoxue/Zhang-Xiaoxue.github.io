@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/Academy-favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Academy-favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/Academy-favicon.png">
+  <link rel="mask-icon" href="/images/Academy-favicon" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;zhang-xiaoxue.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Muse&quot;,&quot;version&quot;:&quot;8.4.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;right&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;Searching...&quot;,&quot;empty&quot;:&quot;We didn&#39;t find any results for the search: ${query}&quot;,&quot;hits_time&quot;:&quot;${hits} results found in ${time} ms&quot;,&quot;hits&quot;:&quot;${hits} results found&quot;}}</script>
+<meta name="description" content="Description: Conic optimization is a subfield of convex optimization that studies problems consisting of minimizing a convex function over the intersection of an affine subspace and a convex cone. The">
+<meta property="og:type" content="article">
+<meta property="og:title" content="7. Nonlinear Conic Programming">
+<meta property="og:url" content="https://zhang-xiaoxue.github.io/2021/08/16/Nonlinear%20Optimization/7_Nonlinear%20Conic%20Programming/index.html">
+<meta property="og:site_name" content="Xiaoxue Zhang - NUS">
+<meta property="og:description" content="Description: Conic optimization is a subfield of convex optimization that studies problems consisting of minimizing a convex function over the intersection of an affine subspace and a convex cone. The">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-08-16T04:00:00.000Z">
+<meta property="article:modified_time" content="2021-08-16T07:02:29.738Z">
+<meta property="article:author" content="Xiaoxue Zhang">
+<meta property="article:tag" content="Reinforcement Learning, Optimization and Control, Intellegent Systems">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zhang-xiaoxue.github.io/2021/08/16/Nonlinear%20Optimization/7_Nonlinear%20Conic%20Programming/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;en&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;zhang-xiaoxue.github.io&#x2F;2021&#x2F;08&#x2F;16&#x2F;Nonlinear%20Optimization&#x2F;7_Nonlinear%20Conic%20Programming&#x2F;&quot;,&quot;path&quot;:&quot;2021&#x2F;08&#x2F;16&#x2F;Nonlinear Optimization&#x2F;7_Nonlinear Conic Programming&#x2F;&quot;,&quot;title&quot;:&quot;7. Nonlinear Conic Programming&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>7. Nonlinear Conic Programming | Xiaoxue Zhang - NUS</title><script src="/js/config.js"></script>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Xiaoxue Zhang - NUS</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">NUS Ph.D.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#7-1-Nonlinear-conic-programming"><span class="nav-number">1.</span> <span class="nav-text">7.1 Nonlinear conic programming</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#7-1-1-COP-problem"><span class="nav-number">1.1.</span> <span class="nav-text">7.1.1 COP problem</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-1-2-Langrage-Multiplier-amp-KKT"><span class="nav-number">1.2.</span> <span class="nav-text">7.1.2 Langrage Multiplier &amp; KKT:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-1-3-Robinson%E2%80%99s-constraint-qualification"><span class="nav-number">1.3.</span> <span class="nav-text">7.1.3 Robinson’s constraint qualification:</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-2-First-order-necessary-conditions"><span class="nav-number">2.</span> <span class="nav-text">7.2 First order necessary conditions</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Xiaoxue Zhang"
+      src="/images/photo_blue.jpg">
+  <p class="site-author-name" itemprop="name">Xiaoxue Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Zhang-Xiaoxue" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Zhang-Xiaoxue" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:xiaoxuezhang@u.nus.edu" title="E-Mail → mailto:xiaoxuezhang@u.nus.edu" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.linkedin.com/in/xiaoxue-zhang-5233b611a/" title="https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;xiaoxue-zhang-5233b611a&#x2F;" rel="noopener" target="_blank">Linkedin</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.zhihu.com/people/lisnol" title="https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;lisnol" rel="noopener" target="_blank">知乎</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/Zhang-Xiaoxue" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zhang-xiaoxue.github.io/2021/08/16/Nonlinear%20Optimization/7_Nonlinear%20Conic%20Programming/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/photo_blue.jpg">
+      <meta itemprop="name" content="Xiaoxue Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Xiaoxue Zhang - NUS">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          7. Nonlinear Conic Programming
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-08-16 12:00:00 / Modified: 15:02:29" itemprop="dateCreated datePublished" datetime="2021-08-16T12:00:00+08:00">2021-08-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Nonlinear-Optimization/" itemprop="url" rel="index"><span itemprop="name">Nonlinear Optimization</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><strong>Description</strong>:</p>
+<p><strong>Conic optimization</strong> is a subfield of <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Convex_optimization">convex optimization</a> that studies problems consisting of minimizing a <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Convex_function">convex function</a> over the intersection of an <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Affine_subspace">affine subspace</a> and a <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Convex_cone">convex cone</a>.</p>
+<p>The class of conic optimization problems includes some of the most well known classes of convex optimization problems, namely <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Linear_programming">linear</a> and <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Semidefinite_programming">semidefinite programming</a>.</p>
+<p><em><strong>Certain special cases of conic optimization problems have notable closed-form expressions of their dual problems.</strong></em></p>
+<h1 id="7-1-Nonlinear-conic-programming"><a href="#7-1-Nonlinear-conic-programming" class="headerlink" title="7.1 Nonlinear conic programming"></a>7.1 Nonlinear conic programming</h1><p><strong>Optimization problem:</strong><br>$$<br>\begin{array}{cl} \text{(OP)} &amp;<br>\begin{array}{cl}<br>{\min} &amp; {f(x)} \ {\text {s.t.}} &amp; {g(x)=0} \ {} &amp; {h(X) \in \mathcal C}<br>\end{array}<br>\end{array}<br>$$<br>where $f: \mathcal X \rightarrow \mathbb R$, $g: \mathcal X \rightarrow \mathcal U$ and $h: \mathcal X \rightarrow \mathcal U$ and $h:= \mathcal X \rightarrow \mathcal V$ are continuous functions. $\mathcal X, \mathcal U, \mathcal V$ are finite dimensional Euclidean spaces each equipped with a scalar product $\langle \cdot, \cdot \rangle$ and its induced norm $| \cdot |$, and <u><strong>$C\in V$ is a closed convex set.</strong></u></p>
+<p><strong>Example :</strong></p>
+<blockquote>
+<ul>
+<li><p>NLP is one kind of OP</p>
+<p>$\mathcal X = \mathbb R^N, \mathcal U = \mathbb R^m, \mathcal V = \mathbb R^p, \mathcal C = \mathbb R_+^p$<br>$$<br>\begin{array}{cl} \text{(NLP)} &amp;<br>\begin{array}{cl}<br>{\min} &amp; {f(x)} \ {\text {s.t.}} &amp; {g(x)=0} \ {} &amp; {h(x)\geq 0}<br>\end{array}<br>\end{array}<br>$$</p>
+</li>
+<li><p>==Linear SemiDefinite Programming==<br>$$<br>\begin{array}{cl} \text{(SDP)} &amp;<br>\begin{array}{cl}<br>{\min} &amp; {\langle C, X\rangle} \ {\text {s.t.}} &amp; {\mathcal{A}(X)-b=0} \ {} &amp; {X \succeq 0 \quad\left(\equiv X \in \mathbb{S}<em>{+}^{n}\right)}<br>\end{array}<br>\end{array}<br>$$<br>$\mathcal X = \mathbb S^n$, the real Euclidean space of $n\times n$ real symmetric matrices with the standard trace inner product $\langle X,Y \rangle = \operatorname{tr} (X^T Y)$ and its induced norm $| X | = \sqrt{\langle X, X \rangle}$. $\mathcal C = \mathbb S</em>+^n$ (the cone of positive semidefinite matrices). The linear map $\mathcal A(X) = \begin{bmatrix} \langle A_1, X \rangle \ \vdots \  \langle A_m, X \rangle  \end{bmatrix}$.</p>
+<p>Let $\mathcal A^* : \mathbb R^m \rightarrow \mathbb S^n$ be adjoint of $\mathcal A$ as $\mathcal A^* y = \sum\limits_{k=1}^m y_kA_k, y\in \mathbb R^m$.<br>$$<br>\langle \mathcal A^* y, X \rangle = \langle y, \mathcal A X \rangle<br>$$<br>if $\mathcal A(X) = \operatorname{diag} (X)$, then $A_k = E_{kk}$, and $\mathcal A^* y =  \operatorname{diag} (y)$.</p>
+</li>
+</ul>
+<blockquote>
+<p>Let $G \in \mathbb R^{p\times n}$ and $H\in \mathbb R^{q\times n}$. For the linear map $\mathcal A: \mathbb S^m \rightarrow \mathbb R^{p \times q}$ defined by $\mathcal A(X) = GXH^T$ . Show that the adjoint map $\mathcal A^*: \mathbb R^{p \times q} \rightarrow \mathbb S^n$ is given by<br>$$<br>\mathcal A^*(Y) = \frac{1}{2} \left( G^TYH+H^TY^TG \right)<br>$$<br><strong>Solution:</strong></p>
+<p>for $Y\in \mathbb R^{n\times n}$, we can have<br>$$<br>\begin {aligned}<br>\langle Y, \mathcal A(X) \rangle &amp; = \operatorname{tr} (Y^T \mathcal A(X)) \<br>&amp; = \operatorname{tr} (Y^TGXH^T) \<br>&amp; = \operatorname{tr} (H^TY^TGX) \<br>&amp; = \frac{1}{2} \operatorname{tr} ( (H^TY^TG + G^TYH)X ) \<br>&amp; = \langle X, \underbrace{\frac{1}{2} (H^TY^TG + G^TYH)}_{\text{symmetric}} \rangle<br>\end{aligned}<br>$$<br>because<br>$$<br>\begin{aligned}<br>\operatorname{tr} (H^TY^TGX) &amp; = \operatorname{tr} (XH^TY^TG) \<br>&amp; =  \operatorname{tr} (G^TYHX^T)\<br>&amp; =  \operatorname{tr} (G^TYHX) \quad X\text{ is symmetric}\<br>\end{aligned}<br>$$</p>
+</blockquote>
+<ul>
+<li><p>Semidefinite least squares problem</p>
+<p>if $f(X) = \frac{1}{2} | X-B |^2$ where $B\in \mathbb S^n$ is a given matrix,<br>$$<br>\begin {array}<br>\text{(SDPLS)} &amp; \min\left{ \frac{1}{2} | X-B |^2 \ \vert \ \mathcal A(X)=b, X \succeq 0 \right}<br>\end{array}<br>$$</p>
+</li>
+</ul>
+</blockquote>
+<p><em>Let  $\mathcal Y := \mathcal U \times \mathcal V$, $\mathcal K := {0^\mathcal U} \times C \subset \mathcal Y$. Define $G: \mathcal X \rightarrow \mathcal Y$ by $G(x):= (g(x), h(x)), x\in \mathcal X$.</em></p>
+<h2 id="7-1-1-COP-problem"><a href="#7-1-1-COP-problem" class="headerlink" title="7.1.1 COP problem"></a>7.1.1 COP problem</h2><p>==Then rewrite the OP into more compact form COP==<br>$$<br>\begin{array}{cl} \text{(COP)} &amp;<br>\begin{array}{cl}<br>{\min} &amp; {f(x)} \ {\text {s.t.}} &amp; {G(x)\in \mathcal K} \<br>\end{array}<br>\end{array}<br>$$</p>
+<ul>
+<li>Lagrangian function $L : \mathcal X \times \mathcal Y \rightarrow \mathbb R$ for COP by<br>$$<br>L(x,\mu) = f(x) - \langle \mu, G(x) \rangle, x\in \mathcal X, \mu\in \mathcal Y \<br>\theta(\mu) := \inf { L(x,\mu) | x\in \mathcal X }<br>$$</li>
+</ul>
+<p>==Dual Problem of COP==:<br>$$<br>\begin{array}{cl}<br>{\text{(COD)}} &amp; \max\left{ \inf \theta(\mu) | \mu \in \mathcal K^* \right}<br>\end{array}<br>$$<br>where $\mathcal K^* = \mathcal U \times  \mathcal C^*$ is the dual cone of $\mathcal K$. Because $({ 0^\mathcal U })^* = \mathcal U$ and $\mathbb S_+^n$ is self-dual.</p>
+<p>We can see in the conic programming, we only consider $μ∈\mathcal K^*$ in the dual problem. However, if needed, we can also put this constraint to the Lagrangian dual function and Lagrangian function like what we usually do in the basic nonlinear programming.</p>
+<p>We also define the Lagrangian function in the conic programming as $L(x,μ)=f(x)$ <strong>minus</strong> $⟨μ,G(x)⟩$ <strong>instead of plus</strong>. This is for convenience because the cone is usually defined as “positive”, which means $h(x)⪰0$ in the conic programming <strong>instead of</strong> $h(x)≤0$ in the basic nonlinear programming is the common case.</p>
+<blockquote>
+<ul>
+<li>NLP</li>
+</ul>
+<p>$\mathcal K = { 0^m } \times \mathbb R_+^p$, and $\mathcal K^* =\mathbb R^m \times \mathbb R_+^p$. The dual problem is<br>$$<br>\max { \theta(\lambda,\rho) \ \vert \ (\lambda, \rho)\in \mathcal K^* = \mathbb R^m \times \mathbb R_+^n  } \<br>\theta (\lambda,\rho) = \inf { f(x)- \langle (\lambda,\rho),(g(x),h(x)) \rangle \ \vert \ x\in \mathbb R^n  }<br>$$</p>
+<ul>
+<li>linear SDP</li>
+</ul>
+<p>$\mathcal K = {0^m} \times \mathbb S_+^n$. For $X\in \mathbb S^n$, $(y,Z) \in \mathcal y := \mathbb R^m \times \mathbb S^n$.<br>$$<br>\begin{aligned}<br>L(X,y,Z) &amp; = \langle C,X \rangle - \langle (y,Z), (\mathcal A(X)-b, X) \rangle \<br>&amp; = \langle C,X \rangle - \langle y, \mathcal A(X)-b\rangle - \langle Z,X \rangle\<br>&amp; = \langle C,X \rangle - \langle \mathcal A^* y, X \rangle + \langle b, y \rangle - \langle Z,X \rangle \<br>&amp; = \langle b,y \rangle + \langle C - \mathcal A^* y -Z, X \rangle<br>\end{aligned}<br>$$</p>
+<p>$$<br>\begin{aligned}<br>\theta (y,Z) &amp;= \inf { L(X,y, Z) \ \vert \ X\in \mathbb S^n } \<br>&amp;= \inf { \langle b,y \rangle +  \langle C - \mathcal A^* y -Z, X \rangle \ \vert \ X\in \mathbb S^n } \<br>&amp; = \begin{cases}<br>\langle b,y \rangle \quad \text{if } C-\mathcal A^* y - Z = 0 \<br>-\infty \quad \text{otherwise}<br>\end{cases}<br>\end{aligned}<br>$$</p>
+<p>Dual problem of SDP is<br>$$<br>\max {\theta (y,Z) \ \vert \ (y,Z)\in \mathcal K^* } = \max \left{ \langle b,y \rangle \ \vert \ C-\mathcal A^* y - Z = 0, y\in \mathbb R^m, Z\succeq0 \right}<br>$$</p>
+<ul>
+<li>SDPLS</li>
+</ul>
+<p>$\mathcal K = {0^m}\times \mathbb S_+^n$. For $X\in \mathbb S^n$, $(y,Z)\in \mathcal Y:=\mathbb R^m \times \mathbb S^n$<br>$$<br>\begin{aligned}<br>L(X,y,Z) = \frac{1}{2} | X-B |^2 + \langle y,b-\mathcal A(X) \rangle + \langle Z,-X \rangle \<br>= \langle b,y \rangle + \frac{1}{2} | B|^2 + \frac{1}{2} |X |^2 - \langle B + \mathcal A^* y +Z, X \rangle<br>\end{aligned}<br>$$<br>thus, $\min { L(X,y,Z) \vert X\in \mathbb S^n }$ can be found by<br>$$<br>\nabla_XL(X,y,Z) = X-(B + \mathcal A^* y +Z) = 0<br>$$<br>substituting, get<br>$$<br>\begin{aligned}<br>\theta(y,Z) := \min{ L(X,y,Z) | X\in \mathbb S^n } \<br>= \langle b,y \rangle + \frac{1}{2} | B|^2 - \frac{1}{2} |X |^2 \<br>= \langle b,y \rangle + \frac{1}{2} | B|^2 - \frac{1}{2} | B + \mathcal A^* y +Z |^2<br>\end{aligned}<br>$$<br>Dual problem is<br>$$<br>\begin{aligned}<br>&amp; \quad \ \max \left{ \theta(y,Z) | (y,Z)\in \mathcal K^* \right} \<br>&amp;= \max \left{ \langle b,y \rangle  - \frac{1}{2} | B + \mathcal A^* y +Z |^2 | y\in \mathbb R^m, Z\in \mathbb S_+^n \right} + \frac{1}{2} | B|^2 \<br>&amp;= \min \left{ \langle -b,y \rangle  + \frac{1}{2} | B + \mathcal A^* y +Z |^2 | y\in \mathbb R^m, Z\in \mathbb S_+^n \right}\<br>&amp;= \min\limits_{y\in \mathbb R^m} \langle -b,y \rangle  + \min \left{ \frac{1}{2} | B + \mathcal A^* y +Z |^2 | Z\in \mathbb S_+^n \right}\<br>&amp;= \min\limits_{y\in \mathbb R^m} \phi(y):= \langle -b,y \rangle + \frac{1}{2} | \Pi_{\mathbb S_+^n} (B+A^* y) |^2\<br>\end{aligned}<br>$$<br>because<br>$$<br>\begin{aligned}<br>\text{set } G = B + \mathcal A^* y +Z, &amp; \<br>&amp; G  = \Pi_{\mathbb S_+^n}(G) - \Pi_{\mathbb S_+^n} (-G) \<br>\Rightarrow \  &amp;G + \Pi_{\mathbb S_+^n} (-G) = \Pi_{\mathbb S_+^n} (G) \<br>\text{set } Z =\Pi_{\mathbb S_+^n} (-G), \quad \quad &amp;\<br>\therefore &amp; \ B + \mathcal A^* y +Z = \Pi_{\mathbb S_+^n} (B+A^* y)<br>\end{aligned}<br>$$<br>This dual problem is unconstrained problem, we can solve it by finding the root of the gradient<br>$$<br>0=\nabla\phi(y) = -b+\mathcal A \Pi_{\mathcal S_+^n} (B+\mathcal A^*y)<br>$$</p>
+<ul>
+<li>Sparse Regression problem:<br>$$<br>\min \left{\frac{1}{2} | Ax-b |^2 + \lambda | x |_1 | x\in \mathbb R^n \right}<br>$$<br>Let $u=b-Ax$, rewrite as<br>$$<br>\begin{array}{cl} \text{(P)} &amp;<br>\begin{array}{cl}<br>{\min} &amp; {f(x)+g(x)} \ {\text {s.t.}} &amp; {u+Ax=b} \<br>\end{array}<br>\end{array}<br>$$<br>where $f(x) = \frac{1}{2} |u|^2$ and $g(x) = \lambda |x |_1$<br>$$<br>\begin{aligned}<br>L(u,x;\xi) &amp;= f(u) + g(x) + \langle \xi, b-u-Ax \rangle \<br>&amp;= f(u) - \langle \xi,u \rangle + g(x) - \langle A^T\xi, x \rangle + \langle \xi,b \rangle<br>\end{aligned}<br>$$</li>
+</ul>
+<p>The dual function is<br>$$<br>\begin{aligned}<br>\min\limits_{u,x} L(u,x;\xi) &amp; = \langle \xi,b \rangle + \min\limits_u \left{ f(u) - \langle \xi,u \rangle \right} + \min\limits_x \left{ g(x) - \langle A^T\xi, x \rangle \right} \<br>&amp; = \langle \xi,b \rangle - \frac{1}{2} |u|^2 + \min\limits_x \left{ g(x) - \langle A^T\xi, x \rangle \right} \<br>&amp; = \langle \xi,b \rangle - \frac{1}{2} |u|^2 + \delta_{B_\lambda}(A^T\xi)<br>\end{aligned}<br>$$<br>where $B_\lambda = { v\in \mathbb R^n \ \vert \  | v|_\infty\leq\lambda }$.  (reason refer to Chapter 3.12 Fenchel conjugate)</p>
+<p>The dual problem is<br>$$<br>\begin{aligned}<br>\max\limits_{\xi \in \mathbb R^m} \left{ \min\limits_{u,x} L(u,x;\xi) \right} &amp;= \max\limits_{\xi \in \mathbb R^m} \langle \xi,b \rangle - \frac{1}{2} |u|^2 + \delta_{B_\lambda}(A^T\xi) \<br>&amp;= - \min\limits_{\xi \in \mathbb R^m} \langle \xi,-b \rangle + \frac{1}{2} |u|^2 - \delta_{B_\lambda}(A^T\xi)<br>\end{aligned}<br>$$</p>
+</blockquote>
+<h2 id="7-1-2-Langrage-Multiplier-amp-KKT"><a href="#7-1-2-Langrage-Multiplier-amp-KKT" class="headerlink" title="7.1.2 Langrage Multiplier &amp; KKT:"></a>7.1.2 Langrage Multiplier &amp; KKT:</h2><p>$\bar \mu \in \mathcal Y$ is a langrage multiplier at feasible point $\bar x$ ($G(\bar x) \in \mathcal K$), if it satisfiy the KKT condition<br>$$<br>0=\nabla_x L(\bar x, \bar \mu) = \nabla f(\bar x) - \nabla G(\bar x) \bar\mu, \quad  0\in \bar\mu+\mathcal N_\mathcal K (G(\bar x))<br>$$<br>or<br>$$<br>0=\nabla_x L(\bar x, \bar \mu) = \nabla f(\bar x) - \nabla G(\bar x) \bar\mu, \quad  \mathcal K \ni G(\bar x) \perp \bar \mu \in \mathcal K^*<br>$$</p>
+<blockquote>
+<p>because<br>$$<br>\begin{aligned}<br>0\in \bar\mu+\mathcal N_\mathcal K (G(\bar x)) &amp;\iff -\bar \mu \in \mathcal N_\mathcal K (G(\bar x))\<br>&amp;\iff G(\bar x)\in \mathcal K, \quad \langle -\bar\mu, d-G(\bar x) \rangle \leq 0, \quad  \forall d\in \mathcal K \<br>&amp;\iff G(\bar x)\in \mathcal K, \quad \langle \bar\mu, G(\bar x) \rangle = 0, \quad \langle \bar\mu, d \rangle \geq 0, \quad  \forall d\in \mathcal K \ (\text{set }d=2G(\bar x) \text{ and } d=0)\<br>&amp;\iff G(\bar x)\in \mathcal K, \quad \langle \bar\mu, G(\bar x) \rangle = 0, \bar\mu\in\mathcal K^* \ (\because \text{definition of dual cone})\<br>&amp;\iff \mathcal K \ni G(\bar x) \perp \bar \mu \in \mathcal K^*<br>\end{aligned}<br>$$</p>
+</blockquote>
+<ul>
+<li>$\mathcal M(\bar x)$ maybe empty or unbounded.</li>
+</ul>
+<blockquote>
+<p>Example:</p>
+<ul>
+<li><p>NLP:</p>
+<p>Let $\bar\mu = (\lambda,\rho)$, $G(x) = (g(x),h(x))$, $\mathcal C=\mathbb R_+^p$, $\mathcal K={0_m}\times\mathcal C$. KKT conditions:<br>$$<br>\nabla f(\bar x) - \nabla g(\bar x)\lambda - \nabla h(\bar x)\rho = 0, G(\bar x) = (g(\bar x), h(\bar x)), \langle h(\bar x),\rho \rangle = 0, \rho\in\mathcal C^*=\mathbb R_+^p<br>$$</p>
+</li>
+<li><p>DNN projection</p>
+<p>problem:<br>$$<br>\min \left{ \frac{1}{2}|X-B|^2 \ \vert \ X\in \mathbb S_+^n \cap \mathcal N^n \right}<br>$$<br>Rewritten it as<br>$$<br>\min \left{ f(X) := \frac{1}{2}|X-B|^2 \ \vert \ G(X)=(X,X)\in \mathcal K := \mathbb S_+^n \times \mathcal N^n \right}<br>$$<br>where $\mathcal N^n$ denote the cone of $n\in \mathcal N^n$ symmetric and element wise nonnegative matrices.</p>
+<p>Lagrange function:<br>$$<br>\begin{aligned}<br>L(X;S,Z) &amp; = \frac{1}{2}|X-B|^2 + \langle (S,Z), (X,X) \rangle \ \vert \ (S,Z)\in \mathcal K^* := \mathbb S_+^n \times \mathcal N^n \<br>\theta(S,Z) &amp; = \inf \left{ \frac{1}{2}|X-B|^2 + \langle (S,Z), (X,X) \rangle \ \vert \ (S,Z)\in \mathcal K^* \right}<br>\end{aligned}<br>$$<br>dual problem:<br>$$<br>\max \left{ \theta(S,Z) \ \vert \ (S,Z)\in \mathcal K^* \right}<br>$$<br>KKT condition:<br>$$<br>\nabla f(X) - \nabla G(X)(S,Z) = 0, \ (S,Z)\in \mathcal K^* \<br>\iff X-B-S-Z = 0, S \in \mathbb S_+^n, Z\in \mathcal N^n<br>$$<br>Rewrite Dual Problem:<br>$$<br>\begin{aligned}<br>\max \left{ \theta(S,Z) \ \vert \ (S,Z)\in \mathcal K^* \right} &amp;= \max \left{ \theta(S,Z) \ \vert \ X-B-S-Z = 0,(S,Z)\in \mathcal K^* \right} \<br>&amp;= \max \left{ \frac{1}{2}|S+Z|^2 + \langle (S,Z), (B+S+Z,B+S+Z) \rangle  \vert \ (S,Z)\in \mathcal K^* \right}\<br>&amp;= \max \left{ \frac{1}{2}|S+Z|^2 + \langle S, (B+S+Z) \rangle + \langle Z, (B+S+Z) \rangle  \vert \ (S,Z)\in \mathcal K^* \right}\<br>&amp;= \max \left{ \frac{1}{2}|S+Z|^2 + |S|^2 + |Z|^2+ 2\langle S, B \rangle + \langle (S+Z),B \rangle  \vert \ (S,Z)\in \mathcal K^* \right}\<br>\end{aligned}<br>$$</p>
+</li>
+</ul>
+</blockquote>
+<h2 id="7-1-3-Robinson’s-constraint-qualification"><a href="#7-1-3-Robinson’s-constraint-qualification" class="headerlink" title="7.1.3 Robinson’s constraint qualification:"></a>7.1.3 Robinson’s constraint qualification:</h2><p>conditions $\longrightarrow$ KKT condition to be necessary for a local minimizer $\bar x$.</p>
+<p>conditions is to ensure the existence of Lagrange multipliers and the boundedness of $\mathcal M(\bar x)$.</p>
+<p>Robinson’s condition generalize the LICQ.</p>
+<ul>
+<li><p>Definition</p>
+<p>$\bar x$ is feasible solution, Robinson’s CQ means<br>$$<br>0 \in \operatorname{int} \left( G(\bar x) + G’(\bar x) \mathcal X -\mathcal K \right)<br>$$</p>
+</li>
+</ul>
+<blockquote>
+<p>example:</p>
+<ol>
+<li><p>when $\mathcal X=\mathbb R^n, G(x)=g(x), \mathcal K={\mathbf 0_m}$, the Robinson’s CQ reduces to $0\in \mathrm{int}(G’(\bar x) \mathbb R^n)$, which is equivalent to $\mathrm{Range}(G’(\bar x))=\mathbb R^m \iff G’(\bar x)^T$ is 1-1.</p>
+</li>
+<li><p>For NLP, the Robinson’s CQ can be written as<br>$$<br>0\in\mathrm {int} \left( \begin{pmatrix} g(\bar x) \ h(\bar x)\end{pmatrix} + \begin{pmatrix} g’(\bar x) \ h’(\bar x)\end{pmatrix}\mathbb R^n - \begin{pmatrix} {\mathbf 0_m} \ \mathbb R_+^p \end{pmatrix} \right)<br>$$<br> ==MFCQ==:<br>$$<br>\begin{array}{l}{\left{\nabla g_{i}(\bar{x}) | i=1, \ldots, m\right} \quad \text { are linearly independent }} \ {\exists d \in \mathbb{R}^{n} \text { s.t. } \quad\left\langle\nabla g_{i}(\bar{x}), d\right\rangle= 0 \quad \forall i=1, \ldots, m, \quad\left\langle\nabla h_{j}(\bar{x}), d\right\rangle&gt; 0 \quad \forall j \in J(\bar{x})} \ {B_{g}(\bar{x})=\left[\nabla g_{1}(\bar{x}), \ldots, \nabla g_{m}(\bar{x})\right], \quad B_{h}(\bar{x})=\left[\nabla h_{j}(\bar{x}): j \in J(\bar{x})\right]} \ {B(\bar{x})=\left[B_{g}(\bar{x}), B_{h}(\bar{x})\right] \in \mathbb{R}^{n \times(m+|J|)}}\end{array}<br>$$<br>This is equivalent to saying that $Bg(\bar x)$ has full column rank and the systems<br>$$<br>B_g(\bar x)^Td = \mathbf 0_m, B_h(\bar x)^Td &gt;0<br>$$<br>has a solution.</p>
+<blockquote>
+<p>In the case when $\bar x$ satisfies the LICQ, then $B(\bar x)$ has full column rank and hence $B(\bar x)^T$ full row rank. In this case, $\mathrm{Range}(B(\bar x)^T ) = \mathbb R^n$ and it is clear that the linear system $B(\bar x)T d = \mathrm{rhs}$ has a solution for any given vector $\mathrm{rhs}$. In particular, for $\mathrm{rhs} = [\mathbf 0_m; I_{|J|}]$.</p>
+</blockquote>
+</li>
+</ol>
+</blockquote>
+<p><strong>Proposition</strong>:</p>
+<p>Assume $G(\bar x)\in \mathcal K$. The following conditions are equivalent to each other and to Robinson’s CQ:<br>$$<br>\begin{array}{l}{\text { (a) } \quad G^{\prime}(\bar{x}) \mathcal{X}+T_{\mathcal{K}}(G(\bar{x}))=\mathcal{Y}} \ {\text { (b) } \quad\left[G^{\prime}(\bar{x}) \mathcal{X}\right]^{\perp} \cap \quad N_{\mathcal{K}}(G(\bar{x}))={0}}\end{array}<br>$$<br>For a set $S$ in $\mathcal Y$ and a point $y \in S$, the tangent cone to $S$ at $y$ is defined by<br>$$<br>\begin{aligned} T_{S}(y) &amp;=\left{d \in \mathcal{Y} | \exists y^{k} \in S \rightarrow y, t_{k} \downarrow 0, \text { s.t. }\left(y^{k}-y\right) / t^{k} \rightarrow d\right} \ &amp;=\left{d \in \mathcal{Y} | \exists t_{k} \downarrow 0, \operatorname{dist}\left(y+t_{k} d, S\right)=o\left(t_{k}\right)\right} \end{aligned}<br>$$<br>Note that if $S$ is nonempty convex subset of $\mathcal Y$, then<br>$$<br>T_s(y) = \mathrm{closure}({ t(x-y) | x\in S, t\ge 0 })<br>$$<br><strong>Remark:</strong></p>
+<ul>
+<li><p>for $\mathcal C = \mathbb R_+^p, y\in \mathcal C$. Let $J(y)={j|y_j=0}$. We have that<br>$$<br>T_C(y) = { d\in \mathbb R^p | d_j\ge 0, j\in J(y) }<br>$$</p>
+</li>
+<li><p>For NLP, above proposition that Robinson’s CQ is equivalent to the following form:<br>$$<br>\left(\begin{array}{c}{g^{\prime}(\bar{x})} \ {h^{\prime}(\bar{x})}\end{array}\right) \mathbb{R}^{n}+\left(\begin{array}{c}{\left{0_{m}\right}} \ {T_{\mathbb{R}_{+}^{p}}(h(\bar{x}))}\end{array}\right)=\left(\begin{array}{c}{\mathbb{R}^{m}} \ {\mathbb{R}^{p}}\end{array}\right)<br>$$</p>
+</li>
+</ul>
+<p><strong>Proposition:</strong> </p>
+<p>Assume that $G(\bar x) \in \mathcal  K$. If $\mathcal K$ has a nonempty interior, then <u>Robinson’s CQ</u> is equivalent to<br>$$<br>\exist d \in \mathcal X \quad \text{s.t.} \quad G(\bar x) + G’(\bar x)d \in \mathrm{int}(\mathcal K)<br>$$<br><strong>Proposition</strong>:</p>
+<p>$G(\bar x)=(g(x),h(x)), \mathcal K={\mathbf 0_m}\times \mathcal C, G(\bar x)\in \mathcal K$. If $C$ has a nonempty interior, then Robinson’s CQ is equivalent to<br>$$<br>\left{\begin{array}{l}{g^{\prime}(\bar{x}) \text { is onto; }} \ {\exists d \in \mathcal{X} \quad \text { such that } \quad g^{\prime}(\bar{x}) d=0, h(\bar{x})+h^{\prime}(\bar{x}) d \in \operatorname{int}(\mathcal{C})}\end{array}\right.<br>$$</p>
+<h1 id="7-2-First-order-necessary-conditions"><a href="#7-2-First-order-necessary-conditions" class="headerlink" title="7.2 First order necessary conditions"></a>7.2 First order necessary conditions</h1><p>Proposition:</p>
+<p>$\bar x$ is locally optimal solution of COP. Then, the point $d=0$ is an optimal solution of the following problem:<br>$$<br>\min_{d\in \mathcal X} f’(\bar x)d \<br>\text{s.t. } d\in T_\mathcal F(\bar x)<br>$$<br>where $\mathcal F = {x\in \mathcal X | G(x)\in \mathcal K}$ is the feasible region of COP.</p>
+<p>Lemma:</p>
+<p>If Robinson’s CQ holds at a feasible point of $\bar x$ of COP, then there exists a constant $c&gt;0$ such that<br>$$<br>\mathrm {dist}(x,G^{-1}(\mathcal K + y)) \le c \ \mathrm{dist}(G(x)-y, \mathcal K)<br>$$<br>for all $(x,y)$ in an open neighborhood of $(\bar x,0)$.</p>
+<ul>
+<li><p>In particular, when $y=0$, we have for all $x$ in a neighborhood of $\bar x$,<br>$$<br>\mathrm {dist}(x,\mathcal F) = O\ \mathrm{dist}(G(x), \mathcal K)<br>$$</p>
+<blockquote>
+<p>This lemma is very important because it can be used to measure the distance from the current point to the feasible point. For example, if we have the constraint $Ax=b$, it is difficult to know the distance $\mathrm{dist}(x^c,\mathcal F)$, but it is easy to calculate $||b−Ax^c||$. Since $\mathrm{dist}(x^c,\mathcal F)$ is bounded by $||b−Ax^c||$, we can use $||b−Ax^c||$ to estimate the distance. </p>
+</blockquote>
+</li>
+<li><p>One has<br>$$<br>0\in \mathrm{int}(G(\mathcal X)-\mathcal K)<br>$$</p>
+</li>
+</ul>
+<p><strong>Proposition</strong>:</p>
+<p>$\bar x$ is a locally optimal solution of COP. If Robinsons’ CQ holds at $\bar x$, then it holds that<br>$$<br>T_\mathcal F(\bar x) = { d\in \mathcal X | G’(\bar x)d\in T_\mathcal K(G(\bar x)) }<br>$$<br>Hence $d=0$ is an optimal solution of the following problem<br>$$<br>\text{(LCOP)} \quad \min_{d\in \mathcal X} { f’(\bar x)d \  | \ G’(\bar x)d \in T_{\mathcal K} (\bar x) }<br>$$<br><strong>Theorem: (Important)</strong></p>
+<p>Suppose that $\bar x$ is a locally optimal solution of (COP). Then, $\mathcal M(\bar x)$ is a nonempty, convex compact subset of $\mathcal Y$ if and only if Robinson’s CQ holds at $\bar x$.</p>
+<p>Proposition (Uniqueness of Lagrange Multipliers) </p>
+<p>Suppose that $\bar x$ is a locally optimal solution to (COP) and $\mathcal M(\bar x) \neq 0$. Let $\mu_0 \in \mathcal M(\bar x)$.</p>
+<ul>
+<li><p>$\mathcal M(\bar x)$ is a singleton if and only if<br>$$<br>\left[G^{\prime}(\bar{x}) \mathcal{X}\right]^{\perp} \cap R_{D}\left(-\mu_{0}\right)={0}<br>$$<br>where $D = N_K(G(\bar x))$.</p>
+</li>
+<li><p>Then, the following condition is sufficient for uniqueness of $\mu_0$:<br>$$<br>\left[G^{\prime}(\bar{x}) \mathcal{X}\right]+\left(T_{\mathcal{K}}(G(\bar{x})) \cap\left[-\mu_{0}\right]^{\perp}\right)=\mathcal{Y}<br>$$</p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>Xiaoxue Zhang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://zhang-xiaoxue.github.io/2021/08/16/Nonlinear%20Optimization/7_Nonlinear%20Conic%20Programming/" title="7. Nonlinear Conic Programming">https://zhang-xiaoxue.github.io/2021/08/16/Nonlinear Optimization/7_Nonlinear Conic Programming/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/08/16/Nonlinear%20Optimization/8_ADMM_boyd/" rel="prev" title="8. Alternating Direction Method of Multipliers (ADMM)">
+                  <i class="fa fa-chevron-left"></i> 8. Alternating Direction Method of Multipliers (ADMM)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/08/16/Nonlinear%20Optimization/3_Basic%20Convex%20Analysis/" rel="next" title="3. Convex Analysis">
+                  3. Convex Analysis <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+<script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xiaoxue Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div><script color="0,0,255" opacity="0.5" zIndex="-1" count="199" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{&quot;enable&quot;:true,&quot;tags&quot;:&quot;none&quot;,&quot;single_dollars&quot;:true,&quot;cjk_width&quot;:0.9,&quot;normal_width&quot;:0.6,&quot;append_css&quot;:true,&quot;js&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;mathjax@3.1.4&#x2F;es5&#x2F;tex-mml-chtml.js&quot;}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

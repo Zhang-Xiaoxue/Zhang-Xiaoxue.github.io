@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/Academy-favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Academy-favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/Academy-favicon.png">
+  <link rel="mask-icon" href="/images/Academy-favicon" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;zhang-xiaoxue.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Muse&quot;,&quot;version&quot;:&quot;8.4.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;right&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;Searching...&quot;,&quot;empty&quot;:&quot;We didn&#39;t find any results for the search: ${query}&quot;,&quot;hits_time&quot;:&quot;${hits} results found in ${time} ms&quot;,&quot;hits&quot;:&quot;${hits} results found&quot;}}</script>
+<meta name="description" content="Take form of decomposition-coordination procedure (solution of subproblem is coordinated to solution of global problem) ADMM : benefits of dual decomposition + augmented Lagrangian methods for constr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="8. Alternating Direction Method of Multipliers (ADMM)">
+<meta property="og:url" content="https://zhang-xiaoxue.github.io/2021/08/16/Nonlinear%20Optimization/8_ADMM_boyd/index.html">
+<meta property="og:site_name" content="Xiaoxue Zhang - NUS">
+<meta property="og:description" content="Take form of decomposition-coordination procedure (solution of subproblem is coordinated to solution of global problem) ADMM : benefits of dual decomposition + augmented Lagrangian methods for constr">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/Lisnol1/PicGo--/master/20191121201431.png">
+<meta property="article:published_time" content="2021-08-16T04:00:00.000Z">
+<meta property="article:modified_time" content="2021-08-16T07:03:13.791Z">
+<meta property="article:author" content="Xiaoxue Zhang">
+<meta property="article:tag" content="Reinforcement Learning, Optimization and Control, Intellegent Systems">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Lisnol1/PicGo--/master/20191121201431.png">
+
+
+<link rel="canonical" href="https://zhang-xiaoxue.github.io/2021/08/16/Nonlinear%20Optimization/8_ADMM_boyd/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;en&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;zhang-xiaoxue.github.io&#x2F;2021&#x2F;08&#x2F;16&#x2F;Nonlinear%20Optimization&#x2F;8_ADMM_boyd&#x2F;&quot;,&quot;path&quot;:&quot;2021&#x2F;08&#x2F;16&#x2F;Nonlinear Optimization&#x2F;8_ADMM_boyd&#x2F;&quot;,&quot;title&quot;:&quot;8. Alternating Direction Method of Multipliers (ADMM)&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>8. Alternating Direction Method of Multipliers (ADMM) | Xiaoxue Zhang - NUS</title><script src="/js/config.js"></script>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Xiaoxue Zhang - NUS</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">NUS Ph.D.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0-precursor"><span class="nav-number">1.</span> <span class="nav-text">0 precursor</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0-1-Gradient-Ascent"><span class="nav-number">1.1.</span> <span class="nav-text">0.1 Gradient Ascent</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0-2-Dual-Decomposition"><span class="nav-number">1.2.</span> <span class="nav-text">0.2 Dual Decomposition</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0-3-Augmented-Lagrangians-and-Method-of-Multipliers"><span class="nav-number">1.3.</span> <span class="nav-text">0.3 Augmented Lagrangians and Method of Multipliers</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-ADMM"><span class="nav-number">2.</span> <span class="nav-text">1. ADMM</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-Algorithm"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 Algorithm</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-1-Unscaled-form"><span class="nav-number">2.1.1.</span> <span class="nav-text">1.1.1 Unscaled form</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-2-Scaled-form"><span class="nav-number">2.1.2.</span> <span class="nav-text">1.1.2 Scaled form</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-Convergence"><span class="nav-number">2.2.</span> <span class="nav-text">1.2 Convergence</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-Optimality-condition-and-Stopping-creterion"><span class="nav-number">2.3.</span> <span class="nav-text">1.3 Optimality condition and Stopping creterion</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-1-Optimality-condition-for-ADMM"><span class="nav-number">2.3.1.</span> <span class="nav-text">1.3.1 Optimality condition for ADMM:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-2-Stopping-criteria"><span class="nav-number">2.3.2.</span> <span class="nav-text">1.3.2 Stopping criteria</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-Extension-and-Variations"><span class="nav-number">2.4.</span> <span class="nav-text">1.4 Extension and Variations</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-General-Patterns"><span class="nav-number">3.</span> <span class="nav-text">2. General Patterns</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-Proximity-Operator"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 Proximity Operator</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-Quadratic-Objective-Terms"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 Quadratic Objective Terms</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#direct-methods"><span class="nav-number">3.2.1.</span> <span class="nav-text">direct methods:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-Smooth-Objective-Terms"><span class="nav-number">3.3.</span> <span class="nav-text">2.3 Smooth Objective Terms</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-Decomposition"><span class="nav-number">3.4.</span> <span class="nav-text">2.4 Decomposition</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-Constrained-Convex-Optimization"><span class="nav-number">4.</span> <span class="nav-text">3. Constrained  Convex Optimization</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-1-Alternating-Projection"><span class="nav-number">4.0.1.</span> <span class="nav-text">3.1.1 Alternating Projection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-2-Parallel-Projection"><span class="nav-number">4.0.2.</span> <span class="nav-text">3.1.2  Parallel Projection</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-Linear-and-Quadratic-Programming"><span class="nav-number">4.1.</span> <span class="nav-text">3.2 Linear and Quadratic Programming</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Linear-and-Quadratic-Cone-Programming"><span class="nav-number">4.1.1.</span> <span class="nav-text">Linear and Quadratic Cone Programming</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-ell-1-Norm-Problems"><span class="nav-number">5.</span> <span class="nav-text">4. $\ell_1$ Norm Problems</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-Least-Absolute-Deviations"><span class="nav-number">5.1.</span> <span class="nav-text">4.1 Least Absolute Deviations</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-Basis-Pursuit"><span class="nav-number">5.2.</span> <span class="nav-text">4.2 Basis Pursuit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-General-ell-1-regularized-loss-minimization"><span class="nav-number">5.3.</span> <span class="nav-text">4.3 General $\ell_1$ regularized loss minimization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-Lasso"><span class="nav-number">5.4.</span> <span class="nav-text">4.2 Lasso</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-1-Generalized-Lass"><span class="nav-number">5.4.1.</span> <span class="nav-text">4.4.1 Generalized Lass</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-2-Group-Lasso"><span class="nav-number">5.4.2.</span> <span class="nav-text">4.4.2 Group Lasso</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sparse-Inverse-Covariance-Selection"><span class="nav-number">5.5.</span> <span class="nav-text">Sparse Inverse Covariance Selection</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-Consensus-and-Sharing"><span class="nav-number">6.</span> <span class="nav-text">5. Consensus and Sharing</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-Global-Variable-Consensus"><span class="nav-number">6.1.</span> <span class="nav-text">5.1 Global Variable Consensus</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-2-Global-Variable-Consensus-with-Regularization"><span class="nav-number">6.1.1.</span> <span class="nav-text">5.1.2 Global Variable Consensus with Regularization</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-General-Form-Consensus-Optimization"><span class="nav-number">6.2.</span> <span class="nav-text">5.2 General Form Consensus Optimization</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-1-General-Form-Consensus-with-Regularization"><span class="nav-number">6.2.1.</span> <span class="nav-text">5.2.1 General Form Consensus with Regularization</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3-Sharing"><span class="nav-number">6.3.</span> <span class="nav-text">5.3 Sharing</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-1-Duality"><span class="nav-number">6.3.1.</span> <span class="nav-text">5.3.1 Duality</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-2-Optimal-Exchange"><span class="nav-number">6.3.2.</span> <span class="nav-text">5.3.2 Optimal Exchange</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-Distributed-Model-Fitting"><span class="nav-number">7.</span> <span class="nav-text">6. Distributed Model Fitting</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-Nonconvex"><span class="nav-number">8.</span> <span class="nav-text">7. Nonconvex</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#7-1-Nonconvex-constraints"><span class="nav-number">8.1.</span> <span class="nav-text">7.1 Nonconvex constraints</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8-QCQP"><span class="nav-number">9.</span> <span class="nav-text">8. QCQP</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#8-1-SDR"><span class="nav-number">9.1.</span> <span class="nav-text">8.1 SDR</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#8-1-1-Homogeneous-QCQP"><span class="nav-number">9.1.1.</span> <span class="nav-text">8.1.1 Homogeneous QCQP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-1-2-Inhomogeneous-QCQP"><span class="nav-number">9.1.2.</span> <span class="nav-text">8.1.2 Inhomogeneous QCQP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-1-3-Complex-valued-problems"><span class="nav-number">9.1.3.</span> <span class="nav-text">8.1.3 Complex-valued problems</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-1-4-Separable-QCQPs"><span class="nav-number">9.1.4.</span> <span class="nav-text">8.1.4 Separable QCQPs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-1-5-Application-sensor-network"><span class="nav-number">9.1.5.</span> <span class="nav-text">8.1.5 Application: sensor network</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-2-Second-order-cone-relaxation-SOCR"><span class="nav-number">9.2.</span> <span class="nav-text">8.2 Second order cone relaxation (SOCR)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-3-Other"><span class="nav-number">9.3.</span> <span class="nav-text">8.3 Other</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Xiaoxue Zhang"
+      src="/images/photo_blue.jpg">
+  <p class="site-author-name" itemprop="name">Xiaoxue Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Zhang-Xiaoxue" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Zhang-Xiaoxue" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:xiaoxuezhang@u.nus.edu" title="E-Mail → mailto:xiaoxuezhang@u.nus.edu" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.linkedin.com/in/xiaoxue-zhang-5233b611a/" title="https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;xiaoxue-zhang-5233b611a&#x2F;" rel="noopener" target="_blank">Linkedin</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.zhihu.com/people/lisnol" title="https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;lisnol" rel="noopener" target="_blank">知乎</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/Zhang-Xiaoxue" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zhang-xiaoxue.github.io/2021/08/16/Nonlinear%20Optimization/8_ADMM_boyd/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/photo_blue.jpg">
+      <meta itemprop="name" content="Xiaoxue Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Xiaoxue Zhang - NUS">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          8. Alternating Direction Method of Multipliers (ADMM)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-08-16 12:00:00 / Modified: 15:03:13" itemprop="dateCreated datePublished" datetime="2021-08-16T12:00:00+08:00">2021-08-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Nonlinear-Optimization/" itemprop="url" rel="index"><span itemprop="name">Nonlinear Optimization</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>Take form of decomposition-coordination procedure (solution of subproblem is coordinated to solution of global problem)</p>
+<p>ADMM : benefits of dual decomposition + augmented Lagrangian methods for constrained optimization</p>
+<h1 id="0-precursor"><a href="#0-precursor" class="headerlink" title="0 precursor"></a>0 precursor</h1><h2 id="0-1-Gradient-Ascent"><a href="#0-1-Gradient-Ascent" class="headerlink" title="0.1 Gradient Ascent"></a>0.1 Gradient Ascent</h2><p>Primal problem<br>$$<br>\begin{array}{rc}<br>\min &amp; f(x) \<br>\text{s.t.} &amp; Ax=b<br>\end{array}<br>$$<br>Lagrangian function is<br>$$<br>L(x,y) = f(x) + y^T(Ax-b)<br>$$<br>and the dual function is<br>$$<br>g(y) = \inf_x L(x,y) = -f^*(-A^Ty) - b^Ty<br>$$<br>dual problem is<br>$$<br>\max g(y)<br>$$<br>recover a primal optimal point $x^*$ from a dual optimal point $y^*$<br>$$<br>x^* = \mathop{\mathrm{argmin}}<em>x L(x,y^*)<br>$$<br>Solve this dual problem using gradient ascent:<br>$$<br>\begin{array}{rl}<br>x^{k+1} &amp;=&amp; \mathop{\mathrm{argmin}}</em>{x} L(x,y^k) &amp; x\text{-minimization step} \<br>y^{k+1} &amp;=&amp; y^k +\alpha^k(Ax^{k+1} - b) &amp; \text{dual variable update}<br>\end{array}<br>$$<br>dual ascent method can lead to a decentralized algorithm in some case.</p>
+<h2 id="0-2-Dual-Decomposition"><a href="#0-2-Dual-Decomposition" class="headerlink" title="0.2 Dual Decomposition"></a>0.2 Dual Decomposition</h2><p>If objective $f$ is separable,<br>$$<br>f(x) = \sum_{i=1}^N f_i(x_i), \text {where } x=(x_1, \cdots, x_N), \ A = [A_1, \cdots, A_N]<br>$$<br>the Lagrangian function is<br>$$<br>L(x,y) = \sum_{i=1}^N L_i(x_i,y) = \sum_{i=1}^N (f_i(x_i)+y^TA_ix_i - \frac{1}{N}(y^Tb)<br>$$<br>which is separable in $x$. <u>This means that $x$-minimization step splits into $N$ separate problems that can be solved in parallel.</u></p>
+<p>Solve:<br>$$<br>\begin{array}{rl}<br>x_i^{k+1} &amp;=&amp; \mathop{\mathrm{argmin}}_{x_i} L_i(x_i,y^k) &amp; x_i\text{-minimization step} \<br>y^{k+1} &amp;=&amp; y^k +\alpha^k(Ax^{k+1} - b) &amp; \text{dual variable update}<br>\end{array}<br>$$<br>So, the $x$-minimization step is carried out independently, in parallel.</p>
+<p>**Each iteration of the dual decomposition requires a <u>broadcast</u> and <u>gather</u> operation **</p>
+<p>[in dual update, collect $A_i x_i^{k+1}$ to compute the residual $Ax^{k+1}-b$. Once global dual variable $y^{k+1}$ is computed, it will be broadcast to $N$ individual $x_i$ minimization steps. ]</p>
+<blockquote>
+<ul>
+<li>[Book] Cooperative distributed multi-agent optimization (this book discusses dual decomposition methods and consensus problems).</li>
+<li>Distributed Dual Averaging in Networks (distributed methods for graph-structured optimization problems)</li>
+</ul>
+</blockquote>
+<h2 id="0-3-Augmented-Lagrangians-and-Method-of-Multipliers"><a href="#0-3-Augmented-Lagrangians-and-Method-of-Multipliers" class="headerlink" title="0.3 Augmented Lagrangians and Method of Multipliers"></a>0.3 Augmented Lagrangians and Method of Multipliers</h2><p>augmented lagrangian is to bring robustness to dual ascent method, and to yield convergence without assumptions like strict convexity or finiteness of $f$.</p>
+<p>Augmented Lagrangian is<br>$$<br>L_\sigma(x,y) = f(x) + y^T(Ax-b) + \frac{\sigma}{2} |Ax-b|^2<br>$$<br>Dual function is<br>$$<br>g_\sigma(y) = \inf_x L_\sigma(x,y)<br>$$<br>Adding the penalty term is to be differentiable under rather mild conditions on the original problem.</p>
+<blockquote>
+<p>find gradient of the augmented dual function by minimizing over $x$, then evaluating the resulting equality constraint residual.</p>
+</blockquote>
+<p>Algorithm:<br>$$<br>\begin{array}{rl}<br>x^{k+1} &amp;=&amp; \mathop{\mathrm{argmin}}_{x} L_\sigma(x,y^k) &amp; x\text{-minimization step} \<br>y^{k+1} &amp;=&amp; y^k +\sigma(Ax^{k+1} - b) &amp; \text{dual variable update}<br>\end{array}<br>$$<br>Here, the parameter $\sigma$ is used as the step size $\alpha^k$. </p>
+<p>[The method of multipliers converges under far more general conditions than dual ascent, including cases when $f$ takes on the value $+\infty$ or is not strictly convex.]</p>
+<ul>
+<li><p>How to choose $\sigma$:</p>
+<p>The optimality condition are primal and dual feasibility, i.e.,<br>$$<br>Ax^* - b = 0, \quad \nabla f(x^*) + A^Ty^* = 0<br>$$<br>Then, we have $x^{k+1}$ can minimize $L_\sigma(x,y^k)$, so<br>$$<br>\begin{aligned}<br> 0 &amp;= \nabla_x L_\sigma(x^{k+1}, y^k) \<br>   &amp;= \nabla_x f(x^{k+1}) + A^T(y^k + \sigma(Ax^{k+1}-b)) \<br>   &amp;= \nabla_x f(x^{k+1}) + A^T y^{k+1}<br> \end{aligned}<br>$$<br>So, using $\sigma$ as step size in dual update, the iterate $(x^{k+1}, y^{k+1})$ is dual feasible. $\rightarrow$ primal residual $Ax^{k+1}-b$ converges to 0. $\rightarrow$ optimality.</p>
+</li>
+</ul>
+<p>Shortcoming: When $f$ is separable, the augmented Lagrangian $L_\sigma$ is not separable, so the $x$-minimization step cannot be carried out separately in parallel for each $x_i$. This means that the basic method of multipliers cannot be used for decomposition</p>
+<h1 id="1-ADMM"><a href="#1-ADMM" class="headerlink" title="1. ADMM"></a>1. ADMM</h1><p>blend the decomposability of dual ascent with the superior convergence properties of the method of multipliers.</p>
+<p>Problem:<br>$$<br>\begin{array}{rcl}<br>\min &amp; f(x)+g(z) \<br>\text{s.t. } &amp; Ax+Bz = c<br>\end{array}<br>$$<br>difference: $x$ splits into two parts, $x$ and $z$, with the objective function separable across the splitting. </p>
+<p>optimal value:<br>$$<br>p^* = \inf { f(x)+g(z) | Ax+Bz = c }<br>$$<br>Augmented Lagrangian:<br>$$<br>L_\sigma (x,z;y) = f(x)+g(z)+y^T(Ax+Bz-c)+\frac{\sigma}{2} |Ax+Bz-c|^2<br>$$</p>
+<h2 id="1-1-Algorithm"><a href="#1-1-Algorithm" class="headerlink" title="1.1 Algorithm"></a>1.1 Algorithm</h2><h3 id="1-1-1-Unscaled-form"><a href="#1-1-1-Unscaled-form" class="headerlink" title="1.1.1 Unscaled form"></a>1.1.1 Unscaled form</h3><p>$$<br>\begin{aligned}<br>x^{k+1} &amp;= \mathop{\mathrm{argmin}}_x L_\sigma(x,z^k,y^k) &amp; x\text{-minimization}\<br>z^{k+1} &amp;= \mathop{\mathrm{armmin}}_z L_\sigma(x^{k+1},z,y^k) &amp; z\text{-minimization}\<br>y^{k+1} &amp;= y^k + \sigma(Ax^{k+1}+Bz^{k+1}-c)  &amp; \text{dual variable update}<br>\end{aligned}<br>$$</p>
+<blockquote>
+<p><u><em>why ADMM is alternating direction:</em></u></p>
+<p>If use method of multipliers to solve this problem, we will have<br>$$<br>\begin{aligned}<br>(x^{k+1}, z^{k+1}) &amp;= \mathop{\mathrm{argmin}}_{x,z} L_\sigma(x,z,y^k) \<br>y^{k+1} &amp;= y^k + \sigma(Ax^{k+1}+Bz^{k+1}-c)<br>\end{aligned}<br>$$<br>So, the augmented lagrangian is minimized jointly with two variables $x,z$.</p>
+<p>But, ADMM update $x$ and $z$ in an alternating or sequential fashion, –&gt; alternating direction.</p>
+<p><em>ADMM can be viewed as a version of method of multipliers where a single Gauss-Seidel pass over $x$ and $z$ is used instead of joint minimization.</em></p>
+</blockquote>
+<h3 id="1-1-2-Scaled-form"><a href="#1-1-2-Scaled-form" class="headerlink" title="1.1.2 Scaled form"></a>1.1.2 Scaled form</h3><p>combine the linear and quadratic terms in the augmented lagrangian and scale the residual variable.</p>
+<p>Set $u = \frac{1}{\sigma} y$, the ADMM becomes<br>$$<br>\begin{array}{l}<br>{x^{k+1}:=\underset{x}{\operatorname{argmin}} \left(f(x) + \frac{\sigma}{2} \left|A x+B z^{k}-c+u^{k}\right|^{2}\right)} \<br>{z^{k+1}:=\underset{z}{\operatorname{argmin}} \left(g(z) + \frac{\sigma}{2} \left|A x^{k+1}+B z-c+u^{k}\right|^{2}\right)} \<br>{u^{k+1}:=u^{k}+A x^{k+1}+B z^{k+1}-c}\end{array}<br>$$<br>Define residual at $k$ iteration as $r^k=Ax^k+Bz^k-c$, we have<br>$$<br>u^k = u^0 + \sum_{j=1}^k r^j<br>$$</p>
+<h2 id="1-2-Convergence"><a href="#1-2-Convergence" class="headerlink" title="1.2 Convergence"></a>1.2 Convergence</h2><p><strong>Assumption 1:</strong></p>
+<p>function $f: \mathbb R^n \rightarrow \mathbb R \cup {+\infty}$ and $g: \mathbb R^m \rightarrow \mathbb R \cup {+\infty}$ are closed, proper and convex</p>
+<blockquote>
+<p>this assumption means the subproblem in $x$-update and $z$-update are solvable. </p>
+<p>allows $f$ and $g$ are nondifferentiable and to assume value $+\infty$. For example, $f$ is indicator function</p>
+</blockquote>
+<p><strong>Assumption 2:</strong></p>
+<p>Unaugmented Lagrangian $L_0$ has a saddle point. This means there exists $(x^*, z^*, y^*)$ such that<br>$$<br>L_0 (x^*, z^*, y) \leq L_0(x^*, z^*, y^*) \leq L_0(x^*, z^*, y^*)<br>$$</p>
+<blockquote>
+<p>Based on assumption1, $L_0(x^*, z^*, y^*)$ is finite for saddle point $(x^*, z^*, y^*)$. So, $(x^*, z^*)$ is solution to $\mathrm{argmin}_{x,z} L(x,z,y)$. So, $Ax^* + Bz^* = c$ and $f(x^*)&lt;\infty$, $g(z^*)&lt;\infty$. =</p>
+<p>It also implies that $y^*$ is dual optimal, and the optimal value of the primal and dual problem are equal, i.e., the strong duality holds. </p>
+</blockquote>
+<p>Under Assumption 1 and Assumption 2, ADMM iteration satisfy:</p>
+<ul>
+<li>residual convergence: $r^k \rightarrow 0$ as $k\rightarrow \infty$.</li>
+<li>objective convergence: $f(x^k)+g(z^k) \rightarrow p^*$ as $k\rightarrow \infty$.</li>
+<li>dual variable convergence: $y^k \rightarrow y^*$ as $k\rightarrow \infty$.</li>
+</ul>
+<h2 id="1-3-Optimality-condition-and-Stopping-creterion"><a href="#1-3-Optimality-condition-and-Stopping-creterion" class="headerlink" title="1.3 Optimality condition and Stopping creterion"></a>1.3 Optimality condition and Stopping creterion</h2><h3 id="1-3-1-Optimality-condition-for-ADMM"><a href="#1-3-1-Optimality-condition-for-ADMM" class="headerlink" title="1.3.1 Optimality condition for ADMM:"></a>1.3.1 Optimality condition for ADMM:</h3><ol>
+<li>Primal feasibility<br>$$<br>Ax^* + Bz^* -c = 0<br>$$</li>
+<li>Dual feasibility<br>$$<br>\begin{aligned}<br>0 &amp;\in \part f(x^*) + A^Ty^* \<br>0 &amp;\in \part g(z^*) + B^Ty^*<br>\end{aligned}<br>$$</li>
+</ol>
+<p>Since $z^{k+1}$ minimizes $L_\sigma(x^{k+1},z,y^k)$, we have<br>$$<br>0\in \part g(z^{k+1}) + B^T y^k + \sigma B^T(Ax^{k+1}+Bz^{k+1}-c)\<br>= \part g(z^{k+1}) + B^T y^k + \sigma B^T r^{k+1} \<br>= \part g(z^{k+1}) + B^T y^k<br>$$<br>This means that $z^{k+1}$ and $y^{k+1}$ satisfy $0\in \part g(z^*)+ B^T u^*$. Similarly, can obtain other conditions. </p>
+<blockquote>
+<p>the last condition holds for $(x^{k+1}, z^{k+1}, y^{k+1})$, the residual for the other two are primal and dual residuals $r^{k+1}$ and $s^{k+1}$. </p>
+</blockquote>
+<h3 id="1-3-2-Stopping-criteria"><a href="#1-3-2-Stopping-criteria" class="headerlink" title="1.3.2 Stopping criteria"></a>1.3.2 Stopping criteria</h3><p>suboptimality<br>$$<br>f(x^k)+g(z^k)-p^* \leq -(y^k)^Tr^k + (x^k-x^*)^T s^k<br>$$<br>shows that when the residuals $r^k$ and $s^k$ are small, the objective suboptimality will be small.</p>
+<p>It’s hard to use this inequality as stopping criterion. But if we guess $|x^k-x^* | \leq d$, we have<br>$$<br>f(x^k)+g(z^k)-p^* \leq -(y^k)^Tr^k + d |s^k| \leq |y^k| |r^k| + d|s^k|<br>$$<br>so, the stopping criterion is that the primal and dual residual are small, i.e.,<br>$$<br>|r^k| \leq \epsilon^{\mathrm {pri}} \quad \text{and } \quad |s^k| \leq \epsilon^{\text{dual}}<br>$$<br>where $\epsilon^{\text{pri}}, \epsilon^{\text{dual}}$ are feasibility tolerance for primal and dual feasibility conditions. These tolerance can be chosen using an absolute and relative criterion, such as<br>$$<br>\begin{aligned}<br>\epsilon^{\text{pri}} &amp;= \sqrt{p} \epsilon^{\text{abs}} + \epsilon^{\text{rel}} \max{ |Ax^k|, B|z^k|, |c| }, \<br>\epsilon^{\text{dual}} &amp;= \sqrt{n} \epsilon^{\text{abs}} + \epsilon^{rel} |A^Ty^k|<br>\end{aligned}<br>$$</p>
+<h2 id="1-4-Extension-and-Variations"><a href="#1-4-Extension-and-Variations" class="headerlink" title="1.4 Extension and Variations"></a>1.4 Extension and Variations</h2><ol>
+<li><p><strong>Varying Penalty Parameter</strong></p>
+<p>using different penalty parameters $\sigma^k$ for each iteration.  -&gt; improve convergence, reduce independence on initial $\sigma$.<br>$$<br>\sigma^{k+1}:=\left{\begin{array}{ll}<br>{\tau^{\text {incr }} \sigma^{k}} &amp; {\text{if } |r^{k}| &gt; \mu |s^{k}|} \<br>{\sigma^{k} / \tau^{\text {decr }}} &amp; {\text {if }|s^{k}| &gt; \mu |r^{k}|} \<br>{\sigma^{k}} &amp; {\text { otherwise }}<br>\end{array}\right.<br>$$<br>where $\mu&gt;1, \tau^{\text{incr}}&gt;1, \tau^{\text{decr}}&gt;1$ are parameters. </p>
+<p>The idea behind this penalty parameter update is to try to keep the primal and dual residual norms within a factor of $\mu$ of one another as they both converge to zero. </p>
+<ul>
+<li><p><strong>large values of $\sigma$ place a large penalty on violations of primal feasibility and so tend to produce small primal residuals.</strong></p>
+</li>
+<li><p><strong>Conversely, small values of $\sigma$ tend to reduce the dual residual, but at the expense of reducing the penalty on primal feasibility, which may result in a larger primal residual.</strong>  </p>
+</li>
+</ul>
+<p>So, when primal residual becomes large, inflates $\sigma$ by $\tau^{\text{incr}}$; when primal residual seems too small, deflates $\sigma$ by $\tau^{\text{decr}}$.  </p>
+<p>When a varying penalty parameter is used in the scaled form of ADMM, the scaled dual variable $u^k=\frac{1}{\sigma} y^k$ should be rescaled after updating $\sigma$.</p>
+</li>
+<li><p><strong>More general Augmenting terms</strong></p>
+<ul>
+<li>idea 1: use different penalty parameters for each constraint, </li>
+<li>idea 2: replace the quadratic term $\frac{\sigma}{2} |r|^2$ with $\frac{1}{2} r^TPr$, where $P$ is a symmetric positive definite matrix.</li>
+</ul>
+</li>
+<li><p>Over-relaxation in the $z$- and $y$- updates, $Ax^{k+1}$ can be replaced with<br>$$<br>\alpha^k Ax^{k+1} - (1-\alpha^k) (Bz^k-c)<br>$$</p>
+<p>where $\alpha^k \in (0,2)$ is a relaxation parameter. When $\alpha^k &gt;1$, over-relaxation; when $\alpha^k&lt;1$, under-relaxation.</p>
+</li>
+<li><p><strong>Inexact minimization</strong></p>
+<p>ADMM will converge even when the $x$- and $z$-minimization steps are not carried out exactly, provided certain suboptimality measures in the minimizations satisfy an appropriate condition, such as being summable.</p>
+<blockquote>
+<p>in situations where the x- or z-updates are carried out using an iterative method; it allows us to solve the minimizations only approximately at first, and then more accurately as the iterations progress</p>
+</blockquote>
+</li>
+<li><p><strong>Update ordering</strong>    </p>
+<p>$x$-, $y$-, $z$- updates in varying orders or multiple times.   </p>
+<p>for example:  </p>
+<p>divide variables into $k$ blocks and update each of them in turn (multiple times). –&gt; multiple Gauss-Seidel passes.</p>
+</li>
+<li><p><strong>Related algorithms</strong> </p>
+<p>Dual ADMM [80]: applied ADMM to a dual problem.</p>
+<p>Distributed ADMM [183]: </p>
+<p>combination ADMM and proximal method of multipliers.</p>
+</li>
+</ol>
+<h1 id="2-General-Patterns"><a href="#2-General-Patterns" class="headerlink" title="2. General Patterns"></a>2. General Patterns</h1><p>Three cases: </p>
+<ul>
+<li>quadratic objective terms; </li>
+<li>separable objective and constraints; </li>
+<li>smooth objective terms.</li>
+</ul>
+<p>Here, we just discuss $x$-update, and can be easily applied to $z$-update.<br>$$<br>x^+ = \mathop{\mathrm{argmin}}_x (f(x)+\frac{\sigma}{2} |Ax-v|^2)<br>$$<br>where $v=-Bz+c-u$ is a known constant vector for the purpose of the $x$-update.</p>
+<h2 id="2-1-Proximity-Operator"><a href="#2-1-Proximity-Operator" class="headerlink" title="2.1 Proximity Operator"></a>2.1 Proximity Operator</h2><p>If $A=I$, $x$-update is<br>$$<br>x^+ = \mathop{\mathrm{argmin}}<em>x (f(x)+\frac{\sigma}{2} |x-v|^2) = \mathrm{Prox}</em>{f,\sigma}(v)<br>$$<br>Moreau envelope or MY regularization of $f$:<br>$$<br>\tilde f(v) = \inf_x (f(x)+\frac{\sigma}{2} |x-v|^2 )<br>$$<br>So, the $x$-minimization in the proximity operator is called <em>proximal minimization</em>.</p>
+<blockquote>
+<p>for example: if $f$ is the indicator function of set $\mathcal C$, the $x$-update is<br>$$<br>x^+ = \mathop{\mathrm{argmin}}<em>x (f(x)+\frac{\sigma}{2} |x-v|^2) = \Pi</em>{\mathcal C}(v)<br>$$</p>
+</blockquote>
+<h2 id="2-2-Quadratic-Objective-Terms"><a href="#2-2-Quadratic-Objective-Terms" class="headerlink" title="2.2 Quadratic Objective Terms"></a>2.2 Quadratic Objective Terms</h2><p>$$<br>f(x) = \frac{1}{2} x^TPx+q^Tx+r<br>$$</p>
+<p>where $P\in \mathbb S^n_+$, the set of symmetric positive semidefinite $n\times n$ matrices.</p>
+<p>Assume $P+\sigma A^TA$ is invertible, $x^+$ is an affine function of $v$ given by<br>$$<br>x^+ = (P+\sigma A^TA)^{-1} (\sigma A^Tv-q)<br>$$</p>
+<ol>
+<li><h3 id="direct-methods"><a href="#direct-methods" class="headerlink" title="direct methods:"></a>direct methods:</h3></li>
+</ol>
+<blockquote>
+<p>If we want to solve $Fx=g$, steps:</p>
+<ol>
+<li><p>factoring $F = F_1F_2\cdots F_k$</p>
+</li>
+<li><p>back-solve: solve $F_iz_i=z_{i-1}$ where $z_1=F_1^{-1}g$ and $x=z_k$ </p>
+<p>(given $z_1$, can compute $z_2$ based on $F_2z_2 =z_1$, then iterates, so can compute $z_k$, i.e., can compute $x$).</p>
+</li>
+</ol>
+<blockquote>
+<p>The cost of solving $Fx = g$ is the sum of the cost of factoring $F$ and the cost of the back-solve.</p>
+</blockquote>
+</blockquote>
+<p>​    In our case, $F=P+\sigma A^TA, \ g=\sigma A^Tv-q$, where $P\in \mathbb S_+^n, A\in \mathbb R^{p\times n}$. </p>
+<blockquote>
+<p> We can form $F = P + \sigma A^TA$ at a cost of $O(pn^2)$ flops (floating point operations). We then carry out a Cholesky factorization of $F$ at a cost of $O(n^3)$ flops; the back-solve cost is $O(n^2)$. (The cost of forming $g$ is negligible compared to the costs listed above.) When $p$ is on the order of, or more than $n$, the overall cost is $O(pn^2)$. (When $p$ is less than $n$ in order, the matrix inversion lemma described below can be used to carry out the update in $O(p^2n)$ flops.)</p>
+</blockquote>
+<ol start="2">
+<li><p><strong>Exploiting Sparsity</strong></p>
+<p>When $A$ and $P$ can make $F$ sparse.  can be more efficient</p>
+</li>
+<li><p><strong>Caching Factorizations</strong></p>
+<p>$Fx^{(i)}=g^{(i)}$,  If $t$ is the factorization cost and $s$ is the back-solve cost, then the total cost becomes $t + Ns$ instead of $N(t + s)$, which would be the cost if we were to factor $F$ each iteration. As long as $\sigma$ does not change, we can factor $P + \sigma A^TA$ once, and then use this cached factorization in subsequent solve steps</p>
+</li>
+<li><p><strong>Matrix Inversion  Lemma</strong><br>$$<br>\left(P+\sigma A^{T} A\right)^{-1}=P^{-1}-\sigma P^{-1} A^{T}\left(I+\sigma A P^{-1} A^{T}\right)^{-1} A P^{-1}<br>$$<br>For efficient computation.</p>
+</li>
+<li><p><strong>Quadratic Function restricted to an Affine Set</strong><br>$$<br>f(x)=(1 / 2) x^{T} P x+q^{T} x+r, \quad \text { dom } f={x | F x=g}<br>$$<br>Here, $x^+$ is still an affine function of $v$. the update involves solving the KKT condition:<br>$$<br>\left[\begin{array}{cc}{P+\sigma I} &amp; {F^{T}} \ {F} &amp; {0}\end{array}\right]\left[\begin{array}{c}{x^{k+1}} \ {\nu}\end{array}\right]+\left[\begin{array}{c}{q-\sigma\left(z^{k}-u^{k}\right)} \ {-g}\end{array}\right]=0<br>$$<br>==So, here, A=I​?==</p>
+</li>
+</ol>
+<h2 id="2-3-Smooth-Objective-Terms"><a href="#2-3-Smooth-Objective-Terms" class="headerlink" title="2.3 Smooth Objective Terms"></a>2.3 Smooth Objective Terms</h2><p>If $f$ is smooth, can use iterative methods. (gradient method, nonlinear conjugate gradient, L-BFGS)</p>
+<blockquote>
+<p>The convergence of these methods depends on the conditioning of the function to be minimized. The presence of the quadratic penalty term $\frac{\sigma}{2} |Ax-v|^2$ tends to improve the conditioning of the problem and thus improve the performance of an iterative method for updating $x$. </p>
+<p>Can adjust $\sigma$ in each iteration to converges quichly.</p>
+</blockquote>
+<ol>
+<li><p><strong>Early Termination</strong></p>
+<p>Early termination in the $x$- or $z$-updates can result in more ADMM iterations, but much lower cost per iteration, giving an overall improvement in efficiency.</p>
+</li>
+<li><p><strong>Warm Start</strong></p>
+<p>initialize the iterative method used in the $x$-update at the solution $x^k$ obtained in the previous iteration</p>
+</li>
+<li><p><strong>Quadratic Objective Terms</strong></p>
+<p>worth using an iterative method than a direct method.  –&gt; conjugate gradient method.</p>
+<p>Can use when direct method do not work, or $A$ is dense.</p>
+</li>
+</ol>
+<h2 id="2-4-Decomposition"><a href="#2-4-Decomposition" class="headerlink" title="2.4 Decomposition"></a>2.4 Decomposition</h2><ol>
+<li><p><strong>Block Separability</strong> </p>
+<p>$x=(x_1, \cdots, x_N)$, then $f(x)=f_1(x_1) + \cdots +f_N(x_N)$. If the quadratic term $|Ax|^2$ is also separable, i.e., $A^TA$ is block diagonal, then the augmented lagrangian $L_\sigma$ is separable.  –&gt;  compute in parallel.</p>
+</li>
+<li><p><strong>Component separability</strong></p>
+<p>$f(x)=f_1(x_1) + \cdots +f_n(x_n)$ and $A^TA$ is diagonal. $x$-minimization step can be carried out via $n$ scalar minimization. </p>
+</li>
+<li><p><strong>Soft Thresholding</strong></p>
+<p>If $f(x)=\lambda ||x|<em>1$ and $A=I$,  –&gt;  component separability. the scalar $x_i$-update is<br>$$<br>x_i^+ =  \mathop{\operatorname{argmin}}</em>{x_i}(\lambda |x_i| + \frac{\sigma}{2}(x_i-v_i)^2)<br>$$<br>Even the first term is not differentiable, But can use subdifferential.<br>$$<br>\begin{array}{ll}<br>&amp;x_i^+ = S_{\frac{\lambda}{\sigma}} (v_i)&amp; \<br>\text{where }&amp; &amp; \<br>&amp;S_\kappa(a)  = \begin{cases} a-\kappa,\quad&amp; a&gt;\kappa \ 0, \quad&amp;  |a|\leq \kappa \<br>a+\kappa, \quad&amp; a&lt; -\kappa\end{cases} \text{ or } S_\kappa(a) = (a-\kappa)<em>- - (-a-\kappa)</em>+<br>\end{array}<br>$$<br><strong>Actually, this is proximity operator of the $\ell_1$ norm.</strong></p>
+</li>
+</ol>
+<h1 id="3-Constrained-Convex-Optimization"><a href="#3-Constrained-Convex-Optimization" class="headerlink" title="3. Constrained  Convex Optimization"></a>3. Constrained  Convex Optimization</h1><h3 id="3-1-1-Alternating-Projection"><a href="#3-1-1-Alternating-Projection" class="headerlink" title="3.1.1 Alternating Projection"></a>3.1.1 Alternating Projection</h3><p>find intersection of two sets.</p>
+<p>alternating projection:<br>$$<br>\begin{array}{l}{x^{k+1}:=\Pi_{\mathcal{C}}\left(z^{k}\right)} \ {z^{k+1}:=\Pi_{\mathcal{D}}\left(x^{k+1}\right)}\end{array}<br>$$<br>ADMM:<br>$$<br>\begin{array}{ll}<br>\min &amp; f(x)+g(z) \<br>\text{s.t. } &amp; x-z = 0<br>\end{array}<br>$$<br>where $f$ and $g$ are indicator function of $\mathcal C$ and $\mathcal D$.<br>$$<br>\begin{array}{l}{x^{k+1}:=\Pi_{\mathcal{C}}\left(z^{k}-u^k\right)} \ {z^{k+1}:=\Pi_{\mathcal{D}}\left(x^{k+1}+u^k\right)} \<br>u^{k+1} := u^k+x^{k+1}-z^{k+1}  \end{array}<br>$$<br>This ADMM method is more efficient than previous method.</p>
+<h3 id="3-1-2-Parallel-Projection"><a href="#3-1-2-Parallel-Projection" class="headerlink" title="3.1.2  Parallel Projection"></a>3.1.2  Parallel Projection</h3><p>find a  point in the intersection of $N$ sets $\mathcal A_1, \cdots, \mathcal A_N$.</p>
+<p>So, $\mathcal C=\mathcal A_1\times \cdots \times \mathcal A_N$, $\mathcal D={(x_1, \cdots, x_N) \in \mathbb R^{nN} | x_1 = \cdots = x_N }$. </p>
+<p>So, $\Pi_\mathcal C(x) = (\Pi_{\mathcal A_1}(x_1), \cdots, \Pi_{\mathcal A_N}(x_N))$, $\Pi_\mathcal D(x)=(\bar x, \cdots, \bar x)$, where $\bar x = \frac{1}{N}\sum_{i=1}^N x_i$.</p>
+<p>each step of ADMM can be carried out by projecting points onto each of the sets $\mathcal A_i$ in parallel and then averaging the results:<br>$$<br>\begin{aligned} x_{i}^{k+1} &amp;:=\prod_{\mathcal{A}<em>{i}}\left(z^{k}-u</em>{i}^{k}\right) \ z^{k+1} &amp;:=\frac{1}{N} \sum_{i=1}^{N}\left(x_{i}^{k+1}+u_{i}^{k}\right) \ u_{i}^{k+1} &amp;:=u_{i}^{k}+x_{i}^{k+1}-z^{k+1} \end{aligned}<br>$$<br>The first and third steps can be carried out in parallel.</p>
+<blockquote>
+<p>indicator function of $\mathcal A_1 \cap \cdots \cap \mathcal A_N$ splits into the sum of the indicator functions of each $\mathcal A_i$.</p>
+</blockquote>
+<p>Another compact representation:<br>$$<br>\begin{array}{ll}<br>&amp;x_i^{k+1} = \Pi_{\mathcal A_i}(\bar x^k - u_i^k) \<br>&amp;u_i^{k+1} = u_i^k + (x_i^{k+1}-\bar x^{k+1}) \<br>\text{where} &amp; \bar u^{k+1}=\bar u^k+\bar x^{k+1}- z^k, z^{k+1} = \bar x^{k+1}+\bar u^k<br>\end{array}<br>$$<br>This shows that the $u_i^k$ is the running sum of the  discrepancies $x_i^k-\bar x^k$. The first step is a parallel projection onto the sets $\mathcal C_i$; the second involves averaging the projected points.</p>
+<h2 id="3-2-Linear-and-Quadratic-Programming"><a href="#3-2-Linear-and-Quadratic-Programming" class="headerlink" title="3.2 Linear and Quadratic Programming"></a>3.2 Linear and Quadratic Programming</h2><p> Quadratic program (QP)<br>$$<br>\begin{array}{rc}<br>\min &amp; \frac{1}{2}x^TPx + q^Tx \<br>\text{s.t. } &amp; Ax=b, x\ge 0<br>\end{array}<br>$$<br>where $x\in \mathbb R^n$, $P\in \mathbb S_+^n$.</p>
+<p>Represent it as ADMM form as<br>$$<br>\begin{array}{rcc}<br>&amp;\min &amp; f(x)+g(z) \<br>&amp;\text{s.t. } &amp; x-z=0  \<br>\text{where, } &amp; &amp;f(x)=\frac{1}{2}x^TPx + q^Tx, &amp; \mathrm{dom} f={x|Ax=b}, &amp; g(z)=\delta_{\mathbb R_+^n}(z)<br>\end{array}<br>$$<br>$f$ is the original objective with restricted domain and $g$ is the indicator function of $\mathbb R_+^n$.</p>
+<p>Scaled form of ADMM:<br>$$<br>\begin{aligned}<br>x^{k+1} &amp;:=\operatorname{argmin}<em>{x}\left(f(x)+\frac{\sigma}{2} \left|x-z^{k}+u^{k}\right|^{2}\right) \<br>z^{k+1} &amp;:=\left(x^{k+1}+u^{k}\right)</em>{+} \<br>u^{k+1} &amp;:=u^{k}+x^{k+1}-z^{k+1}<br>\end{aligned}<br>$$<br>Here, the $x$-update is an equality-constrained least square problem with optimality KKT conditions, $\nu$ is multiplier.<br>$$<br>\begin{bmatrix}{P+\sigma I} &amp; {A^{T}} \ {A} &amp; {0}\end{bmatrix} \begin{bmatrix}{x^{k+1}} \ {\nu}\end{bmatrix} + \begin{bmatrix}{q-\sigma\left(z^{k}-u^{k}\right)} \ {-b}\end{bmatrix} = 0<br>$$</p>
+<h3 id="Linear-and-Quadratic-Cone-Programming"><a href="#Linear-and-Quadratic-Cone-Programming" class="headerlink" title="Linear and Quadratic Cone Programming"></a>Linear and Quadratic Cone Programming</h3><p>conic constraint $x\in \mathcal K$ to replace $x\ge 0$ above</p>
+<p>The only change to ADMM is the $z$-update (Projection onto $\mathcal K$)</p>
+<blockquote>
+<p>For example, we can solve a semidefinite program with $x \in \mathbb S^n_+$ by projecting $x^{k+1} + u^k$ onto $\mathbb S^n_+$ using an ==eigenvalue decomposition==.</p>
+</blockquote>
+<h1 id="4-ell-1-Norm-Problems"><a href="#4-ell-1-Norm-Problems" class="headerlink" title="4. $\ell_1$ Norm Problems"></a>4. $\ell_1$ Norm Problems</h1><p>ADMM explicitly targets problems that split into two distinct parts, $f$ and $g$, that can then be handled separately.</p>
+<p>ADMM can decouple the nonsmooth $\ell_1$ term from the smooth loss term.</p>
+<h2 id="4-1-Least-Absolute-Deviations"><a href="#4-1-Least-Absolute-Deviations" class="headerlink" title="4.1 Least Absolute Deviations"></a>4.1 Least Absolute Deviations</h2><p>minimize $|Ax-b|_1$ instead of $|Ax-b|_2^2$. provide a more robust fit than least squares</p>
+<p>ADMM form:<br>$$<br>\begin{array}{ll}<br>\min &amp; |z|_1 \<br>\text{s.t. } &amp; Ax-z=b<br>\end{array}<br>$$<br>so, $f=0$, $g=| \cdot|_1$.</p>
+<p>ADMM algorithm:<br>$$<br>\begin{aligned}<br>x^{k+1} &amp;:= (A^TA)^{-1} A^T (b+z^k-u^k) \<br>z^{k+1} &amp;:= S_{\frac{1}{\sigma}}(Ax^{k+1}-b+u^k) \<br>u^{k+1} &amp;:= u^{k} + Ax^{k+1} - z^{k+1} - b<br>\end{aligned}<br>$$</p>
+<ol>
+<li><p>Huber fitting</p>
+<p>between least square and lease absolute.<br>$$<br>\begin{array}<br>{} &amp;\min &amp; g^{\text{hub}}(Ax-b) \<br>\text{where} &amp; &amp;g^{\text{hub}}(a)= \begin{cases} \frac{a^2}{2},\quad &amp; |a|\le 1 \ |a|-\frac{1}{2},\quad &amp;  |a|&gt;1 \end{cases} &amp;<br>\end{array}<br>$$</p>
+<p>ADMM algorithm: </p>
+<p>same. Only difference is the $z$-update<br>$$<br>z^{k+1}:=\frac{\sigma}{1+\sigma}\left(A x^{k+1}-b+u^{k}\right)+\frac{1}{1+\sigma} S_{1+1 / \sigma}\left(A x^{k+1}-b+u^{k}\right)<br>$$</p>
+</li>
+</ol>
+<h2 id="4-2-Basis-Pursuit"><a href="#4-2-Basis-Pursuit" class="headerlink" title="4.2 Basis Pursuit"></a>4.2 Basis Pursuit</h2><p>$$<br>\begin{array}{ll}<br>\min &amp; |x|_1 \<br>\text{s.t. } &amp; Ax=b<br>\end{array}<br>$$</p>
+<p>with $x\in \mathbb R^n$, $A\in \mathbb R^{m\times n}$, $b\in \mathbb R^m$ ($m&lt;n$).</p>
+<p>Aim: to find a sparse solution to an underdetermined system with equality equations.</p>
+<p>ADMM form:<br>$$<br>\begin{array}{ll}<br>\min &amp; f(x)+|z|_1 \<br>\text{s.t. } &amp; x-z=0<br>\end{array}<br>$$<br>where $f$ is indicator function of set $\mathcal C={x\in \mathbb R^n | Ax=b}$. </p>
+<p>ADMM algorithm:<br>$$<br>\begin{aligned}<br>x^{k+1} &amp;:= \Pi_\mathcal C (z^k-u^k) \<br>z^{k+1} &amp;:= S_{\frac{1}{\sigma}}(x^{k+1}+u^k) \<br>u^{k+1} &amp;:= u^{k} + x^{k+1} - z^{k+1}<br>\end{aligned}<br>$$<br>The subproblem of $x$-update is solving a linearly-constrained minimum Euclidean norm problem</p>
+<hr>
+<p>$$<br>x^{k+1} = (I-A^T (AA^T)^{-1} A)(z^k-u^k) + A^T(AA^T)^{-1}b<br>$$</p>
+<h2 id="4-3-General-ell-1-regularized-loss-minimization"><a href="#4-3-General-ell-1-regularized-loss-minimization" class="headerlink" title="4.3 General $\ell_1$ regularized loss minimization"></a>4.3 General $\ell_1$ regularized loss minimization</h2><p>Problem:  $\min \quad l(x)+\lambda |x|_1$</p>
+<p>ADMM form:<br>$$<br>\begin{array}{rll}<br>&amp;\min &amp; l(x)+g(z) \<br>&amp;\text{s.t. } &amp; x-z=0 \<br>\text{where,} &amp; &amp; g(z)=\lambda |z|<em>1<br>\end{array}<br>$$<br>ADMM algorithm:<br>$$<br>\begin{aligned}<br>x^{k+1} &amp;:=\operatorname{argmin}</em>{x}\left(l(x)+\frac{\sigma}{2} \left|x-z^{k}+u^{k}\right|^{2}\right) \<br>z^{k+1} &amp;:= S_{\frac{\lambda}{\sigma}}(x^{k+1}+u^k) \<br>u^{k+1} &amp;:=u^{k}+x^{k+1}-z^{k+1}<br>\end{aligned}<br>$$<br>For subproblem $x$-update:</p>
+<ul>
+<li>If $l$ is smooth, this can be done by any standard method, such as Newton’s method, a quasi-Newton method such as L-BFGS, or the conjugate gradient method.</li>
+<li>If $l$ is quadratic, the $x$-minimization can be carried out by solving linear equations</li>
+</ul>
+<h2 id="4-2-Lasso"><a href="#4-2-Lasso" class="headerlink" title="4.2 Lasso"></a>4.2 Lasso</h2><p>$$<br>\min \frac{1}{2} |Ax-b|^2 + \lambda |x|_1<br>$$</p>
+<p>ADMM form:<br>$$<br>\begin{array}{rll}<br>&amp;\min &amp; f(x)+g(z) \<br>&amp;\text{s.t. } &amp; x-z=0 \<br>\text{where,} &amp; &amp; f(x)=\frac{1}{2}|Ax-b|^2,\quad g(z)=\lambda |z|<em>1<br>\end{array}<br>$$<br>ADMM algorithm:<br>$$<br>\begin{aligned}<br>x^{k+1} &amp;:= (A^TA+\sigma I)^{-1} (A^Tb+\sigma(z^k-u^k)) \<br>z^{k+1} &amp;:= S</em>{\frac{\lambda}{\sigma}}(Ax^{k+1}-b+u^k) \<br>u^{k+1} &amp;:= u^{k} + Ax^{k+1} - z^{k+1}<br>\end{aligned}<br>$$</p>
+<h3 id="4-4-1-Generalized-Lass"><a href="#4-4-1-Generalized-Lass" class="headerlink" title="4.4.1 Generalized Lass"></a>4.4.1 Generalized Lass</h3><p>$$<br>\min \frac{1}{2} |Ax-b|^2 + \lambda |Fx|_1<br>$$</p>
+<p>where $F$ is an arbitrary linear transformation.</p>
+<blockquote>
+<p>==Special cases:==<br>$$<br>F_{ij}=\begin{cases} 1, \quad &amp; j=i+1 \ -1, \quad &amp; j=i \ 0, \quad &amp; \text{otherwise} \end{cases}<br>$$<br>and $A=I$, the generation reduces to<br>$$<br>\min \frac{1}{2} |x-b|^2 + \lambda \sum_{i=1}^{n-1} |x_{i+1}-x_i|<br>$$</p>
+</blockquote>
+<p>ADMM form:<br>$$<br>\begin{array}{rll}<br>&amp;\min &amp; \frac{1}{2} |Ax-b|^2 + \lambda |z|<em>1\<br>&amp;\text{s.t. } &amp; Fx-z=0 \<br>\end{array}<br>$$<br>ADMM algorithm:<br>$$<br>\begin{aligned}<br>x^{k+1} &amp;:= (A^TA+\sigma F^TF)^{-1} (A^Tb+\sigma F^T(z^k-u^k)) \<br>z^{k+1} &amp;:= S</em>{\frac{\lambda}{\sigma}}(Fx^{k+1}+u^k) \<br>u^{k+1} &amp;:= u^{k} + Fx^{k+1} - z^{k+1}<br>\end{aligned}<br>$$</p>
+<blockquote>
+<p>For the previous special case, the $A^TA+\sigma F^TF$ is tridiagonal, so can be carried out in $O(n)$ flops.</p>
+</blockquote>
+<h3 id="4-4-2-Group-Lasso"><a href="#4-4-2-Group-Lasso" class="headerlink" title="4.4.2 Group Lasso"></a>4.4.2 Group Lasso</h3><p>Replace $|x|<em>1$ with $\sum</em>{i=1}^N |x_i|_2$ where $x=(x_1, \cdots, x_N)$ with $x_i \in \mathbb R^{n_i}$.</p>
+<p>All the same, except the $z$-update:<br>$$<br>z_i^{k+1} := S_{\frac{\lambda}{\sigma}}(x_i^{k+1}+u^k), \quad o=1, \cdots, N \<br>$$<br>where the thresholding operator $S_\kappa$ is<br>$$<br>S_\kappa(a)=(1-\frac{\kappa}{|a|<em>2} )</em>+ a<br>$$</p>
+<blockquote>
+<p>Extend to handle the <u>overlapping groups.</u></p>
+<p>$N$ potentially overlapping groups $G_i \subseteq {1,\cdots, n}$, the objective is<br>$$<br>\frac{1}{2} |Ax-b|^2 + \lambda \sum_{i=1}^N |x_{G_i} |<br>$$<br>because the groups can overlap, this kind of objective is difficult to optimize with many standard methods, but it is straightforward with ADMM. </p>
+<p>ADMM: Introduce $x_i\in \mathbb R^{|G_i|}$ and consider problem:<br>$$<br>\begin{array}{ll}<br>\min &amp; \frac{1}{2} |Az-b|^2 + \lambda \sum_{i=1}^N |x_i| \<br>\text{s.t. } &amp; x_i-\tilde z_i=0, i=1, \cdots, N<br>\end{array}<br>$$</p>
+</blockquote>
+<h2 id="Sparse-Inverse-Covariance-Selection"><a href="#Sparse-Inverse-Covariance-Selection" class="headerlink" title="Sparse Inverse Covariance Selection"></a>Sparse Inverse Covariance Selection</h2><h1 id="5-Consensus-and-Sharing"><a href="#5-Consensus-and-Sharing" class="headerlink" title="5. Consensus and Sharing"></a>5. Consensus and Sharing</h1><p>$$<br>\min f(x) = \sum_{i=1}^N f_i(x)<br>$$</p>
+<h2 id="5-1-Global-Variable-Consensus"><a href="#5-1-Global-Variable-Consensus" class="headerlink" title="5.1 Global Variable Consensus"></a>5.1 Global Variable Consensus</h2><p>Global consensus problem: </p>
+<p>add <strong>global consensus</strong> variable $z$ to split the minimization problem<br>$$<br>\begin{aligned}<br>\min \quad&amp;  \sum_{i=1}^N f_i(x_i) \<br>\text{s.t.} \quad&amp;  x_i-z = 0, \ i=1,\cdots,N<br>\end{aligned}<br>$$</p>
+<blockquote>
+<p>constraint means all the local variables $x_i$ should be equal. </p>
+</blockquote>
+<p>Augmented Lagrangian:<br>$$<br>L_\sigma(x_1, \cdots, x_N, z, y) = \sum_{i=1}^N \left( f_i(x_i) + y_i^T(x_i-z) + \frac{\sigma}{2} |x_i-z|^2 \right)<br>$$<br>constraint set is<br>$$<br>\mathcal C = {(x_1, \cdots, x_N) | x_1=x_2=\cdots=x_N }<br>$$<br>ADMM algorithm:<br>$$<br>\begin{aligned}<br>x_i^{k+1} &amp;:= \mathop{\mathrm{argmin}}<em>{x_i} \left( f_i(x_i)+y_i^{kT}(x_i-z^k)+\frac{\sigma}{2}|x_i-z^k|^2 \right) \<br>z^{k+1} &amp;:= \frac{1}{N} \sum</em>{i=1}^N \left( x_i^{k+1} + \frac{1}{\sigma}y_i^k \right) \<br>y_i^{k+1} &amp;:= y^k_i + \sigma(x_i^{k+1}-z^{k+1})<br>\end{aligned}<br>$$<br>Here, the first and last step can be carried out independently. </p>
+<p>Simplify this algorithm:<br>$$<br>\begin{array}{ll}<br>&amp;\begin{aligned}<br>x_i^{k+1} &amp;:= \mathop{\mathrm{argmin}}_{x_i} \left( f_i(x_i)+y_i^{kT}(x_i-z^k)+\frac{\sigma}{2}|x_i-\bar x^k|^2 \right) \<br>y_i^{k+1} &amp;:= y^k_i + \sigma(x_i^{k+1}-\bar x^{k+1})<br>\end{aligned} \<br>\text{where, } &amp; \quad z^{k+1} = \bar x^{k+1} + \frac{1}{\sigma} \bar y^k \<br>\end{array}<br>$$<br>The dual variables are separately updated to drive the variables into consensus, and quadratic regularization helps pull the variables toward their average value while still attempting to minimize each local $f_i$.</p>
+<blockquote>
+<p>We can interpret consensus ADMM as a method for solving problems in which the objective and constraints are distributed across multiple processors. Each processor only has to handle its own objective and constraint term, plus a quadratic term which is updated each iteration. The quadratic terms (or more accurately, the linear parts of the quadratic terms) are updated in such a way that the variables converge to a common value, which is the solution of the full problem.</p>
+</blockquote>
+<p>Primal and dual residual are<br>$$<br>{r^{k}=\left(x_{1}^{k}-\bar{x}^{k}, \ldots, x_{N}^{k}-\bar{x}^{k}\right), \quad s^{k}=-\sigma\left(\bar{x}^{k}-\bar{x}^{k-1}, \ldots, \bar{x}^{k}-\bar{x}^{k-1}\right)} <br>$$<br>So, the square norms are<br>$$<br>{\qquad\left|r^{k}\right|<em>{2}^{2}=\sum</em>{i=1}^{N}\left|x_{i}^{k}-\bar{x}^{k}\right|<em>{2}^{2}, \quad\left|s^{k}\right|</em>{2}^{2}=N \sigma^{2}\left|\bar{x}^{k}-\bar{x}^{k-1}\right|_{2}^{2}}<br>$$</p>
+<h3 id="5-1-2-Global-Variable-Consensus-with-Regularization"><a href="#5-1-2-Global-Variable-Consensus-with-Regularization" class="headerlink" title="5.1.2 Global Variable Consensus with Regularization"></a>5.1.2 Global Variable Consensus with Regularization</h3><p>$$<br>\begin{array}{ll}<br>\min &amp; \sum_{i=1}^N f_i(x_i) + g(z) \<br>\text{s.t. } &amp; x_i-z=0, i=1,\cdots, N<br>\end{array}<br>$$</p>
+<p>ADMM algorithm:<br>$$<br>\begin{array}{l}{x_{i}^{k+1}:=\underset{x_{i}}{\operatorname{argmin}}\left(f_{i}\left(x_{i}\right)+y_{i}^{k T}\left(x_{i}-z^{k}\right)+\frac{\sigma}{2} \left|x_{i}-z^{k}\right|<em>{2}^{2}\right)} \ {z^{k+1}:=\underset{z}{\operatorname{argmin}}\left(g(z)+\sum</em>{i=1}^{N}\left(-y_{i}^{k T} z+\frac{\sigma}{2} \left|x_{i}^{k+1}-z\right|<em>{2}^{2}\right)\right)} \ {y</em>{i}^{k+1}:=y_{i}^{k}+\sigma\left(x_{i}^{k+1}-z^{k+1}\right)} \end{array}<br>$$<br>Express the $z$-update as an averaging step, so we can have<br>$$<br>{\quad z^{k+1}:=\underset{z}{\operatorname{argmin}}\left(g(z)+\frac{N\sigma}{2}\left|z-\bar{x}^{k+1}-\frac{1}{\sigma} \bar{y}^{k}\right|_{2}^{2}\right)}<br>$$</p>
+<blockquote>
+<p>example 1:</p>
+<p>$g(z)=\lambda |z|<em>1$, $z$-update becomes $z^{k+1}:=S</em>{\frac{\lambda}{N\sigma}}(\bar x^{k+1}-\frac{1}{\sigma} \bar y^k)$</p>
+<p>Example 2:</p>
+<p>$g$ is indicator function of $\mathbb R^n_+$, i.e., $g=\delta_{\mathbb R_+^n}$. $z$-update is $z^{k+1}:=(\bar x^{k+1}-\frac{1}{\sigma} \bar y^k)_+$</p>
+</blockquote>
+<p>Algorithm:<br>$$<br>\begin{array}{l}{x_{i}^{k+1}:=\underset{x_{i}}{\operatorname{argmin}}\left(f_{i}\left(x_{i}\right)+\frac{\sigma}{2} \left|x_{i}-z^{k}+u_i^k\right|<em>{2}^{2}\right)} \<br>{z^{k+1}:=\underset{z}{\operatorname{argmin}}\left(g(z)+\frac{N\sigma}{2} \left|z-x</em>{i}^{k+1}-\bar u^k\right|<em>{2}^{2}\right)} \<br>{u</em>{i}^{k+1}:=u_{i}^{k}+x_{i}^{k+1}-z^{k+1}} \end{array}<br>$$</p>
+<h2 id="5-2-General-Form-Consensus-Optimization"><a href="#5-2-General-Form-Consensus-Optimization" class="headerlink" title="5.2 General Form Consensus Optimization"></a>5.2 General Form Consensus Optimization</h2><p>Objective: $f_1(x_1) + \cdots + f_N(x_N)$. Each of these local variables consists of a selection of the components of the global variables $z\in \mathbb R^n$. This means each components of local variable corresponds to some global variable component $z_g$.</p>
+<p>Mapping from local to global: $g=\mathcal G(i,j)$ </p>
+<blockquote>
+<p>In the context of model fitting, the following is one way that general form consensus naturally arises. The global variable $z$ is the full feature vector (i.e., vector of model parameters or independent variables in the data), and different subsets of the data are spread out among $N$ processors. Then xi can be viewed as the subvector of $z$ corresponding to (nonzero) features that appear in the $i$th block of data. In other words, each processor handles only its block of data and only the subset of model coefficients that are relevant for that block of data. If in each block of data all regressors appear with nonzero values, then this reduces to global consensus.</p>
+</blockquote>
+<img src="https://raw.githubusercontent.com/Lisnol1/PicGo--/master/20191121201431.png" style="zoom:40%">
+
+<p>$\tilde z_i \in \mathbb R^{n_i}$ defined by $(\tilde z_i)<em>j = z</em>{\mathcal G(i,j)}$.</p>
+<p>General form consensus problem is<br>$$<br>\begin{array}{ll}<br>\min &amp; \sum_{i=1}^N f_i(x_i) \<br>\text{s.t. }&amp; x_i-\tilde z_i = 0, i = 1, \cdots, N<br>\end{array}<br>$$<br>Augmented Lagrangian  is<br>$$<br>L_\sigma(x,z,y) = \sum_{i=1}^N \left( f_i(x_i) + y^T_i(x_i-\tilde z_i) + \frac{<br>\sigma}{2} |x_i - \tilde z_i |^2 \right)<br>$$<br>with the dual variables $y_i\in \mathbb R^{n_i}$.</p>
+<p>ADMM algorithm:<br>$$<br>\begin{array}{l}<br>{x_{i}^{k+1}:=\underset{x_{i}}{\operatorname{argmin}}\left(f_{i}\left(x_{i}\right)+y_{i}^{k T}x_{i}+\frac{\sigma}{2} \left|x_{i}-\tilde z_i^{k}\right|<em>{2}^{2}\right)} \ {z^{k+1}:=\underset{z}{\operatorname{argmin}}\left(\sum</em>{i=1}^{m}\left(-y_{i}^{k T} \tilde z_i+\frac{\sigma}{2} \left|x_{i}^{k+1}-\tilde z_i\right|<em>{2}^{2}\right)\right)} \ {y</em>{i}^{k+1}:=y_{i}^{k}+\sigma\left(x_{i}^{k+1}-\tilde z_i^{k+1}\right)}<br>\end{array}<br>$$<br>where $x_i$- and $y_i$- updates can be carried out independently for each $i$.</p>
+<p>The $z$- update step decouples across the components of $z$, since $L_\sigma$ is fully separable in its components:<br>$$<br>z_{g}^{k+1}:=\frac{\sum_{\mathcal{G}(i, j)=g}\left(\left(x_{i}^{k+1}\right)<em>{j}+(1 / \sigma)\left(y</em>{i}^{k}\right)<em>{j}\right)}{\sum</em>{\mathcal{G}(i, j)=g} 1}<br>$$</p>
+<blockquote>
+<p>the $z$-update is local averaging for each component $z_g$ rather than global averaging; </p>
+<p>in the language of collaborative filtering, we could say that only the processing elements that have an opinion on a feature $z_g$ will vote on $z_g$.</p>
+</blockquote>
+<h3 id="5-2-1-General-Form-Consensus-with-Regularization"><a href="#5-2-1-General-Form-Consensus-with-Regularization" class="headerlink" title="5.2.1 General Form Consensus with Regularization"></a>5.2.1 General Form Consensus with Regularization</h3><p>$$<br>\begin{array}{ll}<br>\min &amp; \sum_{i=1}^N f_i(x_i) + g(z) \<br>\text{s.t. }&amp; x_i-\tilde z_i = 0, i = 1, \cdots, N<br>\end{array}<br>$$</p>
+<p>where $g$ is a regularization function. </p>
+<p>$z$-update:</p>
+<ul>
+<li>first, the local averaging step from the unregularized setting, same to compute $z_g^{k+1}$. </li>
+<li>Then, proximity operator $\mathrm{Prox}_{g,k_g\sigma}$ for averaging </li>
+</ul>
+<h2 id="5-3-Sharing"><a href="#5-3-Sharing" class="headerlink" title="5.3 Sharing"></a>5.3 Sharing</h2><p>$$<br>\min \sum_{i=1}^N f_i(x_i) + g(\sum_{i=1}^N x_i)<br>$$</p>
+<p>where $x_i\in \mathbb R^n, i=1,\cdots, N$. $g$ is the shared object. </p>
+<p>Problem:<br>$$<br>\begin{array}{ll}<br>\min &amp; \sum_{i=1}^N f_i(x_i) + g(\sum_{i=1}^N z_i) \<br>\text{s.t. }&amp; x_i- z_i = 0, \quad x_i, z_i \in \mathbb R^n, \quad i = 1, \cdots, N, \quad<br>\end{array}<br>$$<br>The scaled ADMM algorithm;<br>$$<br>\begin{array}{l}<br>{x_{i}^{k+1}:=\underset{x_{i}}{\operatorname{argmin}}\left(f_{i}\left(x_{i}\right)+\frac{\sigma}{2} \left|x_{i}- z_i^{k}+u_i^k\right|<em>{2}^{2}\right)} \<br>{z^{k+1}:=\underset{z}{\operatorname{argmin}}\left(g\left(\sum</em>{i=1}^{N}z_i\right) + \frac{\sigma}{2} \sum_{i=1}^N \left|z_i-x_{i}^{k+1}-u_i^k\right|<em>{2}^{2}\right)} \ {u</em>{i}^{k+1}:=u_{i}^{k}+x_{i}^{k+1}- z_i^{k+1}}<br>\end{array}<br>$$<br>$x_i$- and $u_i$ update can be carried out independently. $z$-update solve problem in $Nn$ variables. </p>
+<p>But we can simplify it to solve only $n$ variables.<br>$$<br>\begin{array}{ll}<br>&amp;\min &amp; g(N\bar z)+\frac{\sigma}{2} \sum_{i=1}^N |z+i-a_i|^2 \<br>&amp;\text{s.t. } &amp; \bar z=\frac{1}{N} \sum_{i=1}^N z_i \<br>\text{where,} &amp;&amp; a_i = u_i+x_i^{k+1}<br>\end{array}<br>$$<br>Because $\bar z$ fixed, we have $z_i = a_i +\bar z+\bar a$.</p>
+<p>So, $z$-update can be computed by solving unconstrained problem<br>$$<br>\min \quad g(N\bar z)+\frac{\sigma}{2} \sum_{i=1}^N |\bar z - \bar a |^2<br>$$<br>Then, we can have<br>$$<br>u_i^{k+1} = \bar u^k + \bar x^{k+1} - \bar z^{k+1}<br>$$<br>It’s obvious that all of the dual variables $u_i^k$ are equal, (i.e., consensus), and can be replaces with a single dual variable $u\in \mathbb R^m$. </p>
+<p>So, the final algorithm:<br>$$<br>\begin{array}{l}<br>{x_{i}^{k+1}:=\underset{x_{i}}{\operatorname{argmin}}\left(f_{i}\left(x_{i}\right)+\frac{\sigma}{2} \left|x_{i}-x_i^k+\bar x^k - \bar z^{k}+u^k\right|<em>{2}^{2}\right)} \<br>{\bar z^{k+1}:=\underset{\bar z}{\operatorname{argmin}}\left(g\left(N \bar z\right) + \frac{N\sigma}{2} \left|\bar z-u^k-\bar x^{k+1}\right|</em>{2}^{2}\right)} \ {u^{k+1}:=u^{k}+\bar x^{k+1}- \bar z^{k+1}}<br>\end{array}<br>$$<br>The $x$-update can be carried out in parallel, for $i = 1,\cdots,N$. The $z$-update step requires gathering $x^{k+1}_i$ to form the averages, and then solving a problem with $n$ variables. After the $u$-update, the new value of $\bar x^{k+1} − \bar z^{k+1} + u^{k+1}$ is scattered to the subsystems.</p>
+<h3 id="5-3-1-Duality"><a href="#5-3-1-Duality" class="headerlink" title="5.3.1 Duality"></a>5.3.1 Duality</h3><p>Attaching Lagrange multipliers $\nu_i$ to the constraints $x_i-z_i=0$, the dual function $\Gamma$ of the ADMM sharing problem is<br>$$<br>\Gamma(\nu_1, \cdots, \nu_N) = \begin{cases} -g^*(\nu_1)-\sum_if^*<em>i(-\nu_i), \quad &amp;\text{if }\nu_1=\nu_2=\cdots=\nu_N \ -\infty, \quad &amp;\text{otherwise} \end{cases}<br>$$<br>Letting $\psi=g^*$, $h_i(\nu)=f^*(-\nu)$, the dual problem can be rewritten as<br>$$<br>\begin{array}{ll}<br>\min &amp; \sum</em>{i=1}^N h_i(\nu_i) +\psi(\nu) \<br>\text{s.t. } &amp; \nu_i-\nu=0<br>\end{array}<br>$$<br>This is same as the regularized global variable consensus problem. </p>
+<p>$d_i\in \mathbb R^n$ is the multiplers to constraints $\nu_i-\nu=0$. So, the Dual regularized global consensus problem is<br>$$<br>\min \quad \sum_{i=1}^N f_i(d_i) + g(\sum_{i=1}^N d_i)<br>$$<br>Thus, there is a <strong>close dual relationship</strong> between the consensus problem and the sharing problem. In fact, the global consensus problem can be solved by running ADMM on its dual sharing problem, and vice versa.</p>
+<h3 id="5-3-2-Optimal-Exchange"><a href="#5-3-2-Optimal-Exchange" class="headerlink" title="5.3.2 Optimal Exchange"></a>5.3.2 Optimal Exchange</h3><p>exchange problem:<br>$$<br>\begin{array}{ll}<br>\min &amp; \sum_{i=1}^N f_i(x_i) \<br>\text{s.t.} &amp; \sum_{i=1}^N x_i=0<br>\end{array}<br>$$<br>The sharing objective $g$ is the indicator function of the set ${0}$. The components of the vectors $x_i$ represent quantities of commodities that are exchanged among $N$ agents or subsystems. $(x_i)_j$ is the exchanging amount. If $(x_i)_j&gt;0$, $i$ send to $j$, and vice versa. Constraints $\sum x_i=0$ means the each commodity clears. </p>
+<p>Scaled ADMM algorithm:<br>$$<br>\begin{aligned}<br>x_i^{k+1} &amp;= \mathop{\operatorname{argmin}}<em>{x_i} \left( f_i(x_i) + \frac{\sigma}{2} |x_i-x_i^k+\bar x^k+u^k |^2 \right) \<br>u^{k+1} &amp;= u^k + \bar x^{k+1}<br>\end{aligned}<br>$$<br>Unscaled ADMM algorithm:<br>$$<br>\begin{aligned}<br>x_i^{k+1} &amp;= \mathop{\operatorname{argmin}}</em>{x_i} \left( f_i(x_i) + y^{kT}x_i + \frac{\sigma}{2} |x_i-(x_i^k-\bar x^k) |^2 \right) \<br>y^{k+1} &amp;= y^k + \sigma \bar x^{k+1}<br>\end{aligned}<br>$$<br>The proximal term in the $x$-update is a penalty for $x^{k+1}$ deviating from $x^k$, projected onto the feasible set. </p>
+<blockquote>
+<p>$x$-update can be carried out in parallel. $u$-update needs gathering $x_i^{k+1}$  and averages it, then broadcast $u^k + \bar x^{k+1}$ back for $x$-update</p>
+</blockquote>
+<blockquote>
+<p>Dual decomposition is the simplest algorithmic expression of this kind of problem. In this setting, each agent adjusts his consumption $x_i$ to minimize his individual cost $f_i(x_i)$ adjusted by the cost $y^T x_i$, where $y$ is the price vector. ADMM differs only in the inclusion of the proximal regularization term in the updates for each agent. As $y^k$ converges to an optimal price vector $y^*$, the effect of the proximal regularization term vanishes. The proximal regularization term can be interpreted as each agent’s commitment to help clear the market.</p>
+</blockquote>
+<h1 id="6-Distributed-Model-Fitting"><a href="#6-Distributed-Model-Fitting" class="headerlink" title="6. Distributed Model Fitting"></a>6. Distributed Model Fitting</h1><p>$$<br>\min l(Ax-b) + r(x)<br>$$</p>
+<p>where $l(Ax-b)=\sum_{i=1}^m l_i(a_i^Tx-b_i)$.</p>
+<p>assume the regularization function $r$ is separable, like $r(x)=\lambda |x|_2^2$ or $r(x)=\lambda |x|_1$</p>
+<h1 id="7-Nonconvex"><a href="#7-Nonconvex" class="headerlink" title="7. Nonconvex"></a>7. Nonconvex</h1><h2 id="7-1-Nonconvex-constraints"><a href="#7-1-Nonconvex-constraints" class="headerlink" title="7.1 Nonconvex constraints"></a>7.1 Nonconvex constraints</h2><p>$$<br>\begin{array}{ll}<br>\min &amp; f(x) \<br>\text{s.t.} &amp; x\in \mathbb S<br>\end{array}<br>$$</p>
+<p>with $f$ convex but $\mathbb S$.<br>$$<br>\begin{array}{l}{x^{k+1}:=\underset{x}{\operatorname{argmin}}\left(f(x)+(\rho / 2)\left|x-z^{k}+u^{k}\right|<em>{2}^{2}\right)} \ {z^{k+1}:=\prod</em>{\mathcal{S}}\left(x^{k+1}+u^{k}\right)} \ {u^{k+1}:=u^{k}+x^{k+1}-z^{k+1}}\end{array}<br>$$<br>Here, $x$-minimization step is convex since $f$ is convex, but $z$-update is projection onto nonconvex set. </p>
+<ul>
+<li>Cardinality. If $\mathbb S = {x | \mathrm {card}(x) ≤ c}$, where $\mathrm{card}$ gives the number of nonzero elements, then $\Pi_{\mathbb S}(v)$ keeps the $c$ largest<br>magnitude elements and zeroes out the rest.</li>
+<li>Rank. If $\mathbb S$ is the set of matrices with rank $c$, then $\Pi_{\mathbb S}(v)$ is determined by carrying out a singular value decomposition, $v =\sum_i \sigma_i u_i v_i^T$, and keeping the top $c$ dyads, i.e., form $\Pi_{\mathbb S}(v) = \sum_{i=1}^c \sigma_i u_i v_i^T$.</li>
+<li>Boolean constraints. If $\mathbb S={ x|x_i\in {0,1} }$, then $\Pi_{\mathbb S}(v)$ simply rounds each entry to 0 or 1, whichever is closer. Integer constraints can be handled in the same way.</li>
+</ul>
+<h1 id="8-QCQP"><a href="#8-QCQP" class="headerlink" title="8. QCQP"></a>8. QCQP</h1><p>$$<br>\begin{array}{rCl}<br>\text{(P1)} &amp;<br>\begin{array}{rCl}<br>&amp;\min\limits_{x \in \mathbb{R}^{n}} &amp; x^{T} C x\<br>&amp;\text { s.t. } &amp;x^{T} A_{i} x \underline\triangleright b_{i}, \quad i=1, \dots, m<br>\end{array}<br>\end{array}<br>$$</p>
+<p>where $\underline\triangleright$ can represents either $\geq, \leq, =$; $C, A_1, A_2, \cdots, A_m \in \mathbb S^n$ where $\mathbb S^n$ denotes the set of all real symmetric $n\times n$ matrices. </p>
+<p>if $A_i$ are positive semidefinite, it’s convex program. many nonlinear programming codes can be used. (primal-dual interior-point method)</p>
+<p>Nonconvex QOP is NP-hard. there are two distinct techniques –&gt; branch-and-bound method</p>
+<ol>
+<li><p>generate a feasible solution or approximate feasible solution with a smaller objective value.</p>
+</li>
+<li><p>derive a tighter lower bound of the minimal objective value </p>
+</li>
+</ol>
+<p>“Lift-and-project convex relaxation methods”  can be characterized as three steps:</p>
+<ol>
+<li><p>Lift the QOP to an equivalent problem in the space $\mathbb S^{1+n}$ of $(1+n)\times(1+n)$ symmetric matrices. The resulting problem is an Linear Programming with additional rank-1 and positive semidefinite constraints imposed on a matrix variable<br>$$<br>Y=\begin{pmatrix} 1 &amp; x^T \ x &amp; X \end{pmatrix} \in \mathbb S^{1+n}<br>$$</p>
+</li>
+<li><p>Relax the rank-1 and positive semidefinite constraints so that the feasible region of the resulting problem is convex. </p>
+</li>
+<li><p>Project the relaxed lifted problem in $\mathbb S^{1+n}$ back to the original Euclidean space $\mathbb R^n$.</p>
+</li>
+</ol>
+<p>If only the rank-1 constraint is removed in step 2, it becomes an SDP –&gt; SDP relaxation</p>
+<p>If remove both rank-1 and positive semidefinite constraints in step 2, it becomes LP. –&gt; cutting plane algorithm, LP relaxation</p>
+<p>The SDP relaxation is at least as effective as LP relaxation. More efficient. 0.878 approximation of maximum cut based on the SDP relaxation is widely known.</p>
+<h2 id="8-1-SDR"><a href="#8-1-SDR" class="headerlink" title="8.1 SDR"></a>8.1 SDR</h2><h3 id="8-1-1-Homogeneous-QCQP"><a href="#8-1-1-Homogeneous-QCQP" class="headerlink" title="8.1.1 Homogeneous QCQP"></a>8.1.1 Homogeneous QCQP</h3><p>$$<br>\begin{array}{rCCCl}<br>x^{T} C x &amp;=&amp; \operatorname{Tr}\left(x^{T} C x\right) &amp; = &amp; \operatorname{Tr}\left(C x x^{T}\right) \<br>x^{T} A_{i} x &amp;=&amp; \operatorname{Tr}\left(x^{T} A_{i} x\right) &amp; = &amp; \operatorname{Tr}\left(A_{i} x x^{T}\right)<br>\end{array}<br>$$</p>
+<p>Set $xx^T = X$. </p>
+<p>Equivalent formulation is<br>$$<br>\begin{array}{rCl}<br>\text{(P2)} &amp;<br>\begin{array}{rCl}<br>&amp;\min\limits_{X \in \mathbb{S}^{n}} &amp; \operatorname{Tr}(C X)\<br>&amp;\text { s.t. } &amp; \operatorname{Tr}(A_{i} X) \underline\triangleright b_{i}, \quad i=1, \dots, m \<br>&amp;&amp; X\succeq 0, : \operatorname{rank}(X) = 1<br>\end{array}<br>\end{array}<br>$$<br>In problem (P2), the rank constraint $\operatorname{rank}(X)=1$ is difficult and nonconvex. Thus, it can be dropped to obtain the relaxed version (P3):<br>$$<br>\begin{array}{rCl}<br>\text{(P3)} &amp;<br>\begin{array}{rCl}<br>&amp;\min\limits_{X \in \mathbb{S}^{n}} &amp; \operatorname{Tr}(C X)\<br>&amp;\text { s.t. } &amp; \operatorname{Tr}(A_{i} X) \underline\triangleright b_{i}, \quad i=1, \dots, m \<br>&amp;&amp; X\succeq 0<br>\end{array}<br>\end{array}<br>$$</p>
+<blockquote>
+<p>Most of the convex optimization toolboxes handles SDPs using interior-point algorithm with the worst complexity  $\mathcal O(\max{m,n}^4n^{1/2}\log(1/\epsilon))$ given a solution accuracy $\epsilon&gt;0$. [Primal-dual path-following method]</p>
+</blockquote>
+<p>SDR is a computationally efficient approximation approach to QCQP, in the sense that its complexity is polynomial in the problem size $n$ and the number of constraints $m$. </p>
+<p>But, how to convert a globally optimal solution $X^*$ to a feasible solution $\tilde x$ is hard if $\operatorname{rank}(X) \neq 1$. Even if we obtain $\tilde x$, it may be not optimal solution $x^*$.</p>
+<p>one method:</p>
+<ul>
+<li>If $\operatorname{rank}(X) \neq 1$, let $r=\operatorname{rank}(X^*)$, let $X^* = \sum_{i=1}^r \lambda_i q_iq_i^T$ denote the eigen-decomposition of $X^*$ where $\lambda_1\ge \lambda_2 \ge \cdots \ge \lambda_r \ge 0$ are eigen values ad $q_1, q_2, \cdots, q_r\in \mathbb R^n$ are eigen vectors. use the best rank-one approximation $X_1^*$ to $X^*$, where $X_1^* = \lambda_1q_1q_1^T$, we have $\tilde x = \sqrt{\lambda_1}q_1$ is one of the solution to (P1)</li>
+<li>Randomization. rounding to generate feasible points from the random samples $\xi_l$. Moreover, we repeat the random sampling $L$ times and choose the one that yields the best objective.</li>
+</ul>
+<h3 id="8-1-2-Inhomogeneous-QCQP"><a href="#8-1-2-Inhomogeneous-QCQP" class="headerlink" title="8.1.2 Inhomogeneous QCQP"></a>8.1.2 Inhomogeneous QCQP</h3><p>$$<br>\begin{array}{rCl}<br>\min\limits_{x \in \mathbb{R}^{n}} &amp; x^{T} C x+2 c^{T} x \<br>\text { s.t. } &amp; x^{T} A_{i} x+2 a_{i}^{T} x \underline\triangleright b_{i}, \quad i=1, \ldots, m<br>\end{array}<br>$$</p>
+<p>rewrite it as homogeneous form<br>$$<br>\begin{array}{rCl}<br>\min\limits_{x \in \mathbb{R}^{n}, t \in \mathbb{R}} &amp; \begin{bmatrix} x^{T} \quad t\end{bmatrix} \begin{bmatrix} C &amp; c \ c^{T} &amp; 0 \end{bmatrix} \begin{bmatrix} x \ t \end{bmatrix} \<br>\text { s.t. } &amp; t^{2}=1 \<br>&amp; \begin{bmatrix} x^{T} \quad t\end{bmatrix} \begin{bmatrix} A_i &amp; a_i \ a_i^T &amp; 0 \end{bmatrix} \begin{bmatrix} x \ t \end{bmatrix} \underline\triangleright b_i, \quad i=1, \ldots, m<br>\end{array}<br>$$<br>where both the problem size and the number of constraints increase by one.</p>
+<h3 id="8-1-3-Complex-valued-problems"><a href="#8-1-3-Complex-valued-problems" class="headerlink" title="8.1.3 Complex-valued problems"></a>8.1.3 Complex-valued problems</h3><p><strong>One type:</strong><br>$$<br>\begin{array}{rCl}<br>\min\limits_{x \in \mathbb{C}^{n}} &amp; x^{H} C x \<br>\text { s.t. } &amp; x^{H} A_{i} x : \underline\triangleright : b_{i}, \quad i=1, \ldots, m<br>\end{array}<br>$$<br>where $C, A_1, A_2, \cdots, A_m \in \mathbb H^n$ with $\mathbb H^n$ being the set of all complex $n\times n$ Hermitian matrices.  </p>
+<p>Convert it as<br>$$<br>\begin{array}{rCl}<br>\min\limits_{X \in \mathbb{H}^{n}} &amp; \operatorname{Tr}(C X)\<br>\text { s.t. } &amp; \operatorname{Tr}\left(A_{i} X\right)  : \underline\triangleright :  b_{i}, \quad i=1, \ldots, m\<br>&amp; X \succeq 0<br>\end{array}<br>$$<br><strong>Another type:</strong><br>$$<br>\begin{array}{rCl}<br>\min\limits_{x \in \mathbb{C}^{n}} &amp;x^{H} C x \<br>\text { s.t. } &amp;x_{i} \in\left{1, e^{j 2 \pi / k}, \cdots, e^{j 2 \pi(k-1) / k}\right}, i=1, \ldots, n<br>\end{array}<br>$$<br>transform it as<br>$$<br>\begin{array}{rCl}<br>\underset{X \in \mathbb H^{n}}{\min } &amp; \operatorname{Tr}(C X)\<br>\text { s.t. }&amp;  X \succeq 0, :  X_{i i}=1, i=1, \ldots, n<br>\end{array}<br>$$</p>
+<h3 id="8-1-4-Separable-QCQPs"><a href="#8-1-4-Separable-QCQPs" class="headerlink" title="8.1.4 Separable QCQPs"></a>8.1.4 Separable QCQPs</h3><p>$$<br>\begin{array}{rCl}<br>\min\limits_{x_{1}, \cdots, x_{k} \in \mathbb{C}^{n}} &amp; \sum\limits_{i=1}^{k} x_{i}^{H} C_{i} x_{i}\<br>\text { S.t. } &amp; \sum\limits_{l=1}^{k} x_{l}^{H} A_{i, l} x_{l}  : \underline\triangleright :  b_{i}, \quad i=1, \cdots, m<br>\end{array}<br>$$</p>
+<p>Let $X_i = x_i x_i^H$ for $i=1,2,\cdots, k$. By relaxing the rank constraint on each $X_i$, we have<br>$$<br>\begin{array}{rCl}<br>\min\limits_{X_{1}, \ldots, X_{k} \in \mathbb{H}^{n}} &amp; \sum\limits_{i=1}^{k} \operatorname{Tr}\left(C_{i} X_{i}\right)\<br>\text{s.t.} &amp; \sum\limits_{l=1}^{k} \operatorname{Tr}\left(A_{i, l} X_{l}\right)  : \underline\triangleright : b_{i}, \quad i=1, \ldots, m\<br>&amp; X_{1} \succeq 0, \cdots, X_{k} \succeq 0<br>\end{array}<br>$$</p>
+<h3 id="8-1-5-Application-sensor-network"><a href="#8-1-5-Application-sensor-network" class="headerlink" title="8.1.5 Application: sensor network"></a>8.1.5 Application: sensor network</h3><p>goal: determine the coordinates of sensors in $\mathbb R^2$ such that the distances match the measured distance</p>
+<p>Set of sensors $V_s = {1,2, \cdots, n}$, set of anchors $V_a = {n+1, n+2, \cdots, n+m}$. </p>
+<p>Let $E_{ss}$ be the sensor-sensor edges, $E_{sa}$ be the set of sensor-anchor edges.</p>
+<p>Assume the measured distance ${d_{ik}:(i,k)\in E_{ss}}$ and ${\overline d_{ik}:(i,k) \in E_{sa}}$ are noise-free. </p>
+<p>Problem becomes<br>$$<br>\begin{array}{rCl}<br>\text{find} &amp; x_1,x_2,\cdots,x_n \in \mathbb R^2 \<br>\text{s.t. } &amp; |x_i-x_k|^2 = d_{ik}^2, : (i,k)\in E_{ss} \<br>&amp; |a_i-x_k|^2 = d_{ik}^2, : (i,k)\in E_{ss} \<br>\end{array}<br>$$<br>First,<br>$$<br>|x_i - x_k|^2 = x_i^Tx_i - 2x_i^Tx_k + x_k^Tx_k<br>$$<br>rewrite it as<br>$$<br>|x_i - x_k|^2 = (e_i-e_k)^TX^TX(e_i-e_k) = \operatorname{Tr}(E_{ik}X^TX)<br>$$<br>where $e_i\in \mathbb R^n$ is the $i$th vector, $E_{ik}=(e_i-e_k)^T(e_i-e_k) \in \mathbb S^n$, $X\in \mathbb R^{2\times n}$ whose $i$th column is $x_i$.</p>
+<p>Now, we have<br>$$<br>|a_i-x_k|^2 = a_i^Ta_i - 2a_i^Tx_k + x_k^Tx_k<br>$$<br>Although $a_i^Tx_k$ is linear only in $x_k$, we homogenize it and write as<br>$$<br>|a_i-x_k|^2 = \begin{bmatrix} a_i^T &amp; e_k^T \end{bmatrix}\begin{bmatrix} I_2 &amp; X \ x^T &amp; X^TX  \end{bmatrix} \begin{bmatrix} a_i \ e_k \end{bmatrix} = \operatorname{Tr}(\bar M_{ik}Z)<br>$$<br>where $\bar M_{ik} = \begin{bmatrix} a_i \ e_k \end{bmatrix} \begin{bmatrix} a_i^T &amp; e_k^T \end{bmatrix}\in \mathbb S^{n+2} $ .</p>
+<p>Using Schur complement, we have $Z = \begin{bmatrix} I_2 &amp; X \ X^T &amp; X^TX  \end{bmatrix} = \begin{bmatrix} I_2 \ X^T \end{bmatrix}\begin{bmatrix} I_2 &amp; X \end{bmatrix} \in \mathbb S^{n+2}$.</p>
+<p>Set $M_{ik}= \begin{bmatrix} 0 &amp; 0 \ 0 &amp; E_{ik} \end{bmatrix}$.</p>
+<p>We have the following equivalent SDP<br>$$<br>\begin{array}{rCl}<br>\text{find} &amp; Z \<br>s.t. &amp; \operatorname{Tr}\left(M_{i k} Z\right)=d_{i k}^{2}, \quad(i, k) \in E_{s s} \<br>&amp; \operatorname{Tr}\left(\bar{M}<em>{i k} Z\right) =\bar{d}</em>{i k}^{2}, \quad(i, k) \in E_{s a} \<br>&amp; Z_{1: 2,1: 2} =I_{2} \<br>&amp; Z \succeq 0, : \operatorname{rank}(Z)=2<br>\end{array}<br>$$</p>
+<h2 id="8-2-Second-order-cone-relaxation-SOCR"><a href="#8-2-Second-order-cone-relaxation-SOCR" class="headerlink" title="8.2 Second order cone relaxation (SOCR)"></a>8.2 Second order cone relaxation (SOCR)</h2><blockquote>
+<p>Optimal inverter var control in distribution systems with high pv penetration</p>
+<p>Branch flow model: relaxations and convexification (parts I, II)</p>
+<p>Optimal power flow in distribution networks</p>
+<p>Convex Relaxation of Optimal Power FlowPart I: Formulations and Equivalence</p>
+<p>Convex Relaxation of Optimal Power FlowPart II: Exactness,</p>
+</blockquote>
+<h2 id="8-3-Other"><a href="#8-3-Other" class="headerlink" title="8.3 Other"></a>8.3 Other</h2><p>SDR/SOCR are not exact. </p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>Xiaoxue Zhang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://zhang-xiaoxue.github.io/2021/08/16/Nonlinear%20Optimization/8_ADMM_boyd/" title="8. Alternating Direction Method of Multipliers (ADMM)">https://zhang-xiaoxue.github.io/2021/08/16/Nonlinear Optimization/8_ADMM_boyd/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/07/30/Model%20Predictive%20Control/LQR/" rel="prev" title="Linear Quadratic Regulator (LQR)">
+                  <i class="fa fa-chevron-left"></i> Linear Quadratic Regulator (LQR)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/08/16/Nonlinear%20Optimization/7_Nonlinear%20Conic%20Programming/" rel="next" title="7. Nonlinear Conic Programming">
+                  7. Nonlinear Conic Programming <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+<script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xiaoxue Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div><script color="0,0,255" opacity="0.5" zIndex="-1" count="199" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{&quot;enable&quot;:true,&quot;tags&quot;:&quot;none&quot;,&quot;single_dollars&quot;:true,&quot;cjk_width&quot;:0.9,&quot;normal_width&quot;:0.6,&quot;append_css&quot;:true,&quot;js&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;mathjax@3.1.4&#x2F;es5&#x2F;tex-mml-chtml.js&quot;}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

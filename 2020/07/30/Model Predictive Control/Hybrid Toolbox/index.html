@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/Academy-favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Academy-favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/Academy-favicon.png">
+  <link rel="mask-icon" href="/images/Academy-favicon" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;zhang-xiaoxue.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Muse&quot;,&quot;version&quot;:&quot;8.4.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;right&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;Searching...&quot;,&quot;empty&quot;:&quot;We didn&#39;t find any results for the search: ${query}&quot;,&quot;hits_time&quot;:&quot;${hits} results found in ${time} ms&quot;,&quot;hits&quot;:&quot;${hits} results found&quot;}}</script>
+<meta name="description" content="linear system###lincon  lincon  Constrained linear quadratic controller for linear systems  L&#x3D;lincon(SYS,TYPE,COST,INTERVAL,LIMITS,QPSOLVER)  build a regulator (or a controller for reference tracking)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hybrid Toolbox">
+<meta property="og:url" content="https://zhang-xiaoxue.github.io/2020/07/30/Model%20Predictive%20Control/Hybrid%20Toolbox/index.html">
+<meta property="og:site_name" content="Xiaoxue Zhang - NUS">
+<meta property="og:description" content="linear system###lincon  lincon  Constrained linear quadratic controller for linear systems  L&#x3D;lincon(SYS,TYPE,COST,INTERVAL,LIMITS,QPSOLVER)  build a regulator (or a controller for reference tracking)">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-07-30T04:00:00.000Z">
+<meta property="article:modified_time" content="2021-08-16T07:18:57.784Z">
+<meta property="article:author" content="Xiaoxue Zhang">
+<meta property="article:tag" content="Reinforcement Learning, Optimization and Control, Intellegent Systems">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zhang-xiaoxue.github.io/2020/07/30/Model%20Predictive%20Control/Hybrid%20Toolbox/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;en&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;zhang-xiaoxue.github.io&#x2F;2020&#x2F;07&#x2F;30&#x2F;Model%20Predictive%20Control&#x2F;Hybrid%20Toolbox&#x2F;&quot;,&quot;path&quot;:&quot;2020&#x2F;07&#x2F;30&#x2F;Model Predictive Control&#x2F;Hybrid Toolbox&#x2F;&quot;,&quot;title&quot;:&quot;Hybrid Toolbox&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>Hybrid Toolbox | Xiaoxue Zhang - NUS</title><script src="/js/config.js"></script>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Xiaoxue Zhang - NUS</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">NUS Ph.D.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#linear-system"><span class="nav-number">1.</span> <span class="nav-text">linear system</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#sim-for-lincon"><span class="nav-number">1.1.</span> <span class="nav-text">sim for lincon</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sim-general"><span class="nav-number">1.2.</span> <span class="nav-text">sim (general)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#kalman"><span class="nav-number">1.3.</span> <span class="nav-text">kalman</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#expcon"><span class="nav-number">1.4.</span> <span class="nav-text">expcon</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tf"><span class="nav-number">1.5.</span> <span class="nav-text">tf</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ss"><span class="nav-number">1.6.</span> <span class="nav-text">ss</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ssdata"><span class="nav-number">1.7.</span> <span class="nav-text">ssdata</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#c2d"><span class="nav-number">1.8.</span> <span class="nav-text">c2d</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#step"><span class="nav-number">1.9.</span> <span class="nav-text">step</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#solution"><span class="nav-number">2.</span> <span class="nav-text">solution</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dare"><span class="nav-number">2.1.</span> <span class="nav-text">dare</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dlqr"><span class="nav-number">2.2.</span> <span class="nav-text">dlqr</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lqr"><span class="nav-number">2.3.</span> <span class="nav-text">lqr</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#operspec"><span class="nav-number">2.4.</span> <span class="nav-text">operspec</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#findop"><span class="nav-number">2.5.</span> <span class="nav-text">findop</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#place"><span class="nav-number">2.6.</span> <span class="nav-text">place</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mpc"><span class="nav-number">2.7.</span> <span class="nav-text">mpc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#initial"><span class="nav-number">2.8.</span> <span class="nav-text">initial</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#run-sim"><span class="nav-number">3.</span> <span class="nav-text">run sim</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#lsim"><span class="nav-number">3.1.</span> <span class="nav-text">lsim</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#msgbox"><span class="nav-number">3.2.</span> <span class="nav-text">msgbox</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#warndlg"><span class="nav-number">3.3.</span> <span class="nav-text">warndlg</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#waitfor"><span class="nav-number">3.4.</span> <span class="nav-text">waitfor</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Xiaoxue Zhang"
+      src="/images/photo_blue.jpg">
+  <p class="site-author-name" itemprop="name">Xiaoxue Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Zhang-Xiaoxue" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Zhang-Xiaoxue" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:xiaoxuezhang@u.nus.edu" title="E-Mail → mailto:xiaoxuezhang@u.nus.edu" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.linkedin.com/in/xiaoxue-zhang-5233b611a/" title="https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;xiaoxue-zhang-5233b611a&#x2F;" rel="noopener" target="_blank">Linkedin</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.zhihu.com/people/lisnol" title="https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;lisnol" rel="noopener" target="_blank">知乎</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/Zhang-Xiaoxue" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zhang-xiaoxue.github.io/2020/07/30/Model%20Predictive%20Control/Hybrid%20Toolbox/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/photo_blue.jpg">
+      <meta itemprop="name" content="Xiaoxue Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Xiaoxue Zhang - NUS">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hybrid Toolbox
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-07-30 12:00:00" itemprop="dateCreated datePublished" datetime="2020-07-30T12:00:00+08:00">2020-07-30</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-08-16 15:18:57" itemprop="dateModified" datetime="2021-08-16T15:18:57+08:00">2021-08-16</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Model-Predictive-Control/" itemprop="url" rel="index"><span itemprop="name">Model Predictive Control</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="linear-system"><a href="#linear-system" class="headerlink" title="linear system"></a>linear system</h2><p>###<code>lincon</code> </p>
+<p><code>lincon</code>  Constrained linear quadratic controller for linear systems</p>
+<ul>
+<li><p><strong><code>L=lincon(SYS,TYPE,COST,INTERVAL,LIMITS,QPSOLVER)</code></strong>  build a regulator (or a controller for reference tracking) based on a finite time linear quadratic constrained optimal control formulation</p>
+<ul>
+<li><p><strong>SYS</strong> is the discrete-time linear time-invariant model <code>(A,B,C,D,TS)</code></p>
+</li>
+<li><p><strong>TYPE:</strong> 2 types, <code>&#39;reg&#39; </code>  = regulator;  <code>&#39;track&#39;</code> = controller for reference tracking    </p>
+<ol>
+<li><p>Regulator:</p>
+<p>$\min x’(N)Px(N) + \sum\limits_{k=0}^{N-1} x’(k)Qx(k) + u’(k)Ru(k) + \rho*\epsilon ^2$</p>
+<p>  s.t.      $ y_{min} - \epsilon &lt;= y(k) &lt;=y_{max} + \epsilon, k=1,…,N_{cy}$<br>​             $u_{min} &lt;= u(k) &lt;=u_{max},       k=0,…,N_{cu}$<br>​             $u(k) = Kx(k),            k&gt;=N_u$</p>
+</li>
+</ol>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x(t+<span class="number">1</span>) = A x(t) + B u(t)</span><br><span class="line">  y(t) = C x(t) + D u(t)</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li><p>Reference Tracking :</p>
+<p>$\min \sum\limits_{k=0}^{N-1} [y(k)-r]’S[y(k)-r] + \Delta u’(k) T \Delta u(k) + \rho*\epsilon^2$</p>
+<p>  s.t.     $y_{min} - \epsilon &lt;= y(k)  &lt;=y_{max} + \epsilon,\  k=1,…,N_{cy}$<br>​            $u_{min} &lt;= u(k)  &lt;=u_{max}, \      k=0,…,N_{cu}$<br>​            $\Delta u_{min} &lt;= du(k) &lt;=\Delta u_{max}, \     k=0,…,N_{cu}$<br>​             $\Delta u(k) = 0,       \   k&gt;=N_u$</p>
+</li>
+</ol>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x(t+<span class="number">1</span>) = Ax(t) + B [u(t<span class="number">-1</span>)+du(t)]   <span class="comment">%du(t) = u(t)-u(t-1) = input increment</span></span><br><span class="line">  y(t) = Cx(t) + D [u(t<span class="number">-1</span>)+du(t)]</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>COST</strong> is a structure of weights with fields:</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.Q = weight Q on states             [ x&#x27;(k)Qx(k) ]           (regulator only)</span><br><span class="line">.R = weight R on inputs             [ u&#x27;(k)Ru(k) ]           (regulator only)</span><br><span class="line">.P = weight P on final state        [ x&#x27;(N)Px(N) ]           (regulator only)</span><br><span class="line">.S = weight S on outputs            [ (y(k)-r)&#x27;S(y(k)-r) ]   (tracking only)</span><br><span class="line">.T = weight T on input increments   [ du&#x27;(k) T du(k) ]       (tracking only)</span><br><span class="line">.rho = weight on slack var          [ rho*<span class="built_in">eps</span>^<span class="number">2</span>  ]           (regulator and tracking)  <span class="comment">%rho=Inf means hard output constraints</span></span><br><span class="line">.K = feedback gain (default: K=<span class="number">0</span>)   [ u(k)=K*x(k) <span class="keyword">for</span> k&gt;=Nu] (only regulator)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><em>Only for regulators:</em><br>   <em>If <code>COST.P=&#39;lqr&#39;</code> then P is chosen as the solution of the LQR problem with weights Q,R, and K is chosen as the corresponding LQR gain.</em><br>   <em>If <code>COST.P=&#39;lyap&#39;</code> then P is chosen as the solution of the Lyapunov equation <code>A&#39;PA - P + Q = 0</code>, and K=0 (default).</em></p>
+</blockquote>
+</li>
+<li><p><strong>INTERVAL</strong> is a structure of number of input and output optimal control steps </p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.N   = optimal control interval over which the cost <span class="function"><span class="keyword">function</span> <span class="title">is</span> <span class="title">summed</span></span></span><br><span class="line">.Nu  = number of free optimal control moves u(<span class="number">0</span>),...,u(Nu<span class="number">-1</span>)</span><br><span class="line">.Ncy = output constraints are checked up to time k=Ncy</span><br><span class="line">.Ncu = input constraints are checked up to time k=Ncu</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>LIMITS</strong> is a structure of constraints with fields:</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">.umin = lower bounds on inputs             [ u(k)&gt;=umin ]</span><br><span class="line">.umax = upper bounds on inputs             [ u(k)&lt;=umax ]</span><br><span class="line">.ymin = lower bounds on outputs            [ y(k)&gt;=ymin ]</span><br><span class="line">.ymax = upper bounds on outputs            [ y(k)&lt;=ymax ]</span><br><span class="line">.dumin = lower bounds on input increments  [ du(k)&gt;=dumin ] (only tracking)</span><br><span class="line">.dumax = upper bounds on input increments  [ du(k)&lt;=dumax ] (only tracking)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p> <em>O</em>nly for regulators:*<br>   <em>If <code>COST.P=&#39;lqr&#39;</code> then P is chosen as the solution of the LQR problem with weights Q,R, and K is chosen as the corresponding LQR gain.</em><br>   <em>If <code>COST.P=&#39;lyap&#39;</code> then P is chosen as the solution of the Lyapunov equation <code>A&#39;PA - P + Q = 0</code>, and K=0 (default).</em>    </p>
+</blockquote>
+</li>
+<li><p><strong>QPSOLVER</strong>  specifies the QP used for evaluating the control law. Valid options are:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#39;qpact&#39;      active set method</span><br><span class="line">&#39;quadprog&#39;   QUADPROG from Optimization Toolbox</span><br><span class="line">&#39;qp&#39;         QP from Optimization Toolbox</span><br><span class="line">&#39;nag&#39;        QP from NAG Foundation Toolbox</span><br><span class="line">&#39;cplex&#39;      QP from Ilog Cplex</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>YZEROCON</strong> enforce <em>output constraints</em> also at prediction time k=0 if YZEROCON=1 (default: YZEROCON=0). </p>
+<blockquote>
+<p><em>If YEZEROCON is a 0/1 vector of the same dimension as the output vector, then only those outputs where YZEROCON(i)=1 are constrained at time k=0.</em></p>
+</blockquote>
+</li>
+</ul>
+<p><strong>Time-varying formulation</strong>: Use the same syntax as above, with input arguments as follow: </p>
+</li>
+</ul>
+<ul>
+<li><p><code>SYS</code> = cell array of linear models, <code>SYS&#123;i&#125;</code>=model used to predict at step t+i-1</p>
+</li>
+<li><p><code>COST</code> = cell array of structures of weights: <code>COST&#123;i&#125;.Q</code>, <code>COST&#123;i&#125;.R</code>, etc.  Only <code>COST&#123;1&#125;.rho</code> is used for penalty soft constraint penalty, <code>COST&#123;i&#125;.rho</code> is ignored for i&gt;1.</p>
+</li>
+<li><p><code>LIMITS</code> = cell arrays of structures of upper and lower bounds: <code>LIMITS&#123;i&#125;.umin</code>, etc. The constraints <code>LIMITS&#123;i&#125;</code> refer to time index t+i, for both inputs and outputs.<code>linsfun</code></p>
+</li>
+</ul>
+<h3 id="sim-for-lincon"><a href="#sim-for-lincon" class="headerlink" title="sim for lincon"></a><code>sim</code> for <code>lincon</code></h3><p><code>sim</code> : Closed-loop simulation of constrained optimal controllers for linear systems.</p>
+<p> <code>[X,U,T,Y]=sim(LINCON,MODEL,refs,x0,Tstop,u0,qpsolver,verbose)</code> simulates the closed-loop of the linear system <strong>MODE</strong>L with the controller <strong>LINCON</strong> based on quadratic programming.</p>
+<p>Usually, <strong>LINCON</strong> is based on model <strong>MODEL</strong> (nominal closed-loop).</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Input: </span><br><span class="line"></span><br><span class="line">LINCON      = optimal controller</span><br><span class="line">refs        = structure or references with fields; ref.y  output references  (only <span class="keyword">for</span> tracking)</span><br><span class="line">x0          = initial state</span><br><span class="line">Tstop       = total simulation time  (total number of steps = Tstop/LINCON.Ts)</span><br><span class="line">u0          = input at time t=<span class="number">-1</span>     (only <span class="keyword">for</span> tracking)</span><br><span class="line">qpsolver    = QP solver (<span class="built_in">type</span> HELP QPSOL <span class="keyword">for</span> details)</span><br><span class="line">verbose     = verbosity level (<span class="number">0</span>,<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<p> <code> refs.y</code> has as many columns as the number of outputs</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Output <span class="keyword">arguments</span>:</span><br><span class="line">  X is the sequence of states, with as many columns as the number of states.</span><br><span class="line">  U is the sequence of inputs, with as many columns as the number of inputs.</span><br><span class="line">  T is the vector of time steps.</span><br><span class="line">  I is the sequence of region numbers</span><br><span class="line">  Y is the sequence of outputs, with as many columns as the number of outputs.</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Without output arguments, sim produces a plot of the trajectories</p>
+</blockquote>
+<blockquote>
+<p> <strong>LINCON</strong> objects based on time-varying prediction models/weights/limits can be simulated in closed-loop with LTI models. Time-varying simulation models are not supported, use custom for-loops instead.</p>
+</blockquote>
+<h3 id="sim-general"><a href="#sim-general" class="headerlink" title="sim (general)"></a><code>sim </code>(general)</h3><p><code>sim</code> : Simulate a Simulink model</p>
+<p><code>SimOut = sim(&#39;MODEL&#39;, PARAMETERS)</code> simulates your Simulink model,  </p>
+<p><code>&#39;PARAMETERS&#39;</code> represents a list of parameter name-value pairs, a structure  containing parameter settings, or a configuration set. </p>
+<p> <code>SimOut</code> returned by the sim command is an object that contains all of the logged simulation results.</p>
+<p> <code>PARAMETERS</code> can be used to override existing block diagram configuration parameters for the duration of the simulation.</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">This syntax is referred to as the <span class="string">&#x27;Single-Output Format&#x27;</span>.</span><br><span class="line">paramNameValStruct.SimulationMode = <span class="string">&#x27;rapid&#x27;</span>;</span><br><span class="line">paramNameValStruct.AbsTol         = <span class="string">&#x27;1e-5&#x27;</span>;</span><br><span class="line">paramNameValStruct.SaveState      = <span class="string">&#x27;on&#x27;</span>;</span><br><span class="line">paramNameValStruct.StateSaveName  = <span class="string">&#x27;xoutNew&#x27;</span>;</span><br><span class="line">paramNameValStruct.SaveOutput     = <span class="string">&#x27;on&#x27;</span>;</span><br><span class="line">paramNameValStruct.OutputSaveName = <span class="string">&#x27;youtNew&#x27;</span>;</span><br><span class="line">simOut = sim(<span class="string">&#x27;vdp&#x27;</span>,paramNameValStruct)</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="kalman"><a href="#kalman" class="headerlink" title="kalman"></a><code>kalman</code></h3><p><code>KALMAN</code>Design Kalman filter for constrained optimal controllers</p>
+<p> <strong><code>KALMAN(CON,Q,R)</code></strong> design a state observer for the linear model <strong><code>(A,B,C,D)=CON.model</code></strong> which controller <code>CON</code> is based on,  using Kalman filtering techniques. The resulting observer is stored in the <code>&#39;Observer&#39;</code> field of the controller object. The controller object can be either of class <code>LINCON</code> or <code>EXPCON</code>.</p>
+<p> <strong><code>Q</code></strong> is the <span style="border-bottom:2px dashed red;">covariance matrix of state noise</span>, <strong><code>R</code></strong> is the <span style="border-bottom:2px dashed red;">covariance matrix of outputnoise</span>.</p>
+<p> <strong><code>Kest=KALMAN(CON,Q,R)</code></strong> also return the state observer as an LTI object.</p>
+<p> <strong><code>Kest</code></strong> receives <code>u[n]</code> and <code>y[n]</code> as inputs (in this order), and provides the best estimated state <code>x[n|n-1]</code> of <code>x[n]</code> given the past measurements <code>y[n-1]</code>, <code>y[n-2]</code>,<code>...</code></p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x[n+<span class="number">1</span>|n] = Ax[n|n<span class="number">-1</span>] + Bu[n] + L(y[n] - Cx[n|n<span class="number">-1</span>] - Du[n])</span><br></pre></td></tr></table></figure>
+
+<p> <strong><code>Kest=KALMAN(CON,Q,R,ymeasured)</code></strong> assumes that only the outputs specified in vector <code>ymeasured</code> are measurable outputs. In this case, <code>R</code> is a <code>nym-by-nym</code> matrix, where <code>nym</code> is the number of measured outputs.</p>
+<p> <strong><code>[Kest,M]=KALMAN(CON,Q,R,ymeasured)</code></strong> also returns the gain <code>M</code> which allows computing the measurement update</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x[n|n]  = x[n|n<span class="number">-1</span>] + M(y[n] - Cx[n|n<span class="number">-1</span>] - Du[n])</span><br></pre></td></tr></table></figure>
+
+<p>  For time-varying prediction models, the first model <code>CON.model&#123;1&#125;</code> is used to build the Kalman filter, as it is the model of the process for the current time step.</p>
+<h3 id="expcon"><a href="#expcon" class="headerlink" title="expcon"></a><code>expcon</code></h3><p><code>EXPCON</code> Explicit controllers (for linear/hybrid systems)</p>
+<p> **<code>E=EXPCON(C,RANGE,OPTIONS)</code> **convert controller C to piecewise affine explicit form.</p>
+<p> <strong><code>C</code></strong> is a constrained optimal controller for linear systems or hybrid systems (an object of class @LINCON or @HYBCON)</p>
+<p><strong><code>RANGE</code></strong> defines the range of the parameters the explicit solution is found with respect to (it may be different from the limits over variables imposed in the control law). <code>RANGE</code> is a structure with fields:</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">.xmin, xmax = range of states            [ xmin &lt;= x &lt;= xmax ]       (linear and hybrid)</span><br><span class="line">.umin, umax = range of inputs            [ umin &lt;= u &lt;= umax ]       (linear w/ tracking)</span><br><span class="line">.refymin, refymax = range of output refs [ refymin &lt;= r.y &lt;= refymax]  (linear w/ tracking and hybrid)</span><br><span class="line">.refxmin, refxmax = range of state refs  [ refxmin &lt;= r.x &lt;= refxmax ]  (hybrid)</span><br><span class="line">.refumin, refumax = range of input refs  [ refumin &lt;= r.u &lt;= refumax ]  (hybrid)</span><br></pre></td></tr></table></figure>
+
+<p>  For hybrid controllers, <code>refxmin</code>,<code>refxmax</code>,<code>refumin</code>,<code>refumax</code>,<code>refymin</code>,<code>refymax</code> must have dimensions consistent with the number of indices specified in <code>C.ref</code> (type “help hybcon” for details)</p>
+<p> <strong><code>OPTIONS</code></strong> defines various options for computing the explicit control law:</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">.lpsolver    = LP solver (<span class="built_in">type</span> HELP LPSOL <span class="keyword">for</span> details)</span><br><span class="line">.qpsolver    = QP solver (<span class="built_in">type</span> HELP QPSOL <span class="keyword">for</span> details)</span><br><span class="line">.fixref      = structure with fields <span class="string">&#x27;y&#x27;</span>,<span class="string">&#x27;x&#x27;</span>,<span class="string">&#x27;u&#x27;</span> defining references that are fixed at 				   given values, therefore simplifying the parametric solution [hybrid only]</span><br><span class="line">.valueref    = structure with fields <span class="string">&#x27;y&#x27;</span>,<span class="string">&#x27;x&#x27;</span>,<span class="string">&#x27;u&#x27;</span> of values at which references are fixed  				 [hybrid only]</span><br><span class="line">.flattol       Tolerance <span class="keyword">for</span> a polyhedral set to be considered flat</span><br><span class="line">.waitbar       display waitbar (only <span class="keyword">for</span> hybrid)</span><br><span class="line">.verbose     = level of verbosity &#123;<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>&#125; of mp-PWA solver</span><br><span class="line">.mplpverbose = level of verbosity &#123;<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>&#125; of mp-LP solver</span><br><span class="line">.uniteeps    = tolerance <span class="keyword">for</span> judging convexity of the union of polyhedra</span><br><span class="line">.join        = flag <span class="keyword">for</span> reducing the complexity by joining regions whose union is a convex 				set.</span><br><span class="line">.reltol      = tolerance used <span class="keyword">for</span> several polyhedral operations</span><br><span class="line">.sequence    = flag <span class="keyword">for</span> keeping the entire optimal control sequence as an explicit 						<span class="function"><span class="keyword">function</span> <span class="title">of</span> <span class="title">the</span> <span class="title">parameters</span> <span class="title">also</span> <span class="title">in</span> <span class="title">the</span> <span class="title">linear</span> <span class="title">case</span>. <span class="title">Flag</span> <span class="title">ignored</span> <span class="title">in</span> <span class="title">the</span> 				<span class="title">hybrid</span> <span class="title">case</span>: <span class="title">sequence</span> <span class="title">always</span> <span class="title">stored</span> <span class="title">with</span> <span class="title">quadratic</span> <span class="title">costs</span>, <span class="title">never</span> <span class="title">stored</span> 					<span class="title">with</span> <span class="title">inf</span>-<span class="title">norms</span>.     </span></span><br></pre></td></tr></table></figure>
+
+<p>  <strong>Example:</strong> to fix the reference signal for <code>x(1)</code>,<code>x(2)</code> at the values <code>rx(1)=0.6</code>,<code> rx(2)=-1.4</code> and mantain the reference <code>rx(3)</code> for <code>x(3)</code> as a free parameter, specify <code>options.fixref.x=[1 2]</code>, <code>options.valueref.x=[0.6 -1.4]</code>.</p>
+<blockquote>
+<p>Note: @MPC objects from MPC Toolbox are no longer supported, as they are handled directly in the MPC Toolbox since R2014b.</p>
+</blockquote>
+<blockquote>
+<p>See also <code>EXPCON/EVAL</code> for the order states and references are stored inside the parameter vector.</p>
+</blockquote>
+<p>##Modelling </p>
+<h3 id="tf"><a href="#tf" class="headerlink" title="tf"></a><code>tf</code></h3><ol>
+<li>Create transfer function model;      2.  convert to transfer function model</li>
+</ol>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">sys = tf(Numerator,Denominator) </span><br><span class="line">sys = tf(Numerator,Denominator,Ts) </span><br><span class="line">sys = tf(M) </span><br><span class="line">sys = tf(Numerator,Denominator,ltisys) </span><br><span class="line">tfsys = tf(sys) </span><br><span class="line">tfsys = tf(sys, <span class="string">&#x27;measured&#x27;</span>)</span><br><span class="line">tfsys = tf(sys, <span class="string">&#x27;noise&#x27;</span>)</span><br><span class="line">tfsys = tf(sys, <span class="string">&#x27;augmented&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example1:</strong></p>
+<p>Create Transfer Function with One Input and Two Outputs:</p>
+<p>​    Create the following transfer function model:</p>
+<p>​    $$H(p)=\begin{bmatrix} \frac{p+1}{p^2+2*p+2} \   \frac{1}{p}\end{bmatrix}$$</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Numerator = &#123;[<span class="number">1</span> <span class="number">1</span>] ; <span class="number">1</span>&#125;;</span><br><span class="line">Denominator = &#123;[<span class="number">1</span> <span class="number">2</span> <span class="number">2</span>] ; [<span class="number">1</span> <span class="number">0</span>]&#125;;</span><br><span class="line">H = tf(Numerator,Denominator,<span class="string">&#x27;InputName&#x27;</span>,<span class="string">&#x27;current&#x27;</span>,...</span><br><span class="line">        <span class="string">&#x27;OutputName&#x27;</span>,&#123;<span class="string">&#x27;torque&#x27;</span> <span class="string">&#x27;ang. velocity&#x27;</span>&#125;,...</span><br><span class="line">        <span class="string">&#x27;Variable&#x27;</span>,<span class="string">&#x27;p&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example2</strong></p>
+<p>Convert State-Space Model to Transfer Function:</p>
+<p>​    Compute the transfer function of the following state-space model:</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sys = ss([<span class="number">-2</span> <span class="number">-1</span>;<span class="number">1</span> <span class="number">-2</span>],[<span class="number">1</span> <span class="number">1</span>;<span class="number">2</span> <span class="number">-1</span>],[<span class="number">1</span> <span class="number">0</span>],[<span class="number">0</span> <span class="number">1</span>]);</span><br><span class="line">tf(sys)</span><br></pre></td></tr></table></figure>
+
+<h3 id="ss"><a href="#ss" class="headerlink" title="ss"></a><code>ss</code></h3><p>Create state-space model, convert to state-space model</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">sys = ss(A,B,C,D) </span><br><span class="line">sys = ss(A,B,C,D,Ts) </span><br><span class="line">sys = ss(D)</span><br><span class="line">sys = ss(A,B,C,D,ltisys) </span><br><span class="line">sys_ss = ss(sys) </span><br><span class="line">sys_ss = ss(sys,<span class="string">&#x27;minimal&#x27;</span>)</span><br><span class="line">sys_ss = ss(sys,<span class="string">&#x27;explicit&#x27;</span>)</span><br><span class="line">sys_ss = ss(sys, <span class="string">&#x27;measured&#x27;</span>)</span><br><span class="line">sys_ss = ss(sys, <span class="string">&#x27;noise&#x27;</span>)</span><br><span class="line">sys_ss = ss(sys, <span class="string">&#x27;augmented&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p><code>sys = ss(A,B,C,D) </code>creates a state-space model object representing the continuous-time state-space model</p>
+<p>​    $x=Ax+Bu$</p>
+<p>​    $y=Cx+Du$</p>
+<p>​        For a model with <code>Nx</code> states, <code>Ny</code> outputs, and <code>Nu</code> inputs:</p>
+<p>​        - <code>A</code> is an <code>Nx</code>-by-<code>Nx</code> real- or complex-valued matrix.</p>
+<p>​        - <code>B</code> is an <code>Nx</code>-by-<code>Nu</code> real- or complex-valued matrix.</p>
+<ul>
+<li><p><code>C</code> is an <code>Ny</code>-by-<code>Nx</code> real- or complex-valued matrix.</p>
+</li>
+<li><p><code>D</code> is an <code>Ny</code>-by-<code>Nu</code> real- or complex-valued matrix.</p>
+<blockquote>
+<p>To set <code>D = 0</code> , set <code>D</code> to the scalar <code>0</code> (zero), regardless of the dimension.</p>
+</blockquote>
+</li>
+</ul>
+<p><code>sys = ss(A,B,C,D,Ts) </code>creates the discrete-time model</p>
+<p>​    $x[n+1]=Ax[n]+Bu[n]$</p>
+<p>​    $y[n]=Cx[n]+Du[n]$</p>
+<p>with sample time <code>Ts</code> (in seconds). Set <code>Ts = -1</code> or <code>Ts = []</code> to leave the sample time unspecified.</p>
+<h3 id="ssdata"><a href="#ssdata" class="headerlink" title="ssdata"></a><code>ssdata</code></h3><p><code>ssdata</code> :   Quick access to state-space data.</p>
+<p><code>[A,B,C,D] = ssdata(SYS)</code> returns the A,B,C,D matrices of the state-space model <code>SYS</code>.  If <code>SYS</code> is not a state-space model, it is first converted to the state-space representation. If <code>SYS</code> is in descriptor form (nonempty<br>E matrix), an equivalent explicit form is first derived. If <code>SYS</code> has internal delays, A,B,C,D are obtained by first setting all internal delays to zero (delay-free dynamics).</p>
+<p><code>[A,B,C,D,TS] = ssdata(SYS)</code> also returns the sample time <code>TS</code>. Other properties of <code>SYS</code> can be accessed using struct-like dot syntax (for example, <code>SYS.StateName</code>).</p>
+<p>Support for arrays of state-space models:</p>
+<p><code>[A,B,C,D,TS] = ssdata(SYS,J1,...,JN)</code> extracts the data for the (J1,…,JN) entry in the model array SYS.</p>
+<p>If all models in <code>SYS</code> have the same order, <code>ssdata</code> returns multi-dimensional arrays A,B,C,D where A(:,:,k), B(:,:,k), C(:,:,k), D(:,:,k) are the state-space matrices of the k-th model SYS(:,:,k).</p>
+<p>If the models in SYS have variable order, use the syntax <code>[A,B,C,D] = ssdata(SYS,&#39;cell&#39;)</code> to extract the state-space matrices of each model as separate cells in the cell arrays A,B,C,D.</p>
+<h3 id="c2d"><a href="#c2d" class="headerlink" title="c2d"></a><code>c2d</code></h3><p>Convert model from continuous to discrete time</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sysd = c2d(sys,Ts)</span><br><span class="line">sysd = c2d(sys,Ts,method)</span><br><span class="line">sysd = c2d(sys,Ts,opts)</span><br><span class="line">[sysd,G] = c2d(sys,Ts,method)</span><br><span class="line">[sysd,G] = c2d(sys,Ts,opts)</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="step"><a href="#step" class="headerlink" title="step"></a><code>step</code></h3><p>Step response plot of dynamic system; step response data</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">step(sys) </span><br><span class="line">step(sys,Tfinal)</span><br><span class="line">step(sys,t)</span><br><span class="line">step(sys1,sys2,...,sysN)</span><br><span class="line">step(sys1,sys2,...,sysN,Tfinal)</span><br><span class="line">step(sys1,sys2,...,sysN,t)</span><br><span class="line">y = step(sys,t)</span><br><span class="line">[y,t] = step(sys)</span><br><span class="line">[y,t] = step(sys,Tfinal)</span><br><span class="line">[y,t,x] = step(sys) </span><br><span class="line">[y,t,x,ysd] = step(sys) </span><br><span class="line">[y,...] = step(sys,...,options)</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="solution"><a href="#solution" class="headerlink" title="solution"></a>solution</h2><h3 id="dare"><a href="#dare" class="headerlink" title="dare"></a><code>dare</code></h3><p><code>dare</code> :  Solve <u>discrete-time algebraic Riccati equations</u>.</p>
+<p><code>[X,L,G] = dare(A,B,Q,R,S,E)</code> computes the unique stabilizing solution <code>X</code>  of the discrete-time algebraic Riccati equation $E’XE = A’XA - (A’XB + S)(B’XB + R)^{-1}  (A’XB + S)’ + Q$ or, equivalently (if R is nonsingular) $E’XE = F’XF - F’XB(B’XB + R)^{-1}  B’XF + Q - SR^{-1} S’$  with  $F:=A-BR^{-1}S’$.</p>
+<p>When omitted, $R$, $S$ and $E$ are set to the default values $R=I$ , $S=0$ , and $E=I$.  Beside the solution X, dare also returns the gain matrix $G = (B’XB + R)^{-1}(B’XA + S’)$, and the vector $L$ of closed-loop eigenvalues (i.e., EIG(A-B*G,E)).</p>
+<p><code>[X,L,G,REPORT] = dare(...)</code> returns a diagnosis <code>REPORT</code> with value:</p>
+<ul>
+<li>-1 if the Symplectic matrix has eigenvalues on the unit circle</li>
+<li>-2 if there is no finite stabilizing solution X</li>
+<li>Frobenius norm of relative residual if X exists and is finite. This syntax does not issue any error message when X fails to exist.</li>
+</ul>
+<p><code>[X1,X2,D,L] = dare(A,B,Q,...,&#39;factor&#39;)</code> returns two matrices <code>X1</code>, <code> X2</code> and a diagonal scaling matrix <code>D</code> such that $X = D(X_2/X_1)D$. The vector $L$ contains the closed-loop eigenvalues.  All outputs are empty when the associated Symplectic matrix has eigenvalues on the unit circle</p>
+<h3 id="dlqr"><a href="#dlqr" class="headerlink" title="dlqr"></a><code>dlqr</code></h3><p><code>dlqr</code> :  Linear-quadratic regulator design for discrete-time systems.</p>
+<p><code>[K,S,E] = dlqr(A,B,Q,R,N)</code>  calculates the optimal gain matrix $K$ such that the state-feedback law  <code>u[n] = -Kx[n]</code>  minimizes the cost function</p>
+<pre><code>  J = Sum &#123;x&#39;Qx + u&#39;Ru + 2*x&#39;Nu&#125;
+</code></pre>
+<p>subject to the state dynamics  <code>x[n+1] = Ax[n] + Bu[n]</code>.  </p>
+<p>The matrix <code>N</code> is set to zero when omitted.  Also returned are the <u>Riccati equation solution <code>S</code></u> and <u>the closed-loop eigenvalues <code>E</code></u> : </p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">A&#x27;SA - S - (A&#x27;SB+N) (R+B&#x27;SB)^(<span class="number">-1</span>) (B&#x27;SA+N&#x27;) + Q = <span class="number">0</span>,   E = EIG(A-B*K)</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="lqr"><a href="#lqr" class="headerlink" title="lqr"></a><code>lqr</code></h3><p><code>lqr</code> : Linear-quadratic regulator design for state space systems.</p>
+<p><code>[K,S,E] = lqr(SYS,Q,R,N)</code> calculates the optimal gain matrix <code>K</code> such that:</p>
+<ul>
+<li><p>For a continuous-time state-space model SYS, the state-feedback law <code>u = -Kx</code>  minimizes the cost function</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">J = Integral &#123;x&#x27;Qx + u&#x27;Ru + <span class="number">2</span>*x&#x27;Nu&#125; dt</span><br></pre></td></tr></table></figure>
+
+<p>subject to the system dynamics  <code>dx/dt = Ax + Bu</code></p>
+</li>
+<li><p>For a discrete-time state-space model <code>SYS</code>, <code>u[n] = -Kx[n]</code> minimizes</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">J = Sum &#123;x&#x27;Qx + u&#x27;Ru + <span class="number">2</span>*x&#x27;Nu&#125;</span><br></pre></td></tr></table></figure>
+
+<p>subject to  <code>x[n+1] = Ax[n] + Bu[n]</code>.</p>
+</li>
+</ul>
+<p>The matrix <code>N</code> is set to zero when omitted.  Also returned are the solution <u><code>S</code> of the associated algebraic Riccati equation</u> and the <u>closed-loop eigenvalues <code>E = EIG(A-B*K)</code></u> .</p>
+<p><code>[K,S,E] = lqr(A,B,Q,R,N)</code> is an equivalent syntax for continuous-time models with dynamics <code> dx/dt = Ax + Bu</code></p>
+<h3 id="operspec"><a href="#operspec" class="headerlink" title="operspec"></a><code>operspec</code></h3><p><code>operspec</code> :  Create operating point specifications for Simulink model.</p>
+<p><code>OP = operspec(&#39;sys&#39;)</code> returns an operating point specification object <code>OP</code>, for a Simulink model <code>&#39;sys&#39;</code>. Edit the default operating point specifications directly or use get and set. Use the operating point specifications object with the function <code>FINDOP</code> to  <span style="border-bottom:2px dashed red;">find operating points</span>  based on the specifications. Use these operating points with the function <code>LINEARIZE</code> to create linearized models.</p>
+<p><code>OP = operspec(&#39;sys&#39;, N)</code> returns an N-dimensional column vector of the default operating point specification objects for a Simulink model <code>&#39;sys&#39;</code>.</p>
+<p><code>OP = operspec(&#39;sys&#39;, SIZE)</code> returns an array of the default operating point specification objects. The size of OP is specified in the SIZE vector. For example, <code>operspec(&#39;vdp&#39;, [2,3])</code> returns a 2-by-3 matrix of default operating point specifications for the Simulink model <code>&#39;vdp&#39;</code>.</p>
+<h3 id="findop"><a href="#findop" class="headerlink" title="findop"></a><code>findop</code></h3><p> <code>findop</code> : Find operating points from specifications or simulation</p>
+<h3 id="place"><a href="#place" class="headerlink" title="place"></a><code>place</code></h3><p><code>place</code>  Pole placement design</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">K = place(A,B,p)</span><br><span class="line">[K,prec,message] = place(A,B,p)</span><br></pre></td></tr></table></figure>
+
+<p>Given the single- or multi-input system $x=Ax+Bu$, and a vector <code>p</code> of desired self-conjugate closed-loop pole locations, <code>place</code> computes a gain matrix <code>K</code> such that the state feedback <code>u=-Kx</code> places the closed-loop poles at the locations <code>p</code>. In other words, the eigenvalues of <em>A</em> – <em>BK</em> match the entries of <code>p</code> (up to the ordering).</p>
+<p><code>K = place(A,B,p)</code> places the desired closed-loop poles <code>p</code> by computing a state-feedback gain matrix <code>K</code>. All the inputs of the plant are assumed to be control inputs. The length of <code>p</code> must match the row size of <code>A</code>. <code>place</code> works for multi-input systems and is based on the algorithm from [<a target="_blank" rel="noopener" href="https://localhost:31515/static/help/control/ref/place.html#bq1no8b-1">1]</a>. This algorithm uses the extra degrees of freedom to find a solution that minimizes the sensitivity of the closed-loop poles to perturbations in <em>A</em> or <em>B</em>.</p>
+<p><code>[K,prec,message] = place(A,B,p)</code> returns <code>prec</code>, an estimate of how closely the eigenvalues of <em>A</em> – <em>BK</em> match the specified locations <code>p</code> (<code>prec</code> measures the number of accurate decimal digits in the actual closed-loop poles). If some nonzero closed-loop pole is more than 10% off from the desired location, <code>message</code> contains a warning message.</p>
+<h3 id="mpc"><a href="#mpc" class="headerlink" title="mpc"></a><code>mpc</code></h3><p><code>mpc</code>  Create an mpc controller.</p>
+<p><code>MPCOBJ = mpc(PLANT)</code> creates the mpc object based on the linear plant model PLANT, which must be a SS, TF, ZPK or a linear model from System Identification Toolbox such as IDSS, IDTF, IDPROC, IDPOLY and IDGREY.</p>
+<p><code>MPCOBJ = mpc(PLANT,TS)</code> specifies a sampling time for the mpc controller. A continuous-time PLANT model is discretized with sampling time <code>TS</code>.  A <span style="border-bottom:1px dashed blue;">discrete-time</span>   <code>PLANT model</code> is <em>resampled</em> to sampling time TS.</p>
+<p><code>MPCOBJ = mpc(PLANT,TS,P)</code> specifies the prediction horizon <code>P</code>. <code>P</code> is a positive, finite <em>integer</em>.</p>
+<p><code>MPCOBJ = mpc(PLANT,TS,P,M)</code> specifies the control horizon <code>M</code>. <code>M</code> is either an integer (&lt;= P) or a vector of blocked moves such that <code>sum(M)&lt;= P</code>.</p>
+<p><code>MPCOBJ = mpc(PLANT,TS,P,M,Weights,MV,OV,DV)</code> also allows you to specify Weights, constraints on MV, MV rates and plant outputs, scale factors, as well as other properties with structures Weights, MV, OV and DV in that order. Those properties can also be specified using either</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SET(MPCOBJ,Property1,Value1,Property2,Value2,...)</span><br></pre></td></tr></table></figure>
+<p>or</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MPCOBJ.Property = Value</span><br></pre></td></tr></table></figure>
+
+<p>Disturbance models and operating conditions can be specified using the syntax:</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">MPCOBJ = mpc(MODELS,TS,P,M) where MODELS is a structure containing </span><br><span class="line">MODELS.Plant         = plant model (LTI or linear model from System Identification 							   Toolbox).</span><br><span class="line">      .Disturbance   = model describing the input disturbances. This model is assumed to 						be driven by unit variance white noise. </span><br><span class="line">      .Noise         = model describing the plant output measurement noise. This model is 						 assumed to be driven by unit variance white noise.</span><br><span class="line">      .Nominal       = structure specifying the plant nominal conditions at which the 						   plant was linearized.</span><br><span class="line"> </span><br><span class="line">    MPCOBJ = mpc creates an empty mpc object</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="initial"><a href="#initial" class="headerlink" title="initial"></a><code>initial</code></h3><p><code>initial</code>  Initial condition response of state-space models.</p>
+<p><code>initial(SYS,X0)</code> plots the undriven response of the state-space model SYS (created with SS) with initial condition X0 on the states. This response is characterized by the equations<br>                     .<br>  Continuous time:  $ x = A x ,\  y = C x ,\  x(0) = x_0 $</p>
+<p>  Discrete time:  $x(k+1) = Ax(k), \  y(k) = Cx(k), \ x(0) = x_0 $</p>
+<p>The time range and number of points are chosen automatically.</p>
+<p><code>initial(SYS,X0,T)</code> uses the time vector <code>T</code> for simulation (expressed in the time units of SYS). For discrete-time models, T should be of the form Ti:Ts:Tf where Ts is the sample time. For continuous-time models, T should be of the form Ti:dt:Tf where dt is the sampling period for the discrete approximation of SYS. </p>
+<p><code>initial(SYS,X0,T)</code> uses the time vector T for simulation (expressed in the time units of SYS). For discrete-time models, T should be of the form Ti:Ts:Tf where Ts is the sample time. For continuous-time models, T should be of the form Ti:dt:Tf where dt is the sampling period for the discrete approximation of SYS. </p>
+<h2 id="run-sim"><a href="#run-sim" class="headerlink" title="run sim"></a>run sim</h2><h3 id="lsim"><a href="#lsim" class="headerlink" title="lsim"></a><code>lsim</code></h3><p><code>lsim</code>  Simulate time response of dynamic systems to arbitrary inputs.</p>
+<p><code>lsim(SYS,U,T)</code> plots the time response of the dynamic system SYS to the input signal described by U and T. The time vector T is expressed in the  time units of SYS and consists of regularly spaced time samples. The matrix U has as many columns as inputs in SYS and its i-th row specifies the input value at time T(i). For example, <code>t = 0:0.01:5;   u = sin(t);   lsim(sys,u,t)</code>  simulates the response of a single-input model SYS to the input <code>u(t)=sin(t)</code> during 5 time units.</p>
+<p>For discrete-time models, U should be sampled at the same rate as SYS (T is then redundant and can be omitted or set to the empty matrix). For continuous-time models, choose the sampling period T(2)-T(1) small enough to accurately describe the input U.  lsim issues a warning when U is undersampled and hidden oscillations may occur.</p>
+<h3 id="msgbox"><a href="#msgbox" class="headerlink" title="msgbox"></a><code>msgbox</code></h3><p><code>msgbox</code>  : Create message dialog box</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">f = msgbox(message)</span><br><span class="line">f = msgbox(message,title)</span><br><span class="line">f = msgbox(message,title,icon)</span><br><span class="line">f = msgbox(message,title,<span class="string">&#x27;custom&#x27;</span>,icondata,iconcmap)</span><br><span class="line">f = msgbox(___,createmode)</span><br></pre></td></tr></table></figure>
+
+<h3 id="warndlg"><a href="#warndlg" class="headerlink" title="warndlg"></a><code>warndlg</code></h3><p>Create warning dialog box</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">f = warndlg(msg)</span><br><span class="line">f = warndlg(msg,title)</span><br><span class="line">f = warndlg(msg,title,opts)</span><br><span class="line">f = warndlg</span><br></pre></td></tr></table></figure>
+
+<h3 id="waitfor"><a href="#waitfor" class="headerlink" title="waitfor"></a><code>waitfor</code></h3><p><code>waitfor</code> : Block execution and wait for condition [after operation, will terminate the message box] </p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">waitfor(mo)</span><br><span class="line">waitfor(mo,propname)</span><br><span class="line">waitfor(mo,propname,propvalue)</span><br></pre></td></tr></table></figure>
+
+<p>Examples:</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mydlg = warndlg(<span class="string">&#x27;This is a warning.&#x27;</span>, <span class="string">&#x27;A Warning Dialog&#x27;</span>);</span><br><span class="line">waitfor(mydlg);</span><br><span class="line"><span class="built_in">disp</span>(<span class="string">&#x27;This prints after you close the warning dialog.&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">gcf：get current <span class="built_in">figure</span>；<span class="comment">%当前figure</span></span><br><span class="line">gca：get current axes；<span class="comment">%当前坐标轴</span></span><br><span class="line">gcbo：get callback object <span class="comment">%调用callback的对象句柄</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>Xiaoxue Zhang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://zhang-xiaoxue.github.io/2020/07/30/Model%20Predictive%20Control/Hybrid%20Toolbox/" title="Hybrid Toolbox">https://zhang-xiaoxue.github.io/2020/07/30/Model Predictive Control/Hybrid Toolbox/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/06/30/Chance%20Constraints/Chance-Constrained%20Optimal%20Path%20Planning%20with%20Obstacles/" rel="prev" title="Chance-Constrained Optimal Path Planning with Obstacles">
+                  <i class="fa fa-chevron-left"></i> Chance-Constrained Optimal Path Planning with Obstacles
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/07/30/Reinforcement%20Learning/CNN_Keras_vs_Torch/" rel="next" title="CNN Keras vs Torch">
+                  CNN Keras vs Torch <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+<script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xiaoxue Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div><script color="0,0,255" opacity="0.5" zIndex="-1" count="199" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{&quot;enable&quot;:true,&quot;tags&quot;:&quot;none&quot;,&quot;single_dollars&quot;:true,&quot;cjk_width&quot;:0.9,&quot;normal_width&quot;:0.6,&quot;append_css&quot;:true,&quot;js&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;mathjax@3.1.4&#x2F;es5&#x2F;tex-mml-chtml.js&quot;}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/Academy-favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Academy-favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/Academy-favicon.png">
+  <link rel="mask-icon" href="/images/Academy-favicon" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;zhang-xiaoxue.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Muse&quot;,&quot;version&quot;:&quot;8.4.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;right&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;Searching...&quot;,&quot;empty&quot;:&quot;We didn&#39;t find any results for the search: ${query}&quot;,&quot;hits_time&quot;:&quot;${hits} results found in ${time} ms&quot;,&quot;hits&quot;:&quot;${hits} results found&quot;}}</script>
+<meta name="description" content="RL 方法分类：  model-free v.s. model-based model-free:  不需要build a model for 环境或者reward，直接连接observations到actions 适合deterministic environments，比如board game with strict rules.   model-based： 尝试predict下一步的nex">
+<meta property="og:type" content="article">
+<meta property="og:title" content="1. Cross-entropy method">
+<meta property="og:url" content="https://zhang-xiaoxue.github.io/2020/03/01/Reinforcement%20Learning/1.%20Cross-Entropy%20method/index.html">
+<meta property="og:site_name" content="Xiaoxue Zhang - NUS">
+<meta property="og:description" content="RL 方法分类：  model-free v.s. model-based model-free:  不需要build a model for 环境或者reward，直接连接observations到actions 适合deterministic environments，比如board game with strict rules.   model-based： 尝试predict下一步的nex">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-03-01T04:00:00.000Z">
+<meta property="article:modified_time" content="2021-08-16T07:39:17.367Z">
+<meta property="article:author" content="Xiaoxue Zhang">
+<meta property="article:tag" content="Reinforcement Learning, Optimization and Control, Intellegent Systems">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zhang-xiaoxue.github.io/2020/03/01/Reinforcement%20Learning/1.%20Cross-Entropy%20method/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;en&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;zhang-xiaoxue.github.io&#x2F;2020&#x2F;03&#x2F;01&#x2F;Reinforcement%20Learning&#x2F;1.%20Cross-Entropy%20method&#x2F;&quot;,&quot;path&quot;:&quot;2020&#x2F;03&#x2F;01&#x2F;Reinforcement Learning&#x2F;1. Cross-Entropy method&#x2F;&quot;,&quot;title&quot;:&quot;1. Cross-entropy method&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>1. Cross-entropy method | Xiaoxue Zhang - NUS</title><script src="/js/config.js"></script>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Xiaoxue Zhang - NUS</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">NUS Ph.D.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Cross-Entropy-method"><span class="nav-number">1.</span> <span class="nav-text">1. Cross-Entropy method</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Cross-entropy-on-CartPole"><span class="nav-number">2.</span> <span class="nav-text">2. Cross-entropy on CartPole</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-Cross-entropy-on-FrozenLake"><span class="nav-number">3.</span> <span class="nav-text">3. Cross-entropy on  FrozenLake</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-Theoretical-background-of-cross-entropy"><span class="nav-number">4.</span> <span class="nav-text">4. Theoretical background of cross-entropy</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Xiaoxue Zhang"
+      src="/images/photo_blue.jpg">
+  <p class="site-author-name" itemprop="name">Xiaoxue Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Zhang-Xiaoxue" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Zhang-Xiaoxue" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:xiaoxuezhang@u.nus.edu" title="E-Mail → mailto:xiaoxuezhang@u.nus.edu" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.linkedin.com/in/xiaoxue-zhang-5233b611a/" title="https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;xiaoxue-zhang-5233b611a&#x2F;" rel="noopener" target="_blank">Linkedin</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.zhihu.com/people/lisnol" title="https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;lisnol" rel="noopener" target="_blank">知乎</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/Zhang-Xiaoxue" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zhang-xiaoxue.github.io/2020/03/01/Reinforcement%20Learning/1.%20Cross-Entropy%20method/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/photo_blue.jpg">
+      <meta itemprop="name" content="Xiaoxue Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Xiaoxue Zhang - NUS">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          1. Cross-entropy method
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-03-01 12:00:00" itemprop="dateCreated datePublished" datetime="2020-03-01T12:00:00+08:00">2020-03-01</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-08-16 15:39:17" itemprop="dateModified" datetime="2021-08-16T15:39:17+08:00">2021-08-16</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Reinforcement-Learning/" itemprop="url" rel="index"><span itemprop="name">Reinforcement Learning</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>RL 方法分类：</p>
+<ul>
+<li>model-free v.s. model-based<ul>
+<li>model-free: <ul>
+<li>不需要build a model for 环境或者reward，直接连接observations到actions</li>
+<li>适合deterministic environments，比如board game with strict rules.</li>
+</ul>
+</li>
+<li>model-based：<ul>
+<li>尝试predict下一步的next observation 或 reward， 并基于预测来学则可能最好的action. </li>
+<li>easier to train, 当建模比较难的时候</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>value-based v.s. policy-based<ul>
+<li>Policy-based:<ul>
+<li>directly approximate the policy of the agent</li>
+<li><u>policy is usually represented by probability distribution over available actions</u>. </li>
+</ul>
+</li>
+<li>value-based:<ul>
+<li>计算每个可能action的value，选择最好的action。  </li>
+</ul>
+</li>
+</ul>
+</li>
+<li>on-policy v.s. off-policy<ul>
+<li>off-policy: 能够学习old historical data (obtained by a previous version of the agent or recorded by human demonstration or just seen by the same agent several episodes ago)</li>
+<li>on-policy: requires fresh data obtained from the environment</li>
+</ul>
+</li>
+</ul>
+<h1 id="1-Cross-Entropy-method"><a href="#1-Cross-Entropy-method" class="headerlink" title="1. Cross-Entropy method"></a>1. Cross-Entropy method</h1><ul>
+<li><p>Property:</p>
+<ul>
+<li>Simple</li>
+<li>Good convergence: works well in simple environments (不需要复杂多步policy，有short episodes with frequent rewards).</li>
+<li>model-free</li>
+<li>policy-based </li>
+<li>on-policy</li>
+</ul>
+</li>
+<li><p>Pipeline of the loop:</p>
+<ul>
+<li>pass the observation to the network –&gt; get probability distribution over actions –&gt; random sampling using the distribution –&gt; get action –&gt; obtain next observation </li>
+</ul>
+</li>
+<li><p>Core of cross-entropy:</p>
+<ul>
+<li>舍弃不好的episodes，用好的episodes训练</li>
+</ul>
+</li>
+<li><p>Steps：</p>
+<ol>
+<li>Play N episodes</li>
+<li>calculate total reward for each episode, decide on a reward boundary (percentile, e.g., 60th)</li>
+<li>throw away all episodes with a reward below the boundary</li>
+<li>train on the remaining episodes</li>
+<li>repeat</li>
+</ol>
+<p>Based on this procedure, neural network can learn how to repeat actions which leads to a larger reward. Then the boundary will be higher. </p>
+</li>
+</ul>
+<h1 id="2-Cross-entropy-on-CartPole"><a href="#2-Cross-entropy-on-CartPole" class="headerlink" title="2. Cross-entropy on CartPole"></a>2. Cross-entropy on CartPole</h1><p>use one-hidden-layer neural network with <code>ReLU</code> and 128 hidden neurons. </p>
+<p>code example：</p>
+<p> <a target="_blank" rel="noopener" href="https://github.com/PacktPublishing/Deep-Reinforcement-Learning-Hands-On/blob/master/Chapter04/01_cartpole.py">https://github.com/PacktPublishing/Deep-Reinforcement-Learning-Hands-On/blob/master/Chapter04/01_cartpole.py</a></p>
+<h1 id="3-Cross-entropy-on-FrozenLake"><a href="#3-Cross-entropy-on-FrozenLake" class="headerlink" title="3. Cross-entropy on  FrozenLake"></a>3. Cross-entropy on  FrozenLake</h1><p>grid world with specific rules</p>
+<p>code example:</p>
+<p>naïve cross-entropy, which may fail.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/PacktPublishing/Deep-Reinforcement-Learning-Hands-On/blob/master/Chapter04/02_frozenlake_naive.py">https://github.com/PacktPublishing/Deep-Reinforcement-Learning-Hands-On/blob/master/Chapter04/02_frozenlake_naive.py</a></p>
+<p>Shows the limitation of cross-entropy:</p>
+<ul>
+<li>no intermediate indication about whether the agent has succeeded or failed.</li>
+<li>total reward of episodes should have enough variability to separate the good episodes from the bad ones.</li>
+<li>for training, episodes have to be finite and short.</li>
+</ul>
+<p>tweaked code of cross-entropy:</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/PacktPublishing/Deep-Reinforcement-Learning-Hands-On/blob/master/Chapter04/03_frozenlake_tweaked.py">https://github.com/PacktPublishing/Deep-Reinforcement-Learning-Hands-On/blob/master/Chapter04/03_frozenlake_tweaked.py</a></p>
+<p>modification: 1) lager batches, 2) add discount factor, 3) keep good episodes for a longer time, 4) decrease learning rate, 5) much longer training time.</p>
+<h1 id="4-Theoretical-background-of-cross-entropy"><a href="#4-Theoretical-background-of-cross-entropy" class="headerlink" title="4. Theoretical background of cross-entropy"></a>4. Theoretical background of cross-entropy</h1><p>basis of cross-entropy lies in the importance sampling theorem:<br>$$<br>\mathbb E_{x\sim p(x)} \left[H(x)\right] = \int_x p(x)H(x) dx = \int_x q(x)\frac{p(x)}{q(x)}H(x) dx = \mathbb E_{x\sim q(x)} \left[\frac{p(x)}{q(x)}H(x)\right]<br>$$<br>In RL, $H(x)$ is a reward value obtained by some policy $x$, and $p(x)$ is the distribution of all possible policies. </p>
+<p>我们不想通过search所有可能的policy来maximizes我们的reward。我们希望可以找到一种方法来用$q(x)$来近似$p(x)H(x)$，通过迭代减小这两者之间的distance。</p>
+<p>这两者的distance可以通过<strong>KL divergence</strong>来计算。KL divergence的表达式是<br>$$<br>KL(p_1(x) | p_2(x)) = \mathbb E_{x\sim p_1(x)} \left[\log\frac{p_1(x)}{p_2(x)}\right] = \underbrace{\mathbb E_{x\sim p_1(x)}\left[\log{p_1(x)}\right]}<em>{\text{entropy}}  - \underbrace{\mathbb E</em>{x\sim p_1(x)} \left[\log{p_2(x)}\right]}<em>{\text{corss-entropy}}<br>$$<br>结合两个公式，我们可以得到一个iterative algorithm，starting with $q_0(x)=p(x)$ 并且每一步都在提高。近似$p(x)H(x)$的迭代公式为<br>$$<br>q</em>{i+1}(x)= \operatorname{argmin}<em>{q</em>{i+1}(x)} -\mathbb E_{x\sim q_i(x)} \left[\frac{p(x)}{q_i(x)}H(x) \log q_{i+1}(x)\right]<br>$$<br>In RL, </p>
+<p>首先，replace $H(x)$ with an indicator function. 也就是说function值为1 当reward of this episode 高于threshold；值为0如果reward小于。我们的policy update 就变成了<br>$$<br>\pi_{i+1}(a|s)= \operatorname{argmin}<em>{\pi</em>{i+1}} -\mathbb E_{z\sim\pi_{i}(a|s)}  \left[R(z)\geq \psi_i\right] \log \pi_{i+1}(a|s)<br>$$<br>意思是，用我们现在的policy来sample episodes， 然后minimize the negative log likelihood of the most successful samples and policy.</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>Xiaoxue Zhang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://zhang-xiaoxue.github.io/2020/03/01/Reinforcement%20Learning/1.%20Cross-Entropy%20method/" title="1. Cross-entropy method">https://zhang-xiaoxue.github.io/2020/03/01/Reinforcement Learning/1. Cross-Entropy method/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/03/30/Reinforcement%20Learning/2.%20Bellman%20equation%20of%20optimality/" rel="next" title="2. Bellman Equation of Optimality">
+                  2. Bellman Equation of Optimality <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+<script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xiaoxue Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div><script color="0,0,255" opacity="0.5" zIndex="-1" count="199" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{&quot;enable&quot;:true,&quot;tags&quot;:&quot;none&quot;,&quot;single_dollars&quot;:true,&quot;cjk_width&quot;:0.9,&quot;normal_width&quot;:0.6,&quot;append_css&quot;:true,&quot;js&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;mathjax@3.1.4&#x2F;es5&#x2F;tex-mml-chtml.js&quot;}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

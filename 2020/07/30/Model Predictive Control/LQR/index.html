@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/Academy-favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Academy-favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/Academy-favicon.png">
+  <link rel="mask-icon" href="/images/Academy-favicon" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;zhang-xiaoxue.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Muse&quot;,&quot;version&quot;:&quot;8.4.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;right&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;Searching...&quot;,&quot;empty&quot;:&quot;We didn&#39;t find any results for the search: ${query}&quot;,&quot;hits_time&quot;:&quot;${hits} results found in ${time} ms&quot;,&quot;hits&quot;:&quot;${hits} results found&quot;}}</script>
+<meta name="description" content="LQRState-feedback control via pole placement requires one to assign the closed-loop poles, LQR is a technique to place automatically and optimally the closed-loop poles ##Problem description   conside">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linear Quadratic Regulator (LQR)">
+<meta property="og:url" content="https://zhang-xiaoxue.github.io/2020/07/30/Model%20Predictive%20Control/LQR/index.html">
+<meta property="og:site_name" content="Xiaoxue Zhang - NUS">
+<meta property="og:description" content="LQRState-feedback control via pole placement requires one to assign the closed-loop poles, LQR is a technique to place automatically and optimally the closed-loop poles ##Problem description   conside">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gst6s3f0gpj315z0jtdji.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gst6rq6y4mj30wa0f4jst.jpg">
+<meta property="article:published_time" content="2020-07-30T04:00:00.000Z">
+<meta property="article:modified_time" content="2021-08-16T07:18:32.334Z">
+<meta property="article:author" content="Xiaoxue Zhang">
+<meta property="article:tag" content="Reinforcement Learning, Optimization and Control, Intellegent Systems">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gst6s3f0gpj315z0jtdji.jpg">
+
+
+<link rel="canonical" href="https://zhang-xiaoxue.github.io/2020/07/30/Model%20Predictive%20Control/LQR/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;en&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;zhang-xiaoxue.github.io&#x2F;2020&#x2F;07&#x2F;30&#x2F;Model%20Predictive%20Control&#x2F;LQR&#x2F;&quot;,&quot;path&quot;:&quot;2020&#x2F;07&#x2F;30&#x2F;Model Predictive Control&#x2F;LQR&#x2F;&quot;,&quot;title&quot;:&quot;Linear Quadratic Regulator (LQR)&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>Linear Quadratic Regulator (LQR) | Xiaoxue Zhang - NUS</title><script src="/js/config.js"></script>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Xiaoxue Zhang - NUS</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">NUS Ph.D.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#LQR"><span class="nav-number">1.</span> <span class="nav-text">LQR</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Riccati-iterations"><span class="nav-number">1.0.1.</span> <span class="nav-text">Riccati iterations</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Finite-horizon-optimal-control"><span class="nav-number">1.0.1.1.</span> <span class="nav-text">Finite-horizon optimal control</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Infinite-horizon-optimal-control"><span class="nav-number">1.0.1.2.</span> <span class="nav-text">Infinite-horizon optimal control</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#regulate-x-k"><span class="nav-number">1.0.1.2.1.</span> <span class="nav-text">regulate $x(k)$</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#regulate-y-k"><span class="nav-number">1.0.1.2.2.</span> <span class="nav-text">regulate $y(k)$</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kalman-filtering"><span class="nav-number">2.</span> <span class="nav-text">Kalman filtering</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Stationary-Kalman-Filter"><span class="nav-number">2.1.</span> <span class="nav-text">Stationary Kalman Filter</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Tuning-Kalman-Filters"><span class="nav-number">2.1.1.</span> <span class="nav-text">Tuning Kalman Filters</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Extended-Kalman-Filter"><span class="nav-number">2.2.</span> <span class="nav-text">Extended Kalman Filter</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Model"><span class="nav-number">2.2.1.</span> <span class="nav-text">Model:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Steps"><span class="nav-number">2.2.2.</span> <span class="nav-text">Steps:</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#LQG"><span class="nav-number">3.</span> <span class="nav-text">LQG</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Model-1"><span class="nav-number">3.0.1.</span> <span class="nav-text">Model:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#control"><span class="nav-number">3.0.2.</span> <span class="nav-text">control</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Xiaoxue Zhang"
+      src="/images/photo_blue.jpg">
+  <p class="site-author-name" itemprop="name">Xiaoxue Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Zhang-Xiaoxue" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Zhang-Xiaoxue" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:xiaoxuezhang@u.nus.edu" title="E-Mail → mailto:xiaoxuezhang@u.nus.edu" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.linkedin.com/in/xiaoxue-zhang-5233b611a/" title="https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;xiaoxue-zhang-5233b611a&#x2F;" rel="noopener" target="_blank">Linkedin</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.zhihu.com/people/lisnol" title="https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;lisnol" rel="noopener" target="_blank">知乎</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/Zhang-Xiaoxue" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zhang-xiaoxue.github.io/2020/07/30/Model%20Predictive%20Control/LQR/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/photo_blue.jpg">
+      <meta itemprop="name" content="Xiaoxue Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Xiaoxue Zhang - NUS">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linear Quadratic Regulator (LQR)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-07-30 12:00:00" itemprop="dateCreated datePublished" datetime="2020-07-30T12:00:00+08:00">2020-07-30</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-08-16 15:18:32" itemprop="dateModified" datetime="2021-08-16T15:18:32+08:00">2021-08-16</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Model-Predictive-Control/" itemprop="url" rel="index"><span itemprop="name">Model Predictive Control</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="LQR"><a href="#LQR" class="headerlink" title="LQR"></a>LQR</h1><p>State-feedback control via pole placement requires one to assign the closed-loop poles, <strong>LQR</strong> is a technique to place <u>automatically and optimally</u> the closed-loop poles</p>
+<p>##Problem description </p>
+<ul>
+<li><p>consider system $x(k+1)=Ax(k)+Bu(k)$ with initial condition $x(0)$, we look for the optimal sequence of inputs $U={u(0),\ u(1),\cdots,\ u(N-1) }$ driving the state $x(k)$ towards the prigin and that minimizes the performance index </p>
+<p>​    $J(x(0),U)=x’(N)Q_Nx(N)+\sum\limits_{k=0}^{N-1} x’(k)Qx(k) + u’(k)Ru(k)$        <u><em>quadratic cost</em></u></p>
+<p>where $Q=Q’ \succeq 0, R=R’ \succeq 0, Q_N=Q’_N \succeq 0$, means positive definite matrix.</p>
+</li>
+<li><p>consider the controllability of the state to zero with minimum energy input</p>
+<p>​    $\min_U \begin{Vmatrix} \begin{bmatrix} u(0)\ u(1)\ \vdots \ u(N-1) \end{bmatrix} \end{Vmatrix}$</p>
+<p>s.t.  $x(N)=0$</p>
+</li>
+<li><p>The minimum-energy control problem can be seen as aparticular case of the LQ optimal control problem by setting  $R=I, \ Q=0, \ Q_N=\infin \cdot I $</p>
+</li>
+<li><p>By substituting $x(k)=A^k x(0) + \sum\limits_{i=0}^{k-1} A^iBu(k-1-i)$ in</p>
+<p>​    $J(x(0),U)=\sum\limits_{k=0}^{N-1} x’(k)Qx(k) + u’(k)Ru(k) +x’(N)Qx(N)$</p>
+<p>we obtain $J(x(0),U)=\frac{1}{2}U’HU+x(0)’FU+\frac{1}{2}x’(0)Yx(0)$ , where $H=H’ \succeq 0$ is a positive definite matrix</p>
+</li>
+</ul>
+<p>##Solution1:</p>
+<ul>
+<li><p>The optimizer $U^*$ is obtained by <u>zeroing the gradient</u></p>
+<p>​    $0=\nabla_U J(x(0),U)=HU+F’x(0)$</p>
+<p>​    $\rightarrow    U^* = \begin{bmatrix} u^*(0)\ u^*(1)\ \vdots\ u^*(N-1) \end{bmatrix} =-H^{-1}F’x(0)$  </p>
+<p>this $U^*$ is an <em><strong>open-loop</strong></em> one: $u(k)=f_k(x(0)), k=0,1,\cdots,N-1$</p>
+<ul>
+<li>Moreover the dimensions of the $H$ and $F$ matrices is proportional to the time horizon N </li>
+</ul>
+</li>
+</ul>
+<p>##Solution2:</p>
+<ul>
+<li><p>using <strong><u>dynamic programming</u></strong> <em><strong>[Bellman’s principle of optimality]</strong></em></p>
+</li>
+<li><p>at  a generic instant $k_1$ and state $x(k_1)=z$  consider the optimal cost-to-go</p>
+<p>​    $V_{k_1}(z)=\min\limits_{u(k_1),\cdots,u(N-1)}\left{ \sum\limits_{k=k_1}^{N-1}x’(k)Qx(k)+u’(k)Ru(k)+x’(N)Q_Nx(N) \right}$</p>
+<p>and </p>
+<p>​    $\begin{align} V_{0}(x(0))&amp;=\min\limits_{U\triangleq u(0),\cdots,u(N-1)} J(x(0),U) \ &amp;=\min\limits_{u(0),\cdots,u(k_1-1)}\left{ \sum\limits_{k=0}^{k_1-1}x’(k)Qx(k)+u’(k)Ru(k)+V_{k_1}(x(k_1)))\right} \end{align}$    $\rightarrow$  <em><u>iteration</u></em></p>
+</li>
+<li><p>starting at $x(0)$, the minimum cost over $[0,N]$ equals the minumum cost spent until step $k_1$ plus the optimal cost-to-go from $k_1$ to $N$ starting at $x(k_1)$ </p>
+<hr>
+<p>Bellman’s optimality principle also applies to nonlinear system and/or non-quadratic cost functions:</p>
+<ul>
+<li>The optimal control law can be always written in <u>state-feedback form</u></li>
+</ul>
+<p>​    $u^*(k)=f_k(x^*(k)), \ \forall k=0,\cdots,N-1$</p>
+<ul>
+<li>Compared to the open-loop solution ${u^*(0),\cdots, u^*(N − 1)} = f(x(0))$ the <u>feedback form</u> has the big advantage of being more <strong>robust</strong> with respect to perturbations: at each time $k$ we apply the best move on theremaining period $[k, N]$</li>
+</ul>
+<hr>
+</li>
+</ul>
+<h3 id="Riccati-iterations"><a href="#Riccati-iterations" class="headerlink" title="Riccati iterations"></a>Riccati iterations</h3><h4 id="Finite-horizon-optimal-control"><a href="#Finite-horizon-optimal-control" class="headerlink" title="Finite-horizon optimal control"></a>Finite-horizon optimal control</h4><p>compute the optimal inputs $u^*(k)$ recursively as a function of $x^*(k)$ (<strong>Riccati iterations</strong>):</p>
+<ol>
+<li>Initialisation: $P(N)=Q_N$</li>
+<li>for $k=N,\cdots,1$ , compute recursively the following matrix</li>
+</ol>
+<p>​    $P(K-1)=Q-A’P(k)B(R+B’P(k)B)^{-1}B’P(k)A+A’P(k)A$</p>
+<ol start="3">
+<li>Define</li>
+</ol>
+<p>​    $K(k)=-(R+B’P(k+1)B)^{-1}B’P(k+1)A$</p>
+<p>​       The <strong>optimal input</strong> is a <u>(linear time-varying) state feedback</u></p>
+<p>​        $u^*(k)=K(k)x^*(k)$</p>
+<h4 id="Infinite-horizon-optimal-control"><a href="#Infinite-horizon-optimal-control" class="headerlink" title="Infinite-horizon optimal control"></a>Infinite-horizon optimal control</h4><h5 id="regulate-x-k"><a href="#regulate-x-k" class="headerlink" title="regulate $x(k)$"></a>regulate $x(k)$</h5><p>​    $V^{\infin}(x(0)) =\min\limits_{u(0),u(1),\cdots} \sum\limits_{k=0}^{\infin}x’(k)Qx(k)+u’(k)Ru(k)$</p>
+<ul>
+<li><p><strong>Results:</strong></p>
+<p>exists a unique solution $P_∞$ of the <strong>algebraic Riccati equation (ARE)</strong>:</p>
+<p>​    $P_∞ = A′P_∞A + Q − A′P_∞B(B′P_∞B + R)^{−1}B′P_∞A$<br>such that the optimal cost is $V_∞(x(0)) = x′(0)P_∞x(0)$ and the optimal control law is the constant linear state feedback $u(k) = K_{LQR} x(k)$ with </p>
+<p>​    $K_{LQR} = −(R + B′P_∞B)^{−1} B′P_∞A$</p>
+</li>
+</ul>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">P_∞ = dare(A,B,Q,R) <span class="comment">% Solve discrete-time algebraic Riccati equations.</span></span><br><span class="line"> </span><br><span class="line">[-K_∞,P_∞]=dlqr(A,B,Q,R) <span class="comment">% Linear-quadratic regulator design for discrete-time systems.</span></span><br><span class="line"></span><br><span class="line">[-K_∞,P_∞,E] = lqr(sysd,Q,R) <span class="comment">% Linear-quadratic regulator design for state space systems. </span></span><br><span class="line">		where E= closed-loop poles = eigenvalues of (A + B K_&#123;LQR&#125;)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>Closed-loop stability is ensured if (A,B) is stabilizable, $R≻0$, $Q⪰0$ , and $(A, Q^{\frac{1}{2}})$ is detectable, where $Q^{\frac{1}{2}}$ is the <strong>Cholesky factor</strong> of $Q$. </p>
+<blockquote>
+<p>In fact, Given a matrix $Q=Q′⪰0$ , its Cholesky factor is an upper-triangular matrix $C$ such that $C′C = Q$ <em>(<strong>MATLAB</strong>:chol)</em></p>
+</blockquote>
+</li>
+<li><p>LQR is an automatic and optimal way of placing poles! </p>
+</li>
+</ul>
+<h5 id="regulate-y-k"><a href="#regulate-y-k" class="headerlink" title="regulate $y(k)$"></a>regulate $y(k)$</h5><p>if we just want regulate $y(k)=Cx(k)$, rather than $x(k)$ , to zero, so</p>
+<pre><code> $V^&#123;\infin&#125;(x(0))=\min\limits_&#123;u(0),u(1),\cdots&#125; \sum\limits_&#123;k=0&#125;^&#123;\infin&#125;y&#39;(k)Qy(k)+u&#39;(k)Ru(k)$
+</code></pre>
+<p> so, similarly, this problem is again an LQR problem with equivalent state weight $Q=C’Q_y C$</p>
+<blockquote>
+<p>MATLAB: <code>[-K_∞,P_∞,E] = dlqry(sysd,Qy,R) </code> </p>
+</blockquote>
+<p>Corollary: </p>
+<p>Let $(A, B)$ stabilizable, $(A, C)$ detectable, $R &gt; 0$, $Q_y &gt; $0. The LQR control law $u(k) = K_{LQR} x(k)$ the <u><strong>asymptotically stabilize</strong></u>s the closed-loop system </p>
+<p>​        $\lim\limits_{t \rightarrow \infin}x(t)=0$, $\lim\limits_{t \rightarrow \infin} u(t)=0$ </p>
+<ul>
+<li><p><strong>Idea</strong>:</p>
+<p>Intuitively: the minimum cost $x′(0)P_∞x(0)$ is finite ⇒ $y(k) → 0$ and $u(k) → 0$.<br>$y(k) → 0$ implies that the observable part of the state $→ 0$. As $u(k) → 0$, the unobservable states<br>remain undriven and go to zero spontaneously (=detectability condition)</p>
+</li>
+</ul>
+<h1 id="Kalman-filtering"><a href="#Kalman-filtering" class="headerlink" title="Kalman filtering"></a>Kalman filtering</h1><p>Assign observer poles in an optimal way, that is to minimize the state estimation error $\tilde{x}  = x − \hat{x}$ </p>
+<p>##Model:</p>
+<ul>
+<li><p>linear time-varying system with noise</p>
+<p>​    $\begin{align} x(k+1)&amp;=A(k)x(k)+B(k)u(k)+G(k)\xi(k) \ y(k)&amp;=C(k)x(k)+D(k)u(k)+\zeta(k)\ x(0)&amp;=x_0 \end{align}$</p>
+<ul>
+<li><p>$\xi(k)$  Process noise, assume $\mathbb{E}(\xi(k))=0$ <u><em><strong>[zero means]</strong></em></u>; $\mathbb{E}(\xi(k) \xi’(j))=0$ <u><em><strong>[white noise]</strong></em></u>; and $\mathbb{E}(\xi(k) \xi’(k))=Q(k)$ <u><em><strong>[covariance matrix]</strong></em></u></p>
+</li>
+<li><p>$\zeta(k)$ measurement noise; assume $\mathbb{E}(\zeta(k))=0$ <u><em><strong>[zero means]</strong></em></u>; $\mathbb{E}(\zeta(k) \zeta’(j))=0$ <u><em><strong>[white noise]</strong></em></u>; and $\mathbb{E}(\zeta(k) \zeta’(k))=R(k)$ <u><em><strong>[covariance matrix]</strong></em></u></p>
+</li>
+<li><p>$x_0$ random vector; $\mathbb{E}(x_0)=\bar{x}_0$ ; $\mathbb{E}[(x_0-\bar{x}_0)(x_0-\bar{x}_0)’]=Var[x_0]=P_0$</p>
+</li>
+<li><p>Vectors $\xi(k)$ , $\zeta(k)$ , $x_0$ are uncorrelated: $\mathbb{E}(\xi(k) \zeta’(j))=0$ ; and $\mathbb{E}(\xi(k) x’_0)=0$; $\mathbb{E}(\zeta(k) x’_0)=0$</p>
+</li>
+<li><p>Probability distributions: assume <u>normal (Gaussian) distributions</u></p>
+<p>​    $\xi(k)\sim\mathcal{N}(0,Q(k))$ , $\xi(k) \sim \mathcal{N}(0,R(k))$ , $x_0 \sim \mathcal(\bar{x}_0,P_0)$</p>
+<p><img src="https://tva1.sinaimg.cn/large/008i3skNgy1gst6s3f0gpj315z0jtdji.jpg" alt="Annotations"></p>
+</li>
+</ul>
+</li>
+</ul>
+<p>##Steps：</p>
+<p>The Kalman filter provides the optimal estimate $\hat{x}(k|k)$ of $x(k)$ given the measurements up to time $k$. Optimality means that the trace of the variance $P(k+1|k)$ is minimized.</p>
+<p>Step1: measurement update</p>
+<ul>
+<li><p>Measurement update based on the most recent $y(k)$</p>
+<p>​    $M(k)=P(k|k-1) C(k)’ [ C(k) P(k|k-1) C(k)’+ R(k) ]^{-1}$</p>
+<p>​    $\hat{x}(k|k)=\hat{x}(k|k-1)+M(k) [ y(k)- C(k) \hat{x}(k|k-1) -D(k)u(k) ]$</p>
+<p>​    $P(k|k)=( I - M(k) C(k)) P(k|k-1)$</p>
+<p>With initial conditions $\hat{x}(0|-1)=\hat{x}_0, P(0|-1)=P_0$</p>
+</li>
+</ul>
+<p>Step 2: Time update</p>
+<ul>
+<li><p>time update based on the model of the system</p>
+<p>​    $\hat{x}(k+1|k)=A\hat{x}(k|k)+Bu(k)$</p>
+<p>​    $P(k+1|k)=A(k)P(k|k)A(k)’ + G(k)Q(k)G(k)’$</p>
+</li>
+</ul>
+<h2 id="Stationary-Kalman-Filter"><a href="#Stationary-Kalman-Filter" class="headerlink" title="Stationary Kalman Filter"></a>Stationary Kalman Filter</h2><ul>
+<li><p>assume $A,C,G,Q,R$ are constant</p>
+</li>
+<li><p>$P(k|k-1), M(k)$ converge to the constant matrices</p>
+<p>​    $P_{\infin} = AP_{\infin}A’ + GQG’ -AP_{\infin}C’[CP_{\infin}C’+R]^{-1} CP_{\infin}A’$</p>
+<p>​    $\ M\ =P_{\infin} C’(CP_{\infin}C’+R)^{-1}$</p>
+</li>
+<li><p>By setting $L=AM$, the dynamics of the prediction $\hat{x}(k|k-1)$ becomes the luenberger observer</p>
+<p>​    $\hat{x}(k+1|k)=A\hat{x}(k|k-1)+B(k)u(k)+L(y(k)-C\hat{x}(k|k-1)-D(k)u(k))$</p>
+<p>With all the eigenvalues of $(A-LC)$ inside the unit circle</p>
+<blockquote>
+<p>MATLAB:</p>
+<p>[~,L,P_∞,M,Z]=kalman(sys,Q,R),</p>
+</blockquote>
+<p>​                where $Z=\mathbb{E}[\tilde{x}(k|k)\tilde{x}(k|k)’]$</p>
+</li>
+</ul>
+<h3 id="Tuning-Kalman-Filters"><a href="#Tuning-Kalman-Filters" class="headerlink" title="Tuning Kalman Filters"></a>Tuning Kalman Filters</h3><ul>
+<li>It is usually hard to quantify exactly the correct values of $Q$ and $R$ for a given process </li>
+<li>The diagonal terms of $R$ are related to how noisy are output sensors </li>
+<li>$Q$ is harder to relate to physical noise, it mainly relates to how rough is the $(A, B)$ model </li>
+<li>After all, $Q$ and $R$ are the tuning knobs of the observer (similar to LQR) </li>
+<li>The “larger” is $R$ with respect to $Q$, the “slower” is the observer to converge ($L$, $M$ will be small) </li>
+<li>On the contrary, the “smaller” is $R$ than $Q$, the more precise are considered the measurments, and the “faster” observer will be to converge </li>
+</ul>
+<h2 id="Extended-Kalman-Filter"><a href="#Extended-Kalman-Filter" class="headerlink" title="Extended Kalman Filter"></a>Extended Kalman Filter</h2><p>extended to nonlinear system:</p>
+<h3 id="Model"><a href="#Model" class="headerlink" title="Model:"></a>Model:</h3><p>nonlinear model:</p>
+<p>​    $\begin{align} x(k+1)&amp;=f(x(k),u(k),\xi(k)) \ y(k)&amp;=g(x(k),u(k))+\zeta(k) \end{align}$</p>
+<h3 id="Steps"><a href="#Steps" class="headerlink" title="Steps:"></a>Steps:</h3><ol>
+<li><p>Measurement update:</p>
+<p>​    $$\begin{align} C(k)&amp;=\frac{\partial{g}}{\partial{x}} (\hat{x}_{k|k-1},u(k)) \ M(k)&amp;=P(k|k-1)C(k)’[C(k)R(k|k-1)C(k)’+R(k)]^{-1}\ \hat{x}(k|k)&amp;=\hat{x}(k|k-1)+M(k)(y(k)-g(\hat{x}(k|k-1),u(k))) \ P(k|k)&amp;=(I-M(k)C(k))P(k|k-1) \end{align}$$</p>
+</li>
+<li><p>Time update:</p>
+<p>​    $$\begin{align} \hat{x}(k+1|k)&amp;=f(\hat{x}(k|k),u(k)),&amp; \ \ \  \hat{x}(0|-1)=\hat{x}<em>0     \ A(k)&amp;=\frac{\partial f}{\partial x}(\hat{x}</em>{k|k},u{k},\mathbb{E}[\xi(k)]), &amp;\ \ G(k)=\frac{\partial f}{\partial \xi}(\hat{x}_{k|k},u(k),\mathbb{E}[\xi(k)])            \   P(k+1|k)&amp;=A(k)P(k|k)A(k)’ + G(k)Q(k)G(k)’, &amp;\ \ P(0|-1)=P_0  \end{align}$$</p>
+</li>
+</ol>
+<ul>
+<li>The EKF is in general <strong><u><em>not optimal and may even diverge, due to linearisation</u></em></strong>. But is the de-facto standard in nonlinear state estimation </li>
+</ul>
+<h1 id="LQG"><a href="#LQG" class="headerlink" title="LQG"></a>LQG</h1><p><strong>LQG</strong> (Linear Quadratic Gaussian) control:     <strong><u>LQR control</u></strong>     +    <u><strong>stationary Kalman predictor/filter</strong></u></p>
+<h3 id="Model-1"><a href="#Model-1" class="headerlink" title="Model:"></a>Model:</h3><ul>
+<li>stochastic dynamic system</li>
+</ul>
+<p>​    $\begin{align} x(k+1)&amp;=Ax(k)+Bu(k)+\xi(k),&amp; \ \ w\sim\mathcal{N}(0,Q_{KF})            \       y(k)&amp;=Cx(k)+\zeta(k),&amp; \ \ v\sim\mathcal{N}(0,R_KF)        \end{align}$</p>
+<p>​    with initial condition $x(0)=x_0, x_0\sim\mathcal{N}(\bar{x}<em>0,P_0), P,Q</em>{KF}\succeq0, R_{KF}&gt;0$ , and $\xi$ and $\zeta$ are <u>independent and white noise</u> terms</p>
+<ul>
+<li>objective is to minimize the cost function:</li>
+</ul>
+<p>​    $J(x(0),U)=\lim\limits_{T\rightarrow \infin} \frac{1}{T} \mathbb{E} \left[ \sum\limits_{k=0}^{T} x’(k)Q_{LQ}x(k)+u’()k R_{LQ}U(K)\right]$</p>
+<p>​    when the state $x$ is not measurable</p>
+<h3 id="control"><a href="#control" class="headerlink" title="control"></a>control</h3><ul>
+<li>the pair $(A,B)$ is reachable and the pair $(A,C_q)$ with $C_q$ such that $Q_{LQ} =C_qC_q′$ is observable (here $Q$ is the weight matrix of the LQ controller)</li>
+<li>the pair $(A, B_q)$, with $B_q$  s.t.  $Q_{KF} = B_qB_q′$ , is stabilizable, and the pair $(A, C)$ is observable (here $Q$ is the covariance matrix of the Kalman predictor/filter)</li>
+</ul>
+<p>Then,</p>
+<ol>
+<li>Determine the optimal stationary Kalman predictor/filter, neglecting the fact that the control variable $u$ is generated through a closed-loop control scheme, and find the optimal gain $L_KF$ </li>
+<li>Determine the optimal $L_{QR}$ strategy assuming the state accessible, and find the optimal gain $K_{LQR}$</li>
+</ol>
+<p><img src="https://tva1.sinaimg.cn/large/008i3skNgy1gst6rq6y4mj30wa0f4jst.jpg" alt="LQG controller"></p>
+<blockquote>
+<p>Analogously to the case of <u>output feedback control</u> using a <u>Luenberger observer</u>, it is possible to show that the extended <u>state $[x′ \ \   \tilde{x}’]’$ has eigenvalues</u> <em>equal to</em> the eigenvalues of $(A + BK_{LQR})$ plus those of $(A − L_{KF} C)$ (2n in total)</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>Xiaoxue Zhang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://zhang-xiaoxue.github.io/2020/07/30/Model%20Predictive%20Control/LQR/" title="Linear Quadratic Regulator (LQR)">https://zhang-xiaoxue.github.io/2020/07/30/Model Predictive Control/LQR/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/07/30/Model%20Predictive%20Control/MPC/" rel="prev" title="Model Predictive Control (MPC)">
+                  <i class="fa fa-chevron-left"></i> Model Predictive Control (MPC)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/08/16/Nonlinear%20Optimization/8_ADMM_boyd/" rel="next" title="8. Alternating Direction Method of Multipliers (ADMM)">
+                  8. Alternating Direction Method of Multipliers (ADMM) <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+<script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xiaoxue Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div><script color="0,0,255" opacity="0.5" zIndex="-1" count="199" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{&quot;enable&quot;:true,&quot;tags&quot;:&quot;none&quot;,&quot;single_dollars&quot;:true,&quot;cjk_width&quot;:0.9,&quot;normal_width&quot;:0.6,&quot;append_css&quot;:true,&quot;js&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;mathjax@3.1.4&#x2F;es5&#x2F;tex-mml-chtml.js&quot;}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

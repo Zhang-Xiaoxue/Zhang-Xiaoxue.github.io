@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/Academy-favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Academy-favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/Academy-favicon.png">
+  <link rel="mask-icon" href="/images/Academy-favicon" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;zhang-xiaoxue.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Muse&quot;,&quot;version&quot;:&quot;8.4.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;right&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;Searching...&quot;,&quot;empty&quot;:&quot;We didn&#39;t find any results for the search: ${query}&quot;,&quot;hits_time&quot;:&quot;${hits} results found in ${time} ms&quot;,&quot;hits&quot;:&quot;${hits} results found&quot;}}</script>
+<meta name="description" content="DQN and variantsDQNValue: (state, reward, state_new) $Q(s,a)$ 与当前得到的reward 和 $Q(s’,a)$有关。 价值函数近似： $Q(s,a)&#x3D;f(s,a)$, here, $f$ can be represented by NN. –&gt; $Q(s,a)&#x3D;f(s,a,w)$ where $w$ is hte parame">
+<meta property="og:type" content="article">
+<meta property="og:title" content="3. RL algorithms">
+<meta property="og:url" content="https://zhang-xiaoxue.github.io/2020/04/30/Reinforcement%20Learning/3_RL_algorithms/index.html">
+<meta property="og:site_name" content="Xiaoxue Zhang - NUS">
+<meta property="og:description" content="DQN and variantsDQNValue: (state, reward, state_new) $Q(s,a)$ 与当前得到的reward 和 $Q(s’,a)$有关。 价值函数近似： $Q(s,a)&#x3D;f(s,a)$, here, $f$ can be represented by NN. –&gt; $Q(s,a)&#x3D;f(s,a,w)$ where $w$ is hte parame">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gpwcji8mrwj31790ndjus.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008eGmZEgy1gpnxbqekppj31960ncgsj.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008eGmZEgy1gpo4jju4nej30y60u0e47.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008eGmZEgy1gpo8o0h1hgj31600sy7ae.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Lisnol1/CloudIMG/master/20210421160047.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Lisnol1/CloudIMG/master/20210421152427.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Lisnol1/CloudIMG/master/20210421152326.png">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gpwcfcvd52j30nm0cl76q.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gpwchx6pyoj315g0u0wlx.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gpwcprru9jj30vm0ky432.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Lisnol1/CloudIMG/master/20210427143013.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Lisnol1/CloudIMG/master/20210427124447.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Lisnol1/CloudIMG/master/20210428163711.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Lisnol1/CloudIMG/master/20210428145330.png">
+<meta property="og:image" content="https://pic4.zhimg.com/v2-4908c65bdca28a7602a864add9777d4f_r.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gq0tivv1upj30tf0hi771.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Lisnol1/CloudIMG/master/20210430154648.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Lisnol1/CloudIMG/master/20210501150503.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Lisnol1/CloudIMG/master/20210501151446.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Lisnol1/CloudIMG/master/20210430180012.png">
+<meta property="article:published_time" content="2020-04-30T04:00:00.000Z">
+<meta property="article:modified_time" content="2021-08-16T07:39:44.902Z">
+<meta property="article:author" content="Xiaoxue Zhang">
+<meta property="article:tag" content="Reinforcement Learning, Optimization and Control, Intellegent Systems">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gpwcji8mrwj31790ndjus.jpg">
+
+
+<link rel="canonical" href="https://zhang-xiaoxue.github.io/2020/04/30/Reinforcement%20Learning/3_RL_algorithms/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;en&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;zhang-xiaoxue.github.io&#x2F;2020&#x2F;04&#x2F;30&#x2F;Reinforcement%20Learning&#x2F;3_RL_algorithms&#x2F;&quot;,&quot;path&quot;:&quot;2020&#x2F;04&#x2F;30&#x2F;Reinforcement Learning&#x2F;3_RL_algorithms&#x2F;&quot;,&quot;title&quot;:&quot;3. RL algorithms&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>3. RL algorithms | Xiaoxue Zhang - NUS</title><script src="/js/config.js"></script>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Xiaoxue Zhang - NUS</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">NUS Ph.D.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#DQN-and-variants"><span class="nav-number">1.</span> <span class="nav-text">DQN and variants</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DQN"><span class="nav-number">1.1.</span> <span class="nav-text">DQN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Double-DQN"><span class="nav-number">1.2.</span> <span class="nav-text">Double DQN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dueling-DQN"><span class="nav-number">1.3.</span> <span class="nav-text">Dueling DQN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Summary"><span class="nav-number">1.4.</span> <span class="nav-text">Summary</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Policy-based-method"><span class="nav-number">2.</span> <span class="nav-text">Policy-based method</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Policy-gradient"><span class="nav-number">2.1.</span> <span class="nav-text">Policy gradient</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E8%A7%92%E5%BA%A6%E6%9D%A5%E7%9C%8B"><span class="nav-number">2.1.1.</span> <span class="nav-text">一个角度来看</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Method-1-Reinforce"><span class="nav-number">2.1.1.1.</span> <span class="nav-text">Method 1: Reinforce</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Method-2-Actor-Critic"><span class="nav-number">2.1.1.2.</span> <span class="nav-text">Method 2: Actor-Critic</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%A6%E4%B8%80%E4%B8%AA%E8%A7%92%E5%BA%A6%E6%9D%A5%E7%9C%8B"><span class="nav-number">2.1.2.</span> <span class="nav-text">另一个角度来看</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%BA%E7%82%B9%EF%BC%9A"><span class="nav-number">2.1.3.</span> <span class="nav-text">缺点：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Actor-critic-and-Variants"><span class="nav-number">3.</span> <span class="nav-text">Actor-critic and Variants</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Actor-critic"><span class="nav-number">3.1.</span> <span class="nav-text">Actor-critic</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#A2C"><span class="nav-number">3.2.</span> <span class="nav-text">A2C</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#A3C"><span class="nav-number">3.3.</span> <span class="nav-text">A3C</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Actor-Critic-based-methods"><span class="nav-number">4.</span> <span class="nav-text">Actor-Critic based methods</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#TRPO"><span class="nav-number">4.1.</span> <span class="nav-text">TRPO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PPO"><span class="nav-number">4.2.</span> <span class="nav-text">PPO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DDPG"><span class="nav-number">4.3.</span> <span class="nav-text">DDPG</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TD3"><span class="nav-number">4.4.</span> <span class="nav-text">TD3</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SAC"><span class="nav-number">5.</span> <span class="nav-text">SAC</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Maximum-Entropy-RL"><span class="nav-number">5.1.</span> <span class="nav-text">Maximum Entropy RL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Soft-Policy-Iteration"><span class="nav-number">5.2.</span> <span class="nav-text">Soft Policy Iteration</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Soft-policy-evaluation"><span class="nav-number">5.2.1.</span> <span class="nav-text">Soft policy evaluation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Soft-policy-improvement"><span class="nav-number">5.2.2.</span> <span class="nav-text">Soft policy improvement</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Soft-Actor-Critic"><span class="nav-number">5.3.</span> <span class="nav-text">Soft Actor Critic</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Summary-1"><span class="nav-number">5.4.</span> <span class="nav-text">Summary</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Xiaoxue Zhang"
+      src="/images/photo_blue.jpg">
+  <p class="site-author-name" itemprop="name">Xiaoxue Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Zhang-Xiaoxue" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Zhang-Xiaoxue" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:xiaoxuezhang@u.nus.edu" title="E-Mail → mailto:xiaoxuezhang@u.nus.edu" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.linkedin.com/in/xiaoxue-zhang-5233b611a/" title="https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;xiaoxue-zhang-5233b611a&#x2F;" rel="noopener" target="_blank">Linkedin</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.zhihu.com/people/lisnol" title="https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;lisnol" rel="noopener" target="_blank">知乎</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/Zhang-Xiaoxue" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zhang-xiaoxue.github.io/2020/04/30/Reinforcement%20Learning/3_RL_algorithms/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/photo_blue.jpg">
+      <meta itemprop="name" content="Xiaoxue Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Xiaoxue Zhang - NUS">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          3. RL algorithms
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-04-30 12:00:00" itemprop="dateCreated datePublished" datetime="2020-04-30T12:00:00+08:00">2020-04-30</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-08-16 15:39:44" itemprop="dateModified" datetime="2021-08-16T15:39:44+08:00">2021-08-16</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Reinforcement-Learning/" itemprop="url" rel="index"><span itemprop="name">Reinforcement Learning</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <img src="https://tva1.sinaimg.cn/large/008i3skNgy1gpwcji8mrwj31790ndjus.jpg" width="700">
+
+<h1 id="DQN-and-variants"><a href="#DQN-and-variants" class="headerlink" title="DQN and variants"></a>DQN and variants</h1><h2 id="DQN"><a href="#DQN" class="headerlink" title="DQN"></a>DQN</h2><p>Value: (state, reward, state_new)</p>
+<p>$Q(s,a)$ 与当前得到的reward 和 $Q(s’,a)$有关。</p>
+<p>价值函数近似：</p>
+<p>$Q(s,a)=f(s,a)$, here, $f$ can be represented by NN. –&gt; $Q(s,a)=f(s,a,w)$ where $w$ is hte parameter of NN.</p>
+<p>How to get the state_new? we trial and error –&gt; have state_new from previous experiences.</p>
+<p>流程；</p>
+<p>首先环境会给出一个obs，智能体根据值函数网络得到关于这个obs的所有Q(s,a)，然后利用$ϵ$−greedy选择action并做出决策，环境接收到此action后会给出一个奖励Rew及下一个obs。这是一个step。此时我们根据Rew去更新值函数网络的参数。接着进入下一个step。如此循环下去，直到我们训练出了一个好的值函数网络。</p>
+<p>Q value的更新依靠$Q_{target}$:（利用reward和Q计算出来的目标Q value）, $R_{t+1}+\gamma\max_a Q(s_{t+1},a)$.</p>
+<p>所以，我们把$Q_{target}$作为标签，使$Q$趋近于$Q_{target}$. </p>
+<p>所以，loss function is $\ell(w)=\mathbb{E}[\underbrace{r+\gamma\max_{a’}Q(s’,a’,w) }<em>{Q</em>{target}}- Q(s,a,w)]$.</p>
+<p>具体流程：</p>
+<p>每次只要传入一组（s,a,r,s’），即当前所处状态s，当前选择的动作a，做出动作a后获得的奖励r，以及做出动作a后转移到的下一状态s’。这四个值都可以在模拟一局游戏时取到，而且每模拟一局游戏能取到非常多组数据。在论文中作者提出了经验回放（experience replay）的采集数据方法，即事先采样足够多组的数据放入一个固定容量的经验池中，然后每次训练时从该经验池中随机取出一个batch的数据进行梯度下降更新参数。值得注意的是这一个batch的数据训练完成后是放回经验池的，也就是说下次训练时是可以复用的。只有当产生新的数据时，才会更新经验池。当一轮训练完成，更新完模型参数后，再根据该模型提供的策略进行模拟游戏，产生新的数据并放入经验池中，由于该经验池是有最大容量的，所以最早的一些数据会被新的数据替代。像这样每玩几局游戏训练一次（玩游戏的同时其实是在更新训练数据），极大地提升了训练的效率。此外，为了更加稳定地训练模型，作者提出了固定target值的思想，具体做法是复制一个和原本Q网络一模一样的target-Q网络用于计算target值，使得target-Q网络的参数在一定时间段内保持固定不变，在这段时间内用梯度下降训练Q网络。然后阶段性地根据Q网络学习完后的参数更新这个target-Q网络（就是把Q网络的参数再复制过去）。</p>
+<img src="https://tva1.sinaimg.cn/large/008eGmZEgy1gpnxbqekppj31960ncgsj.jpg" style="zoom:40">
+
+<blockquote>
+<p>Q-Learning的target是 $R_{t+1}+γ\max_{a′}Q(S_{t+1},a′)$。它使用 $ϵ$−greedy策略来生成action $a_{t+1}$，但用来计算target的action却不一定是$a_{t+1}$，而是使得$Q(S_{t+1},a)$最大的action。这种产生行为的策略和进行评估的策略不一样的方法称为Off-policy方法。对于Q-Learning来说，产生行为的策略是$$ϵ$$−greedy，而进行评估的策略是greedy。$Q(s,a)\leftarrow Q(s,a)+\alpha(R+\gamma\max_{a’}Q(s’,a’)-Q(s,a))$</p>
+<p>SarSa中使用$ϵ$−greedy策略生成action $a_{t+1}$，随即又用 $a_{t+1}$处对应的值函数来计算target，更新上一步的值函数。这种学习方式又称为On-policy。$Q(s,a)\leftarrow Q(s,a)+\alpha(R+\gamma Q(s’,a’)-Q(s,a))$</p>
+</blockquote>
+<h2 id="Double-DQN"><a href="#Double-DQN" class="headerlink" title="Double DQN"></a>Double DQN</h2><p>DDQN的模型结构基本和DQN的模型结构一模一样，唯一不同的就是它们的目标函数。<br>$$<br>Q^{DQN}<em>{target}(s,a) = R</em>{t+1} + \gamma \max_aQ(s’,a;\hat\theta)\<br>Q^{DoubleDQN}<em>{target}(s,a) = R</em>{t+1} + \gamma Q(s’, \operatorname{argmax}_a Q(s’,a;\theta),\hat\theta)<br>$$<br>这两个target函数的区别在于DoubleDQN的最优动作选择是根据当前正在更新的Q网络的参数 $\theta_t$，而DQN中的最优动作选择是根据target-Q网络的参数$\hat\theta_t$。这样做的原因是传统的DQN通常会高估Q值的大小（overestimation）。</p>
+<p>而DDQN由于每次选择的根据是当前Q网络的参数，并不是像DQN那样根据target-Q的参数，所以当计算target值时是会比原来小一点的。（因为计算target值时要通过target-Q网络，在DQN中原本是根据target-Q的参数选择其中Q值最大的action，而现在用DDQN更换了选择以后计算出的Q值一定是小于或等于原来的Q值的）这样在一定程度上降低了overestimation，使得Q值更加接近真实值。</p>
+<h2 id="Dueling-DQN"><a href="#Dueling-DQN" class="headerlink" title="Dueling DQN"></a>Dueling DQN</h2><img src="https://tva1.sinaimg.cn/large/008eGmZEgy1gpo4jju4nej30y60u0e47.jpg" width="500">
+
+<p>把Q function拆分为state function和advantage function ：$Q(s,a;\theta, \alpha, \beta) = V(s;\theta, \beta)+A(s,a;\theta,\alpha)$, 式中，$V(s;\theta, \beta)$是state function，输出一个标量，$A(s,a;\theta,\alpha)$是advantage function，输出一个矢量，矢量长度等于动作空间大小； $\theta$指网络卷积层的参数； $\alpha$和$\beta$分别是2个分支的全连接层的参数<br>$$<br>V^\pi(s) = \mathbb E_{a\sim\pi(s)}[Q^\pi(s,a)] \<br>A^\pi(s,a) = Q^\pi(s,a) - V^\pi(s)<br>$$<br>V代表了在当前状态s下，Q值的平均期望（综合考虑了所有可选动作）。A代表了在选择动作a时Q值超出期望值的多少。两者相加就是实际的Q(s,a)。所以这样设计模型就是为了让神经网络对给定的s有一个基本的判断，在这个基础上再根据不同的action进行修正。但是按照上述想法直接训练是有问题的，问题就在于若神经网络把V训练成固定值0后，就相当于普通的DQN网络了，因为此时的A值就是Q值。所以我们需要给我们的神经网络加一个约束条件，让所有动作对应的A值之和为零，使得训练出的V值是所有n个Q值的平均值（n代表可选择的动作个数）。<br>$$<br>Q(s,a;\theta, \alpha, \beta) = V(s;\theta, \beta)+ (A(s,a;\theta,\alpha) - \frac{1}{|\mathcal A|} \sum_{a’}A(s,a’;\theta,\alpha)<br>$$<br>式中，里括号中的部分其实就是之前说的A值，公式里的$|\mathcal A|$代表了可选择动作的个数。可以明显看出若把|A|个动作对应的括号中的部分相加，它们的和为零。所以问题就转化为利用神经网络求上述公式中的V(s; \theta,\beta)与A(s,a; \theta, \alpha)。其中V(s; θ \theta θ, β \beta β)就是前文所提到的V值，而A(s,a; θ \theta θ, α \alpha α)和前文所提到的广义上的A值其实不一样，但可以通过A(s,a; θ \theta θ, α \alpha α)计算出A值。</p>
+<h2 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h2><img src="https://tva1.sinaimg.cn/large/008eGmZEgy1gpo8o0h1hgj31600sy7ae.jpg" width="550">
+
+<ul>
+<li>Double DQN：目的是减少因为max Q值计算带来的计算偏差，或者称为过度估计（over estimation）问题，用当前的Q网络来选择动作，用目标Q网络来计算目标Q。</li>
+<li>Prioritised replay：也就是优先经验的意思。优先级采用目标Q值与当前Q值的差值来表示。优先级高，那么采样的概率就高。</li>
+<li>Dueling Network：将Q网络分成两个通道，一个输出V，一个输出A，最后再合起来得到Qr。</li>
+</ul>
+<h1 id="Policy-based-method"><a href="#Policy-based-method" class="headerlink" title="Policy-based method"></a>Policy-based method</h1><h2 id="Policy-gradient"><a href="#Policy-gradient" class="headerlink" title="Policy gradient"></a>Policy gradient</h2><h3 id="一个角度来看"><a href="#一个角度来看" class="headerlink" title="一个角度来看"></a>一个角度来看</h3><ol>
+<li><p>State-value function: $V_\pi(s_t) = \mathbb E_A [Q_\pi(s_t, A)] = \sum_a \pi(a|s_t) Q_\pi(s_t,a)$</p>
+<p>通过state-value function的定义引出用策略网络来近似策略函数</p>
+<p>Approximate the state-value function：</p>
+<ul>
+<li>Approximate policy function $\pi(a|s_t)$ by policy network $\pi(a|s_t;\theta)$.</li>
+<li>Approximate value function $V_\pi(s_t)$ by $V_\pi(s_t) = \sum_a \pi(a|s_t;\theta) Q_\pi(s_t,a)$.</li>
+</ul>
+</li>
+<li><p>用评价函数$L(\theta)$来评价策略的好坏，进而用策略梯度进行求解</p>
+<p>learn $\theta$ that maximizes $L(\theta)=\mathbb E_S[V(S;\theta)]$</p>
+<p>How to improve $\theta$?</p>
+<ol>
+<li><p>observe state $s$.</p>
+</li>
+<li><p>update policy by $\theta \leftarrow \theta + \beta \underbrace{ \frac{\partial V(s;\theta)}{\partial \theta}}<em>{policy\ gradient}$.<br>$$<br>\begin{array}{rCl}<br>\frac{\partial V(s;\theta)}{\partial \theta}<br>&amp;=&amp; \frac{\partial \sum_a \pi(a|s;\theta) Q_\pi(s,a)}{\partial \theta} \<br>&amp;=&amp; \sum_a \frac{\partial  \pi(a|s;\theta) Q_\pi(s,a)}{\partial \theta} \<br>&amp;=&amp; \sum_a \frac{\partial  \pi(a|s;\theta) }{\partial \theta} Q_\pi(s,a) \quad \text{assume $Q</em>{\pi}$ is independent of $\theta$} \<br>&amp;=&amp; \sum_a \pi(a|s;\theta) ; \frac{\partial  \log \pi(a|s;\theta) }{\partial \theta} Q_\pi(s,a) \<br>&amp;=&amp; \mathbb E_{A\sim\pi(\cdot|s,\theta)} \left[ \frac{\partial  \log \pi(a|s;\theta) }{\partial \theta} Q_\pi(s,a) \right]<br>\end{array}<br>$$<br>Thus, we have two forms of policy gradient:<br>$$<br>\begin{array}{rCl}<br>\text{Form 1: } &amp;\quad&amp;  \frac{\partial V(s;\theta)}{\partial \theta} = \sum_a \frac{\partial  \pi(a|s;\theta) }{\partial \theta} Q_\pi(s,a) \<br>\text{Form 2: } &amp;\quad&amp;  \frac{\partial V(s;\theta)}{\partial \theta} = \mathbb E_{A\sim\pi(\cdot|s,\theta)} \left[ \frac{\partial  \log \pi(a|s;\theta) }{\partial \theta} Q_\pi(s,a) \right]<br>\end{array}<br>$$</p>
+</li>
+</ol>
+<ul>
+<li><p>Case 1 (discrete actions) –&gt; Form 1</p>
+<ol>
+<li><p>Calculate $f(a,\theta) = \frac{\partial  \pi(a|s;\theta) }{\partial \theta} Q_\pi(s,a)$ for every acton $a\in \mathcal A$.</p>
+</li>
+<li><p>Policy gradient: $\frac{\partial V(s;\theta)}{\partial \theta} = \sum_a f(a,\theta)$</p>
+<blockquote>
+<p>if $|\mathcal A|$  is vast, this approach is costly.</p>
+</blockquote>
+</li>
+</ol>
+</li>
+<li><p>Case 2 (continuous actions) –&gt; Form 2 </p>
+<p>在求连续动作时，需要求定积分，这很难。一般采用Monte-Carlo近似的方法求出期望函数的无偏估计。（对于离散动作，这种方法也适用）。</p>
+<ol>
+<li>Randomly sample an action $\hat a$ according to the PDF $\pi(\cdot|s;\theta)$</li>
+<li>Calculate $g(\hat a, \theta) = \frac{\partial  \log \pi(\hat a|s;\theta) }{\partial \theta} Q_\pi(s, \hat a)$</li>
+<li>Use $g(\hat a, \theta)$ as an approximation to the policy gradient $\frac{\partial V(s;\theta)}{\partial \theta}$.</li>
+</ol>
+</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li><p>Algorithm:</p>
+<img src="https://raw.githubusercontent.com/Lisnol1/CloudIMG/master/20210421160047.png" width="500"></li>
+<li><p>Pros and Cons:</p>
+<ul>
+<li>Advantages:<ul>
+<li>efficient in high-dimensional or continuous action spaces (output actions probability)</li>
+<li>can learn stochastic policies</li>
+<li>better convergence properties</li>
+</ul>
+</li>
+<li>Disadvantages:<ul>
+<li>typocally converge to a local rather global optimum</li>
+<li>evaluating a policy is typically inefficient and high variance</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>遗留的问题： How to calculate $q_t$???</p>
+<h4 id="Method-1-Reinforce"><a href="#Method-1-Reinforce" class="headerlink" title="Method 1: Reinforce"></a>Method 1: Reinforce</h4><ol>
+<li>Play the game to the end and generate the trajectry &lt;$s_1, a_1, r_1, s_2, a_2, r_2, \cdots, S_T, a_T, r_T$&gt;</li>
+<li>Compute the discounted return $G_t = \sum_{k=t}^T \gamma^{k-t} r_k$ for all $t$.</li>
+<li>Since $Q_\pi(s_t,a_t) = \mathbb E[G_t]$, we can use $u_t$ to approximate $Q_\pi(s_t,a_t)$.</li>
+<li>–&gt; $q_t = u_t$.</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/Lisnol1/CloudIMG/master/20210421152427.png" width="500"> <img src="https://raw.githubusercontent.com/Lisnol1/CloudIMG/master/20210421152326.png" width='450'></p>
+<h4 id="Method-2-Actor-Critic"><a href="#Method-2-Actor-Critic" class="headerlink" title="Method 2: Actor-Critic"></a>Method 2: Actor-Critic</h4><ul>
+<li>approximate $Q_\pi$ using a neural network.</li>
+</ul>
+<h3 id="另一个角度来看"><a href="#另一个角度来看" class="headerlink" title="另一个角度来看"></a><strong>另一个角度来看</strong></h3><p>Loss: $L(\theta) = \mathbb E(r1 + \gamma r2 + \gamma^2r_3 + \cdots  | \pi(,\theta))$ , 所有带衰减reward的累计期望</p>
+<p>如何能够计算出损失函数关于参数的梯度（也就是策略梯度）$\nabla_\theta L(\theta)$:</p>
+<ul>
+<li>对于一个策略网络，输入state，输出action的概率。然后execute action, 得到reward。</li>
+<li>如果某一个动作得到reward多，使其出现的概率增大，如果某一个动作得到的reward少，使其出现的概率减小。</li>
+<li>如果能够构造一个好的动作评判指标，来判断一个动作的好与坏，那么我们就可以通过改变动作的出现概率来优化策略！</li>
+</ul>
+<p>–&gt; 使用log likelihood $\log \pi(a|s,\theta)$, 且给定critic metric是$f(s,a)$. </p>
+<p>–&gt; Loss：$L(\theta) = \sum \log \pi(a|s,\theta) f(s,a)$</p>
+<p><strong>Parametrise</strong> the policy: $\pi_\theta(s,a)=\mathbb P \left[a|s,\theta\right]$.<br>$$<br>\nabla_\theta \pi_\theta(s,a) = \pi_\theta(s,a) \frac{\nabla_\theta \pi_\theta(s,a)}{\pi_\theta(s,a)} = \underbrace{\pi_\theta(s,a)}<em>{policy} \underbrace{\nabla_\theta \log \pi_\theta(s,a)}</em>{score\ function}<br>$$</p>
+<ul>
+<li>softmax policy: [discrete action space]<ul>
+<li>weighting actions using linear combination of features $\phi(s,a)^\top\theta$</li>
+<li>probability of action is proportional to exponentiated weight $\pi_\theta(s,a) \propto e^{\phi(s,a)^\top \theta}$</li>
+<li>The score function is $\nabla_\theta \log \pi_\theta(s,a) = \phi(s,a) - \mathbb E_{\pi_\theta} [\phi(s,\cdot)]$</li>
+</ul>
+</li>
+<li>Gaussian policy: [continuous action space]<ul>
+<li>mean is linear combination of state feature $\mu(s) = \phi(s)^\top \theta$</li>
+<li>variance is fixed $\sigma^2$ or parameterised</li>
+<li>policy is Gaussian $a\sim\mathcal N(\mu(s),\sigma^2)$</li>
+<li>the score function is $\nabla_\theta \log \pi_\theta(s,a) = \frac{(a-\mu(s))\phi(s)}{\sigma^2}$</li>
+</ul>
+</li>
+</ul>
+<h3 id="缺点："><a href="#缺点：" class="headerlink" title="缺点："></a>缺点：</h3><ol>
+<li><p>require full episodes</p>
+</li>
+<li><p>high gradients variance. $\nabla L \simeq \mathbb E [Q(s,a) \nabla \log \pi(a|s)]$ which is proportional to the discounted reward from the given state.</p>
+<p>–&gt; add baseline from $Q$, which can be :</p>
+<ul>
+<li>some constant value (mean of the discounted rewards)</li>
+<li>moving average of discouted rewards</li>
+<li>the value of the state $V(s)$</li>
+</ul>
+</li>
+<li><p>Exploration. entropy 表征uncertainty。</p>
+<p>为避免local optimum，substract entropy from the loss function and punish the entropy to be too certain.</p>
+</li>
+<li><p>Correlation between samples.</p>
+</li>
+</ol>
+<h1 id="Actor-critic-and-Variants"><a href="#Actor-critic-and-Variants" class="headerlink" title="Actor-critic and Variants"></a>Actor-critic and Variants</h1><h2 id="Actor-critic"><a href="#Actor-critic" class="headerlink" title="Actor-critic"></a>Actor-critic</h2><ul>
+<li><p>reduce the variance of the gradient (由于很难infinite交互，期望与真实有差异，会带来较大的variance)</p>
+<p>actor-critic用一个独立模型估计轨迹的长期return，而不是直接使用轨迹的真实return。（类似于基于模型的Q-Learning 算法，在估计时使用模型估计轨迹价值，在更新时利用轨迹的回报得到目标价值，然后将模型的估计值和目标值进行比较，从而改进模型。）</p>
+<p>$\nabla_\theta L(\theta) = \frac{1}{N} \sum_{i=1}^N\sum_{t=0}^T \left[\nabla_\theta \log \pi_\theta (a_{i,t}|s_{i,t}) \left(\sum_{t’=t}^{T}r(s_{i,t’},a_{i,t’}) - b_i \right)\right]$</p>
+<p>方案：</p>
+<ol>
+<li>使用策略梯度法: $\sum_{t’=t}^{T}r(s_{i,t’},a_{i,t’}) - b_i$</li>
+<li>使用状态值函数估计轨迹的return: $q(s,a)$</li>
+<li>使用优势函数估计轨迹的return: $A(s,a) = q(s,a) - V(s)$</li>
+<li>使用TD-Error估计轨迹的return: $r(s,a) + q(s) - q(s’)$ [只需要算一个价值函数V，V函数和动作无关，可以用来计算Q和A]</li>
+</ol>
+</li>
+<li><p>Evaluation for value function</p>
+<ul>
+<li>Monte Carlo （用整条轨迹计算）<ul>
+<li>$V^\pi(s_t) \approx \sum_{t’=t}^T r(s_{t’}, a_{t’})$</li>
+<li>Training data: $\left{ \left(s_{i,t}, \underbrace{\sum_{t’=t}^T r(s_{t’}, a_{t’})}<em>{y</em>{i,t}}\right) \right}$</li>
+<li>Loss: $L = \frac{1}{2} \sum_i | \hat V^\pi(s_i) - y_i |^2$</li>
+</ul>
+</li>
+<li>TD （bootstrap):<ul>
+<li>Training data: $\left{ \left(s_{i,t}, \underbrace{ r(s_{i,t}, a_{i,t})+ \hat V^\pi_\phi (s_{i,t+1})}<em>{y</em>{i,t}}\right) \right}$</li>
+<li>引入了适当的bias， –&gt; 减小variance</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Actor Critic Design Decisions</p>
+<ul>
+<li>用两个网络分别去拟合Actor网络和Critic网络<ul>
+<li>优势是容易训练且稳定；缺点是没有共享feature，导致参数量增大，计算量也增大</li>
+</ul>
+</li>
+<li>用同一个网络去拟合：<ul>
+<li>解决了两个网络的优势，但是有可能会出现两个部分冲突的问题</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Actor-Critic方法和Policy Gradient方法各有优劣：Actor-Critic方法方差小但是有偏，Policy-Gradient无偏但是方差大：</p>
+<ul>
+<li><p>Actor-critic: $\nabla_\theta L(\theta) = \frac{1}{N} \sum_{i=1}^N\sum_{t=0}^T \left[\nabla_\theta \log \pi_\theta (a_{i,t}|s_{i,t}) \left(r(s_{i,t},a_{i,t}) + \gamma\hat V^\pi_\phi(s_{i,t+1}) - \hat V^\pi_\phi(s_{i,t}) - b_i \right)\right]$</p>
+<p>lower variance with bias</p>
+</li>
+<li><p>Policy graddient: $\nabla_\theta L(\theta) = \frac{1}{N} \sum_{i=1}^N\sum_{t=0}^T \left[\nabla_\theta \log \pi_\theta (a_{i,t}|s_{i,t}) \left(\sum_{t’=t}^{T}\gamma^{t’-t}r(s_{i,t’},a_{i,t’}) - b_i \right)\right]$</p>
+<p>no bias with higher variace (because use single sample estimate)</p>
+</li>
+</ul>
+</li>
+<li><p>So, 结合两种方法，–&gt; no bias with low variance (because baseline is close to reward)<br>$$<br>\nabla_\theta L(\theta) = \frac{1}{N} \sum_{i=1}^N\sum_{t=0}^T \left[\nabla_\theta \log \pi_\theta (a_{i,t}|s_{i,t}) \left(\sum_{t’=t}^{T} \gamma^{t’-t}r(s_{i,t’},a_{i,t’}) - \hat V_\phi^\pi(s_{i,t}) \right)\right]<br>$$<br>如果用整条轨迹，或者仅仅一个step，都有缺点 –&gt; 折中一下 –&gt; n-step<br>$$<br>\nabla_\theta L(\theta) = \frac{1}{N} \sum_{i=1}^N\sum_{t=0}^T \left[\nabla_\theta \log \pi_\theta (a_{i,t}|s_{i,t}) \left(\sum_{t’=t}^{t+n} \gamma^{t’-t}r(s_{i,t’},a_{i,t’}) - \hat V_\phi^\pi(s_{i,t}) + \gamma^n \hat V_\phi^\pi(s_{i,t+n})\right)\right]<br>$$</p>
+</li>
+</ul>
+<blockquote>
+<p>随着AC的run，networks变得越来越确定optimum value，sigma变得越来越小，越来越倾向于exploiting，而不是exploring</p>
+</blockquote>
+<h2 id="A2C"><a href="#A2C" class="headerlink" title="A2C"></a>A2C</h2><h2 id="A3C"><a href="#A3C" class="headerlink" title="A3C"></a>A3C</h2><img src="https://tva1.sinaimg.cn/large/008i3skNgy1gpwcfcvd52j30nm0cl76q.jpg" width="500">
+
+<img src="https://tva1.sinaimg.cn/large/008i3skNgy1gpwchx6pyoj315g0u0wlx.jpg" width="500">
+
+<p>Parallel actor-learners have a stabilizing effect on training allowing many methods (DQN, n-step Sarsa, AC) to successfully train NN.</p>
+<p>与memory replay不同，A3C允许多个agents独立play on separate environments. Each environment is in CPU.</p>
+<p>global optimizer and global actor-critic. each agent interact environments in separate thread. Agents reach terminal state –&gt; gradient descent on global optimizer </p>
+<p>Pseudocode:</p>
+<img src="https://tva1.sinaimg.cn/large/008i3skNgy1gpwcprru9jj30vm0ky432.jpg" width="800">
+
+<p>具体实现：</p>
+<p>使用torch的multiprocessing模块来生成多个trainer进程，每个进程里都会有一个player与环境交互并采集样本，定期利用buffer中的数据进行梯度更新。为了保证异步更新的有效性，在main进程里实例化了一个share model (global_actor_critic)，并且通过global的optimizer来对异步收集的梯度进行优化。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">global_actor_critic = Agent(input_dims=input_dims, n_actions=n_actions, gamma=GAMMA) <span class="comment"># global network</span></span><br><span class="line">global_actor_critic.actor_critic.share_memory() <span class="comment"># share the global parameters in multiprocessing</span></span><br><span class="line">optimizer = SharedAdam(global_actor_critic.actor_critic.parameters(), lr=lr, betas=(<span class="number">0.92</span>,<span class="number">0.999</span>)) <span class="comment"># global optimizer</span></span><br></pre></td></tr></table></figure>
+
+<p>在每个train进程中，每个agent需要定期地和global_actor_critic进行同步，从而保证整体优化的方向一致。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">self.local_actor_critic.actor_critic.load_state_dict(self.global_actor_critic.actor_critic.state_dict())</span><br></pre></td></tr></table></figure>
+
+<p>因此，我们可以得到train进程使用的是需要优化的目标策略，并且该模型是被所有进程所共享的，在global optimizer中可以实现share model （global_actor_critic）的更新。但是，在train进程中，每个agent的model是单独实例化的，因此并不和share model共享内存空间，只是会定期地通过load_state_dict()来获取共享模型的参数。player和环境交互采样得到的trajectory用于计算policy loss和value loss，通过backward获得model的梯度。然而这些梯度都是train进程player model上的，并不在share model中，所以必须要有某个机制来进行同步。因此，可以以下方法实现：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> local_param, global_param <span class="keyword">in</span> <span class="built_in">zip</span>(self.local_actor_critic.actor_critic.parameters(), self.global_actor_critic.actor_critic.parameters()):</span><br><span class="line">    global_param._grad = local_param.grad</span><br></pre></td></tr></table></figure>
+
+<p>注意，这里的=赋值是一个浅拷贝，因此是共享地址的，也就是share model的参数的梯度和player model参数的梯度共享一个内存空间，那么自然梯度就完成了同步。</p>
+<h1 id="Actor-Critic-based-methods"><a href="#Actor-Critic-based-methods" class="headerlink" title="Actor-Critic based methods"></a>Actor-Critic based methods</h1><h2 id="TRPO"><a href="#TRPO" class="headerlink" title="TRPO"></a>TRPO</h2><p>Property：</p>
+<ul>
+<li>On-policy</li>
+<li> can be used for environments with either discrete or continuous action spaces.</li>
+<li>supports parallelization </li>
+</ul>
+<p>policy update: $\theta = \theta_{old} + \alpha \nabla_\theta J$. </p>
+<blockquote>
+<p>更新步长$\alpha$非常重要，当步长不合适时，更新的参数所对应的策略是一个更不好的策略，当利用这个更不好的策略进行采样学习时，再次更新的参数会更差，因此很容易导致越学越差，最后崩溃。选择合适的步长$\alpha$使得新的回报函数的值单调递增。</p>
+<p>回报函数： $\eta(\tilde\pi)=E_{\tau \mid \tilde\pi}\left[\sum_{t=0}^{\infty} \gamma^{t}\left(r\left(s_{t}\right)\right)\right]$.</p>
+<p>如果可以将新的策略所对应的回报函数$\eta(\tilde\pi)$分解成旧的策略所对应的回报函数$$\eta(\pi)$$+其他项。只要新的策略所对应的其他项大于等于零，那么新的策略就能保证回报函数单调不减。</p>
+</blockquote>
+<p>$$<br>\eta(\tilde\pi)=\eta(\pi)+E_{s_{0}, a_{0}, \cdots \sim\eta(\tilde\pi)}\left[\sum_{t=0}^{\infty} \gamma^{t} A_{\pi}\left(s_{t}, a_{t}\right)\right]<br>$$</p>
+<p>其中，$\tilde\pi$ 和 $\pi$ 分别表示新策略和旧策略，$\begin{array}{c}<br>A_{\pi}(s, a)=Q_{\pi}(s, a)-V_{\pi}(s)<br>=E_{s^{\prime} \sim P\left(s^{\prime} \mid s, a\right)}\left[r(s)+\gamma V^{\pi}\left(s^{\prime}\right)-V^{\pi}(s)\right]<br>\end{array}$.</p>
+<blockquote>
+<p>Proof:<br>$$<br>\begin{array}{rcl}<br>&amp;&amp; E_{\tau \mid \tilde{\pi}}\left[\sum\limits_{t=0}^{\infty} \gamma^{t} A_{\pi}\left(s_{t}, a_{t}\right)\right] \<br>&amp;=&amp; E_{\tau \mid \tilde{\pi}}\left[\sum\limits_{t=0}^{\infty} \gamma^{t}\left(r(s)+\gamma V^{\pi}\left(s_{t+1}\right)-V^{\pi}\left(s_{t}\right)\right)\right] \<br>&amp;=&amp; E_{\tau \mid \tilde{\pi}}\left[\sum\limits_{t=0}^{\infty} \gamma^{t}\left(r\left(s_{t}\right)\right)+\sum\limits_{t=0}^{\infty} \gamma^{t}\left(\gamma V^{\pi}\left(s_{t+1}\right)-V^{\pi}\left(s_{t}\right)\right)\right] \<br>&amp;=&amp; E_{\tau \mid \tilde{\pi}}\left[\sum\limits_{t=0}^{\infty} \gamma^{t}\left(r\left(s_{t}\right)\right)\right]+E_{s_{0}}\left[-V^{\pi}\left(s_{0}\right)\right] \<br>&amp;=&amp;\eta(\tilde{\pi})-\eta(\pi)<br>\end{array}<br>$$</p>
+</blockquote>
+<p>因此，可以转化为<br>$$<br>\begin{array}{rCl}<br>\eta(\tilde{\pi}) &amp;=&amp;<br>\eta(\pi)+\sum\limits_{t=0}^{\infty} \sum\limits_{s} P\left(s_{t}=s \mid \tilde{\pi}\right)\sum\limits_{a} \tilde{\pi}(a \mid s) \gamma^{t} A_{\pi}(s, a) \<br>&amp;=&amp; \eta(\pi)+\sum\limits_{s} \rho_{\tilde{\pi}}(s) \sum\limits_{a} \tilde{\pi}(a \mid s) A^{\pi}(s, a)<br>\end{array}<br>$$<br>其中，$\rho_{\pi}(s)=P\left(s_{0}=s\right)+\gamma P\left(s_{1}=s\right)+\gamma^{2} P\left(s_{2}=s\right)+\cdots$表示discounted visitation frequencies。 此时状态$s$的分布对新策略$\tilde\pi$严重依赖。</p>
+<p><strong>用旧策略$\pi$的状态分布来代替新策略$\tilde\pi$的状态分布</strong>，surrogate loss function is<br>$$<br>\begin{array}{rCl}<br>L_\pi(\tilde{\pi})<br>&amp;=&amp; \eta(\pi)+\sum\limits_{s} \rho_(s) \sum\limits_{a} \tilde{\pi}(a \mid s) A^{\pi}(s, a)<br>\end{array}<br>$$<br>此时，产生动作$a$是基于新的策略$\tilde\pi$，但新策略$\tilde\pi$的参数$\theta$是未知的，无法应用。</p>
+<p><strong>利用重要性采样对动作分布进行处理:</strong><br>$$<br>\sum_{a} \tilde{\pi}<em>{\theta}\left(a \mid s</em>{n}\right) A_{\theta_{\text {old}}}\left(s_{n}, a\right)=E_{a \sim q}\left[\frac{\tilde{\pi}<em>{\theta}\left(a \mid s</em>{n}\right)}{q\left(a \mid s_{n}\right)} A_{\theta_{\text{old}}}\left(s_{n}, a\right)\right]<br>$$<br>surrogate loss function变为：<br>$$<br>\sum_{a} \tilde{\pi}<em>{\theta}\left(a \mid s</em>{n}\right) A_{\theta_{\text {old}}}\left(s_{n}, a\right)=E_{a \sim q}\left[\frac{\tilde{\pi}<em>{\theta}\left(a \mid s</em>{n}\right)}{q\left(a \mid s_{n}\right)} A_{\theta_{\text{old}}}\left(s_{n}, a\right)\right]<br>$$<br>比较该surrogate loss function $L_\pi(\tilde\pi)$ 和 $\eta(\tilde\pi)$:<br>$$<br>\begin{aligned}<br>L_{\pi_{\theta_{o l d}}}\left(\pi_{\theta_{o l d}}\right) &amp;=\eta\left(\pi_{\theta_{o l d}}\right) \<br>\left.\nabla_{\theta} L_{\pi_{\theta_{o l d}}}\left(\pi_{\theta}\right)\right|<em>{\theta=\theta</em>{o l d}} &amp;=\left.\nabla_{\theta} \eta\left(\pi_{\theta}\right)\right|<em>{\theta=\theta</em>{o l d}}<br>\end{aligned}<br>$$<br><img src="https://raw.githubusercontent.com/Lisnol1/CloudIMG/master/20210427143013.png" width="400"></p>
+<p><strong>利用不等式：</strong>$\eta(\tilde{\pi})  \geq L_{\pi}(\tilde{\pi})-C D_{\mathrm{KL}}^{\max }(\pi, \tilde{\pi})$, where $C=\frac{4 \epsilon \gamma}{(1-\gamma)^{2}}$. </p>
+<blockquote>
+<p>该不等式给出了$\eta(\tilde\pi)$的lower bound $M_i(\pi) = L_{\pi_i}(\pi) - CD_{KL}^{\max}(\pi_i, \pi)$</p>
+<p>证明策略的单调性：</p>
+<p>$\eta\left(\pi_{i+1}\right) \geqslant M_{i}\left(\pi_{i+1}\right)$, 且 $\eta\left(\pi_{i}\right) = M_{i}\left(\pi_{i}\right)$, 则 $\eta\left(\pi_{i+1}\right)-\eta\left(\pi_{i}\right) \geqslant M_{i}\left(\pi_{i+1}\right)-M\left(\pi_{i}\right)$.</p>
+<p>如果新策略能够使得$M_i$最大，我们可以得到$M_i(\pi_{i+1}) - M(\pi_i) \geq 0$, 则 $\eta(\pi_{i+1})-\eta(\pi_i) \geq 0$.</p>
+</blockquote>
+<p>使得$M_i$最大的策略 $\iff$ $\underset{\theta}{\operatorname{maximize}}\left[L_{\theta_{\text {old }}}(\theta)-C D_{\mathrm{KL}}^{\max }\left(\theta_{\text {old }}, \theta\right)\right]$</p>
+<p><strong>利用惩罚因子$C$,</strong> the step size will be small. –&gt; add constraint on the KL divergence (trust region constraint):<br>$$<br>\begin{array}{l}<br>\underset{\theta}{\operatorname{maximize}} \quad \mathbb{E}<em>{s \sim \rho</em>{\theta_{\text {old}}}, a \sim \pi_{\theta_{old}}}\left[\frac{\pi_{\theta}(a \mid s)}{\pi_{\theta_{old}}(a \mid s)} A_{\theta_{\text {old}}}(s, a)\right] \<br>\text {subject to} \quad D^{\max}<em>{\mathrm{KL}}\left(\theta</em>{\text {old}}, {\theta}\right) \leq \delta<br>\end{array}<br>$$<br><strong>在约束条件中，利用平均KL散度代替最大KL散度。</strong>该问题化简为<br>$$<br>\begin{array}{l}<br>\underset{\theta}{\operatorname{maximize}} \quad \mathbb{E}<em>{s \sim \rho</em>{\theta_{\text {old }}}, a \sim q}\left[\frac{\pi_{\theta}(a \mid s)}{q(a \mid s)} Q_{\theta_{\text {old }}}(s, a)\right] \<br>\text { subject to} \quad \mathbb{E}<em>{s \sim \rho</em>{\theta_{\text {old}}}}\left[D_{\mathrm{KL}}\left(\pi_{\theta_{\text {old}}}(\cdot \mid s) | \pi_{\theta}(\cdot \mid s)\right)\right] \leq \delta<br>\end{array}<br>$$<br>The objective function (surrogate advantage) is a measure of how policy $\pi_\theta$ performs relative to the old policy $\pi_{\theta_{old}}$ using data from the old policy.</p>
+<p>接下来就是利用采样得到数据，然后求样本均值，解决优化问题即可。至此，TRPO理论算法完成。</p>
+<p><strong>求解优化问题：</strong></p>
+<p>The objective and constraint are both zero when $\theta=\theta_{old}$. Furthermore, the gradient of the constraint with respect to $\theta$ is zero when $\theta=\theta_{old}$. TRPO makes some approximations to get an answer quickly. We Taylor expand the objective and constraint to leading order around $\theta_{old}$:<br>$$<br>\begin{array}{c}<br>\mathcal{L}\left(\theta_{k}, \theta\right) \approx g^{T}\left(\theta-\theta_{k}\right) \<br>\bar{D}<em>{K L}\left(\theta | \theta</em>{k}\right) \approx \frac{1}{2}\left(\theta-\theta_{k}\right)^{T} H\left(\theta-\theta_{k}\right)<br>\end{array}<br>$$<br>resulting in an approximate optimization problem,<br>$$<br>\begin{array}{r}<br>\theta_{k+1}=\arg \max <em>{\theta} g^{T}\left(\theta-\theta</em>{k}\right) \<br>\text { s.t. } \frac{1}{2}\left(\theta-\theta_{k}\right)^{T} H\left(\theta-\theta_{k}\right) \leq \delta<br>\end{array}<br>$$<br>This approximate problem can be analytically solved by the methods of Lagrangian duality, yielding the solution:<br>$$<br>\theta_{k+1}=\theta_{k}+\sqrt{\frac{2 \delta}{g^{T} H^{-1} g}} H^{-1} g<br>$$<br>A problem is that, due to the approximation errors introduced by the Taylor expansion, this may not satisfy the KL constraint, or actually improve the surrogate advantage. TRPO adds a modification to this update rule: a backtracking line search,<br>$$<br>\theta_{k+1}=\theta_{k}+\alpha^{j} \sqrt{\frac{2 \delta}{g^{T} H^{-1} g}} H^{-1} g<br>$$<br>where $\alpha\in (0,1)$ is the backtracking coefficient, and $j$ is the smallest nonnegative integer such that $\pi_\theta$ satisfies the KL constraint and produces a positive surrogate advantage.</p>
+<p>Lastly: computing and storing the matrix inverse, $H^{-1}$, is painfully expensive when dealing with neural network policies with thousands or millions of parameters. TRPO sidesteps the issue by using the <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Conjugate_gradient_method">conjugate gradient</a> algorithm to solve $Hx=g$ for $x=H^{-1}g$ , requiring only a function which can compute the matrix-vector product $Hx$  instead of computing and storing the whole matrix $H$ directly. This is not too hard to do: we set up a symbolic operation to calculate<br>$$<br>H x=\nabla_{\theta}\left(\left(\nabla_{\theta} \bar{D}<em>{K L}\left(\theta | \theta</em>{k}\right)\right)^{T} x\right)<br>$$<br>which gives us the correct output without computing the whole matrix.</p>
+<p>Over the course of training, the policy typically becomes progressively less random, as the update rule encourages it to exploit rewards that it has already found. This may cause the policy to get trapped in local optima. </p>
+<img src="https://raw.githubusercontent.com/Lisnol1/CloudIMG/master/20210427124447.png" width="600">
+
+<h2 id="PPO"><a href="#PPO" class="headerlink" title="PPO"></a>PPO</h2><p>Fundamental Knowledge:</p>
+<ol>
+<li><p>TRPO:<br>$$<br>\begin{array}{ll}<br>\underset{\theta}{\operatorname{maximize}} &amp; \hat{\mathbb{E}}<em>{t}\left[\frac{\pi</em>{\theta}\left(a_{t} \mid s_{t}\right)}{\pi_{\theta_{\text {old }}}\left(a_{t} \mid s_{t}\right)} \hat{A}<em>{t}\right] \<br>\text { subject to } &amp; \widehat{\mathbb{E}}</em>{t}\left[\operatorname{KL}\left[\pi_{\theta_{\text {old }}}\left(\cdot \mid s_{t}\right), \pi_{\theta}\left(\cdot \mid s_{t}\right)\right]\right] \leq \delta<br>\end{array}<br>$$<br>This problem can efficiently be approximately solved using the conjugate gradient algorithm, after making a linear approximation to the objective and a quadratic approximation to the constraint. The theory justifying TRPO actually suggests using a penalty instead of a constraint, i.e., solving the unconstrained optimization problem<br>$$<br>\underset{\theta}{\operatorname{maximize}} \hat{\mathbb{E}}<em>{t}\left[\frac{\pi</em>{\theta}\left(a_{t} \mid s_{t}\right)}{\pi_{\theta_{\text {old }}}\left(a_{t} \mid s_{t}\right)} \hat{A}<em>{t}-\beta \operatorname{KL}\left[\pi</em>{\theta_{\text {old }}}\left(\cdot \mid s_{t}\right), \pi_{\theta}\left(\cdot \mid s_{t}\right)\right]\right]<br>$$</p>
+<p>for some coefficient $\beta$. </p>
+<blockquote>
+<p>a certain surrogate objective (which computes the max KL over states instead of the mean) forms a lower bound (i.e., a pessimistic bound) on the performance of the policy $\pi$.</p>
+</blockquote>
+<p>TRPO uses a hard constraint rather than a penalty because it is hard to choose a single value of $\beta$ that performs well across different problems—or even within a single problem, where the the characteristics change over the course of learning.</p>
+</li>
+<li><p>Actor-critic:</p>
+<p>sensitive to perturbations (small change in parameters of network –&gt; big change of policy space)</p>
+</li>
+</ol>
+<p>In order to address this issue, PPO:</p>
+<ul>
+<li>limits update to policy network, and <ul>
+<li>base the update on the ratio of new policy to old. (make the ratio be confined into a range –&gt; not take big step in parameter space)</li>
+</ul>
+</li>
+<li>Need to account for goodness of state (advantage)</li>
+<li>clip the loss function and take lower bound with minimum function</li>
+<li>Track a fixed length trajectory of memories (instead of many transitions)</li>
+<li>Use multiple network updates per data sample. Use minibatch stochastic gradient ascent</li>
+<li>can use multiple parallel CPU</li>
+</ul>
+<p><strong>Important Components:</strong></p>
+<ul>
+<li><p>Update Actor is different<br>$$<br>L^{CPI}(\theta) = \hat{\mathbb E} \left[ \frac{\pi_\theta(a_t|s_t)}{\pi_{\theta_{old}}(a_t|s_t) }\hat A_t \right] = \hat{\mathbb E} \left[r_t(\theta) \hat A_t \right]<br>$$</p>
+<ul>
+<li>based on ratio of new policy to old policy (can use log)</li>
+<li>consider the advantage</li>
+</ul>
+</li>
+<li><p>Only maximize $L^{CPI}(\theta)$ will lead to large policy update, –&gt; Modify objective </p>
+<p>Adding epsilon (about 0.2) for clip/min operations<br>$$<br>L^{CPI}(\theta) = \hat{\mathbb E} \left[ \min\left(r_t(\theta)\hat{A}_t;, ; \operatorname{clip}(r_t(\theta), 1-\epsilon, 1+\epsilon) \right)\hat{A}_t \right]<br>$$</p>
+</li>
+<li><p>pessimistic lower bound to the loss</p>
+<ul>
+<li>smaller loss, smaller gradient, smaller update</li>
+</ul>
+</li>
+<li><p>Advantages at each time step:<br>$$<br>\hat{A}<em>t = \delta_t + (\gamma\lambda)\delta</em>{t+1} + \cdots +(\gamma\lambda)^{T-t+1}\delta_{T-1}<br>$$<br>where $\delta_t = r_t + \gamma V(s_{t+1}) - V(s_t)$.</p>
+<ul>
+<li>show the benefit of the new state over the old state</li>
+<li>$\lambda$ is a smoothing parameter (about 0.95) to help to reduce variance</li>
+<li>Nested for loops</li>
+</ul>
+</li>
+<li><p>Critic loss is straightforward </p>
+<ul>
+<li>Return = advantage + critic_value (from memory)</li>
+<li>$L_{critic}$ = MSE( return - critic_value ) [from network]</li>
+</ul>
+</li>
+<li><p>Total loss is sum of clipped actor and critic<br>$$<br>L_t^{CLIP+VF+S} = \hat{\mathbb E} \left[ L_t^{CLIP}(\theta) - c_1 L_t^{VF} + c_2 S<a href="s_t">\pi_\theta</a> \right]<br>$$</p>
+<ul>
+<li>coefficient $c_1$ of the critic</li>
+<li>$S$ term is the entropy term [which is required if the actor and critic are coupled].</li>
+</ul>
+</li>
+</ul>
+<p>总结：</p>
+<p>PPO: off-policy </p>
+<ul>
+<li><p>通过importance sampling实现离线更新策略（可以使用行为策略所得到的数据用来更新目标策略）</p>
+<p>使用$\theta_{old}$采样的数据，训练$\theta$这个actor，过程中$\theta_{old}$是fixed的所以可以重复使用用$\theta_{old}$的数据训练$\theta$许多次，增加数据利用率，提高训练速度。也就是说，在importance sampling中，我们使用$\theta_{old}$获得数据，来估计$\theta$的期望分布。、</p>
+</li>
+<li><p>但是注意，此时两种策略的分布不能差别很大。–&gt; 引入了约束条件。</p>
+<ul>
+<li>TRPO是加入了KL($\theta_{old},\theta$) divergence的constraint</li>
+<li>PPO是在目标函数后加入了关于$\beta$KL($\theta_{old},\theta$)的惩罚项.</li>
+</ul>
+</li>
+</ul>
+<img src="https://raw.githubusercontent.com/Lisnol1/CloudIMG/master/20210428163711.png" width="500">
+
+<h2 id="DDPG"><a href="#DDPG" class="headerlink" title="DDPG"></a>DDPG</h2><p>同样，也是Actor-Critic架构。</p>
+<ul>
+<li><p>Actor:</p>
+<ul>
+<li>Input: state $s$</li>
+<li>Output: action $a$。 【在Actor-Critic方法中，输出的是一个概率分布】</li>
+<li>更新方法是基于梯度上升的。</li>
+<li>该网络的损失函数就是从critic网络中获取的Q值的平均值，在实现的过程中，需要加入负号，即最小化损失函数，来与深度学习框架保持一致。用数学公式表示其损失函数就是：$L_{actor}=\mathbb E \left[{Q(s,a|\theta^Q)}|_{s=s_t,a=\mu(s_t|\theta^\mu)} \right]$.</li>
+</ul>
+</li>
+<li><p>Critic：</p>
+<ul>
+<li>Input: state $s$ and action $a$</li>
+<li>Output: Q value $Q(s,a)$。 【在Actor-Critic方法中，输出的是$V(s)$】</li>
+<li>通过最小化目标网络与现有网络之间的均方误差来更新现有网络的参数，</li>
+</ul>
+</li>
+<li><p>加入experience replay buffer，存储agent与env之间的交互数据。</p>
+</li>
+<li><p>在实际操作中，如果更新目标在变化，会导致更新困难。–&gt; use “soft” target updates, rather than directly copy the weights –&gt; 方法：添加target actor 和 target critic 网络。并在更新target 网络参数时增加权重$\tau$，即每一步仅采用相对小的权重采用相应训练中的network更新；如此的目的在于尽可能保障训练能够收敛；</p>
+</li>
+<li><p>Exploration via random process, 为actor采取的action基础上增加一定的随机扰动, 以保障一定的探索完整动作空间的几率。一般的, 相应随机扰动的幅度随着训练的深入而逐步递减；</p>
+</li>
+<li><p>Batch normalization, 为每层神经网络之前加入batch normalization层, 可以降低不对状态量取值范围差异对模型稳定性的影响程度。</p>
+</li>
+</ul>
+<img src="https://raw.githubusercontent.com/Lisnol1/CloudIMG/master/20210428145330.png" width="700">
+
+
+
+<h2 id="TD3"><a href="#TD3" class="headerlink" title="TD3"></a>TD3</h2><p>DDPG起源于DQN，是DQN解决连续控制问题的一个解决方法。而DQN有一个众所周知的问题，就是Q值会被高估。这是因为我们用$\operatorname{argmax}Q(s’)$去代替$V(s’)$，去评估$Q(s)$。当我们每一步都这样做的时候，很容易就会出现高估$Q$值的情况。类似地，DDPG也会有这个问题。可以借鉴double DQN的思路来解决这个问题。在TD3中，可以用两套网络估算$Q$值，相对较小的那个作为我们更新的目标。这就是TD3的基本思路。</p>
+<blockquote>
+<p>DDPG算法涉及了4个网络，TD3需要用到6个网络。</p>
+</blockquote>
+<img src="https://pic4.zhimg.com/v2-4908c65bdca28a7602a864add9777d4f_r.jpg" width="550">
+
+<img src="https://tva1.sinaimg.cn/large/008i3skNgy1gq0tivv1upj30tf0hi771.jpg" width="550">
+
+<ul>
+<li><p>Actor:</p>
+<p>与DDPG相同</p>
+</li>
+<li><p>Critic:</p>
+<ul>
+<li>两个target ciritc网络，用于计算两个Q值：$Q_1(A’)$和$Q_2(A’)$.</li>
+<li>$\min(Q_1(A’), Q_2(A’))$用来计算target value，i.e. $y_i = r+ \gamma \min(Q_1(A’), Q_2(A’))$. 而计算出的target value也是两个critic网络的更新目标。</li>
+<li>两个critic 网络的意义：虽然更新目标一样，两个网络会越来越趋近与和实际q值相同。但由于网络参数的初始值不一样，会导致计算出来的值有所不同。所以我们可以选择较小的值去估算q值，避免q值被高估。</li>
+</ul>
+</li>
+<li><p>送</p>
+</li>
+</ul>
+<h1 id="SAC"><a href="#SAC" class="headerlink" title="SAC"></a>SAC</h1><h2 id="Maximum-Entropy-RL"><a href="#Maximum-Entropy-RL" class="headerlink" title="Maximum Entropy RL"></a>Maximum Entropy RL</h2><p>之前的RL算法中，学习目标主要是学习一个policy使得累积reward的期望值最大：$\pi^{*}=\arg \max <em>{\pi} \mathbb{E}</em>{\left(s_{t}, a_{t}\right) \sim \rho_{\pi}}\left[\sum_{t} R\left(s_{t}, a_{t}\right)\right]$.</p>
+<p>而最大熵RL的学习目标，除了学习一个policy使得累积reward最大，还要求policy的每一次输出的action的entropy最大：<br>$$<br>\pi^{*}=\arg \max <em>{\pi} \mathbb{E}</em>{\left(s_{t}, a_{t}\right) \sim \rho_{\pi}} \left[\sum_{t} \underbrace{R\left(s_{t}, a_{t}\right)}<em>{\text {reward }}+\alpha \underbrace{H\left(\pi\left(\cdot \mid s</em>{t}\right)\right)}_{\text {entropy }}\right]<br>$$<br>$\alpha$是temperature parameter决定entropy项和reward之间的relative importance。通过增加entropy项，可使得策略随机化，即输出的每一个action的概率尽可能均匀，而不是集中在一个action上。从而鼓励exploration，也可以学到更多near-optimal行为（也就是在一些状态下， 可能存在多个action都是最优的，那么使得选择它们的概率相同，可以提高学习速度）。</p>
+<blockquote>
+<p>在信息论中，熵（entropy）是接收的每条消息中包含的信息的平均量，又被稱為信息熵、信源熵、平均自信息量。这里，“消息”代表来自分布或数据流中的事件、样本或特征。（熵最好理解为不确定性的量度而不是确定性的量度，因为越随机的信源的熵越大。）来自信源的另一个特征是样本的概率分布。这里的想法是，比较不可能发生的事情，当它发生了，会提供更多的信息。由于一些其他的原因，把信息（熵）定义为概率分布的对数的相反数是有道理的。事件的概率分布和每个事件的信息量构成了一个随机变量，这个随机变量的均值（即期望）就是这个分布产生的信息量的平均值（即熵）。</p>
+</blockquote>
+<h2 id="Soft-Policy-Iteration"><a href="#Soft-Policy-Iteration" class="headerlink" title="Soft Policy Iteration"></a>Soft Policy Iteration</h2><h3 id="Soft-policy-evaluation"><a href="#Soft-policy-evaluation" class="headerlink" title="Soft policy evaluation"></a>Soft policy evaluation</h3><p>思路1（通过DP得到Soft bellman equation）：</p>
+<ul>
+<li>因此可以得到Soft Bellman Backup equation (Entropy项额外乘上$\alpha$系数) :<br>$$<br>q_{\pi}(s, a)=r(s, a)+\gamma \sum_{s^{\prime} \in \mathcal{S}} \mathcal{P}<em>{s s^{\prime}}^{a} \sum</em>{a^{\prime} \in \mathcal{A}} \pi\left(a^{\prime} \mid s^{\prime}\right)\left(q_{\pi}\left(s^{\prime}, a^{\prime}\right)-\alpha \log \left(\pi\left(a^{\prime} \mid s^{\prime}\right)\right)\right.<br>$$<br>可以得到Soft Bellman Backup的 更新公式:<br>$$<br>Q_{\text{soft}}\left(s_{t}, a_{t}\right)=r\left(s_{t}, a_{t}\right)+\gamma \mathbb{E}<em>{s</em>{t+1}, a_{t+1}}\left[Q_{\text{soft}}\left(s_{t+1}, a_{t+1}\right)-\alpha \log \left(\pi\left(a_{t+1} \mid s_{t+1}\right)\right)\right]<br>$$</li>
+</ul>
+<p>思路2（将entropy嵌入reward）：</p>
+<ul>
+<li>Reward with entropy:<br>$$<br>r_{\text{soft}}\left(s_{t}, a_{t}\right)=r\left(s_{t}, a_{t}\right)+\gamma \alpha \mathbb{E}<em>{s</em>{t+1} \sim \rho} H\left(\pi\left(\cdot \mid s_{t+1}\right)\right)<br>$$<br>将该reward代入Bellman equation $Q\left(s_{t}, a_{t}\right)=r\left(s_{t}, a_{t}\right)+\gamma \mathbb{E}<em>{s</em>{t+1}, a_{t+1}}\left[Q\left(s_{t+1}, a_{t+1}\right)\right]$, 得到<br>$$<br>\begin{array}{rCl}<br>Q_{\text{soft}}\left(s_{t}, a_{t}\right) &amp;=&amp; r\left(s_{t}, a_{t}\right)+ \gamma \alpha \mathbb{E}<em>{s</em>{t+1} \sim \rho} H\left(\pi\left(\cdot \mid s_{t+1}\right)\right) + \gamma \mathbb{E}<em>{s</em>{t+1}, a_{t+1}}\left[Q_{\text{soft}}\left(s_{t+1}, a_{t+1}\right)\right] \<br>&amp;=&amp; r\left(s_{t}, a_{t}\right)+ \gamma \mathbb{E}<em>{s</em>{t+1}\sim\rho,a_{t+1}\sim\pi} \left[Q_{\text{soft}}\left(s_{t+1}, a_{t+1}\right)\right] + \gamma \alpha \mathbb{E}<em>{s</em>{t+1}\sim\rho} H\left(\pi\left(\cdot \mid s_{t+1}\right)\right) \<br>&amp;=&amp; r\left(s_{t}, a_{t}\right)+ \gamma \mathbb{E}<em>{s</em>{t+1}\sim\rho} \mathbb{E}<em>{a</em>{t+1}\sim\pi} \left[Q_{\text{soft}}\left(s_{t+1}, a_{t+1}\right)\right] - \gamma \alpha \mathbb{E}<em>{s</em>{t+1}\sim\rho}\mathbb{E}<em>{a</em>{t+1}\sim\pi} \log\pi(a_{t+1}|s_{t+1}) \<br>&amp;=&amp; r\left(s_{t}, a_{t}\right)+ \gamma \mathbb{E}<em>{s</em>{t+1}\sim\rho} \left[ \mathbb{E}<em>{a</em>{t+1}\sim\pi}\left[Q_{\text{soft}}\left(s_{t+1}, a_{t+1}\right) - \alpha \log\pi(a_{t+1}|s_{t+1}) \right]\right] \<br>&amp;=&amp; r\left(s_{t}, a_{t}\right)+ \gamma \mathbb{E}<em>{s</em>{t+1},a_{t+1}}\left[Q_{\text{soft}}\left(s_{t+1}, a_{t+1}\right) - \alpha \log\pi(a_{t+1}|s_{t+1}) \right] \<br>\end{array}<br>$$<br>该结果也和思路1得到的结果相同。</li>
+</ul>
+<p>因此，根据$Q\left(s_{t}, a_{t}\right)=r\left(s_{t}, a_{t}\right)+\gamma \mathbb{E}<em>{s</em>{t+1} \sim \rho}\left[V\left(s_{t+1}\right)\right]$，可得到$V_{\text{soft}}(s_t)$:<br>$$<br>V_{\text{soft}}\left(s_{t}\right)=\mathbb{E}<em>{a</em>{t} \sim \pi}\left[Q_{\text {soft}}\left(s_{t}, a_{t}\right)-\alpha \log \pi\left(a_{t} \mid s_{t}\right)\right]<br>$$</p>
+<p><strong>Soft Policy Evaluation:</strong> 固定policy，使用soft Bellman equation更新Q value直到收敛<br>$$<br>Q_{\text{soft}}\left(s_{t}, a_{t}\right)=r\left(s_{t}, a_{t}\right)+\gamma \mathbb{E}<em>{s</em>{t+1}, a_{t+1}}\left[Q_{\text{soft}}\left(s_{t+1}, a_{t+1}\right)-\alpha \log \left(\pi\left(a_{t+1} \mid s_{t+1}\right)\right)\right]<br>$$</p>
+<h3 id="Soft-policy-improvement"><a href="#Soft-policy-improvement" class="headerlink" title="Soft policy improvement"></a>Soft policy improvement</h3><p>stochastic policy的重要性：面对多模的（multimodal）的Q function，传统的RL只能收敛到一个选择（左图），而更优的办法是右图，让policy也直接符合Q的分布。</p>
+<img src="https://raw.githubusercontent.com/Lisnol1/CloudIMG/master/20210430154648.png" width="600">
+
+<p>这里，通过定义energy-based policy as：$\pi(a_t|s_t) \propto \exp(-\mathcal E(s_t,a_t))$。设定$\mathcal E(s_t,a_t)=-\frac{1}{\alpha}Q_{\text{soft}}(s_t,a_t)$, 可以得到$\pi(a_t|s_t) \propto \exp(-\mathcal E(s_t,a_t))$。根据$V_{\text{soft}}\left(s_{t}\right)=\mathbb{E}<em>{a</em>{t} \sim \pi}\left[Q_{\text {soft}}\left(s_{t}, a_{t}\right)-\alpha \log \pi\left(a_{t} \mid s_{t}\right)\right]$, 可以得到</p>
+<p>$$<br>\begin{array}{rCl}<br>\pi(s_t,a_t) &amp;=&amp; \exp \left( \frac{1}{\alpha} \left(Q_{\text{soft}}(s_t,a_t) - V_{\text{soft}}(s_t) \right)\right) \<br>&amp;=&amp; \frac{\frac{1}{\alpha}Q_{\text{soft}}(s_t,a_t)}{\frac{1}{\alpha}V_{\text{soft}}(s_t)} \propto Q_{\text{soft}}(s_t,a_t)<br>\end{array}<br>$$<br>其中，$\exp \left(\frac{1}{\alpha} V_{\text {soft }}\left(s_{t}\right)\right)=\int \exp \left(\frac{1}{\alpha} Q_{\text {soft }}\left(s_{t}, a\right)\right) d a$，因此，$V_{\text {soft }}\left(s_{t}\right) \triangleq \alpha \log \int \exp \left(\frac{1}{\alpha} Q_{\text {soft }}\left(s_{t}, a\right)\right) d a$</p>
+<p>所以，$\underset{a}{\operatorname{soft max}} f(a):=\log \int \exp f(a) d a$, –&gt; $Q_{\text {soft }}\left(s_{t}, a_{t}\right)=\mathbb{E}\left[r_{t}+\gamma \underset{a}{\operatorname{soft max}} Q\left(s_{t+1}, a\right)\right]$.</p>
+<p>因此可以得到：$\pi_{\text{MaxEnt}}^{<em>}\left(a_{t} \mid s_{t}\right)=\exp \left(\frac{1}{\alpha}\left(Q_{\text {soft }}^{</em>}\left(s_{t}, a_{t}\right)-V_{\text {soft}}^{*}\left(s_{t}\right)\right)\right)$。</p>
+<p><strong>Soft Policy Improvement</strong>: 更新policy towards the exponential of new Q-function. Restrict the policy to some set of policies, like Gaussian.<br>$$<br>\pi^{\prime}=\arg \min <em>{\pi</em>{k} \in \Pi} D_{K L}\left(\pi_{k}\left(\cdot \mid s_{t}\right) \Big| \frac{\exp \left(\frac{1}{\alpha} Q_{\text {soft }}^{\pi}\left(s_{t}, \cdot\right)\right)}{Z_{\text {soft }}^{\pi}\left(s_{t}\right)}\right)<br>$$<br>其中, $Z^\pi_{\text{soft}}(s_t)$ 就是是一个配分函数，用于归一化分布，在求导的时候可以直接忽略。此处，通过KL divergence来趋近$\exp(Q_{\text{soft}}^{\pi}(s_t,\cdot))$ ，从而限制policy在一定范围的policies $\Pi$中，从而变得tractable，policy的分布可以是高斯分布。</p>
+<h2 id="Soft-Actor-Critic"><a href="#Soft-Actor-Critic" class="headerlink" title="Soft Actor Critic"></a>Soft Actor Critic</h2><p>旧版SAC：</p>
+<img src="https://raw.githubusercontent.com/Lisnol1/CloudIMG/master/20210501150503.png" width="800">
+
+<p>新版SAC：</p>
+<img src="https://raw.githubusercontent.com/Lisnol1/CloudIMG/master/20210501151446.png" width="800">
+
+<ul>
+<li><p>Critic：<br>$$<br>\begin{aligned}<br>J_{Q}(\theta) &amp;=\mathbb{E}<em>{\left(s</em>{t}, a_{t}, s_{t+1}\right) \sim \mathcal{D}}\left[\frac{1}{2}\left(Q_{\theta}\left(s_{t}, a_{t}\right)-\left(r\left(s_{t}, a_{t}\right)+\gamma V_{\bar{\theta}}\left(s_{t+1}\right)\right)\right)^{2}\right] \<br>&amp;=\mathbb{E}<em>{\left(s</em>{t}, a_{t}, s_{t+1}\right) \sim \mathcal{D}, a_{t+1} \sim \pi_{\phi}}\left[\frac{1}{2}\left(Q_{\theta}\left(s_{t}, a_{t}\right)-\left(r\left(s_{t}, a_{t}\right)+\gamma\left(Q_{\bar{\theta}}\left(s_{t+1}, a_{t+1}\right)-\alpha \log \left(\pi_{\phi}\left(a_{t+1} \mid s_{t+1}\right)\right)\right)\right)\right)^{2}\right]<br>\end{aligned}<br>$$<br>这里和DDPG一样，构造了一个target soft Q 网络带参数$\bar \theta$，这个参数通过exponentially moving average Q网络的参数$\theta$得到。</p>
+<p>在第一个版本的SAC中，他们单独定义了Value网络进行更新，</p>
+<p>在新版的SAC中，由于自动更新temperature $\alpha$就直接使用Q网络更新。</p>
+</li>
+<li><p>Actor：<br>$$<br>\begin{aligned}<br>J_{\pi}(\phi) &amp;=D_{\mathrm{KL}}\left(\pi_{\phi}\left(. \mid s_{t}\right) | \exp \left(\frac{1}{\alpha} Q_{\theta}\left(s_{t}, .\right)-\log Z\left(s_{t}\right)\right)\right) \<br>&amp;=\mathbb{E}<em>{s</em>{t} \sim \mathcal{D}, a_{t} \sim \pi_{\phi}}\left[\log \left(\frac{\pi_{\phi}\left(a_{t} \mid s_{t}\right)}{\exp \left(\frac{1}{\alpha} Q_{\theta}\left(s_{t}, a_{t}\right)-\log Z\left(s_{t}\right)\right)}\right)\right] \<br>&amp;=\mathbb{E}<em>{s</em>{t} \sim \mathcal{D}, a_{t} \sim \pi_{\phi}}\left[\log \pi_{\phi}\left(a_{t} \mid s_{t}\right)-\frac{1}{\alpha} Q_{\theta}\left(s_{t}, a_{t}\right)+\log Z\left(s_{t}\right)\right]<br>\end{aligned}<br>$$<br>这里的action我们采用reparameterization trick来得到，即 $a_{t}=f_{\phi}\left(\varepsilon_{t} ; s_{t}\right)=f_{\phi}^{\mu}\left(s_{t}\right)+\varepsilon_{t} \odot f_{\phi}^{\sigma}\left(s_{t}\right)$。</p>
+<p>$f$函数输出平均值和方差，然后$\epsilon$是noise，从标准正态分布采样。使用这个trick，整个过程就是完全可微的(loss 乘以$\alpha$并去掉不影响梯度的常量log partition function $Z(s_t)$：<br>$$<br>J_{\pi}(\phi)=\mathbb{E}<em>{s</em>{t} \sim \mathcal{D}, \varepsilon \sim \mathcal{N}}\left[\alpha \log \pi_{\phi}\left(f_{\phi}\left(\varepsilon_{t} ; s_{t}\right) \mid s_{t}\right)-Q_{\theta}\left(s_{t}, f_{\phi}\left(\varepsilon_{t} ; s_{t}\right)\right)\right]<br>$$</p>
+</li>
+<li><p>Update temperature</p>
+<p>前面的SAC中，我们只是人为给定一个固定的temperature $\alpha$ 作为entropy的权重，但实际上由于reward的不断变化，采用固定的temperature并不合理，会让整个训练不稳定，因此，有必要能够自动调节这个temperature。当policy探索到新的区域时，最优的action还不清楚，应该调高temperature 去探索更多的空间。当某一个区域已经探索得差不多，最优的action基本确定了，那么这个temperature就可以减小。</p>
+<p>这里，SAC的作者构造了一个带约束的优化问题，让平均的entropy权重是有限制的，但是在不同的state下entropy的权重是可变的，即 $\max <em>{\pi</em>{0}, \ldots, \pi_{T}} \mathbb{E}\left[\sum_{t=0}^{T} r\left(s_{t}, a_{t}\right)\right]$ s.t. $\forall t, \mathcal{H}\left(\pi_{t}\right) \geq \mathcal{H}_{0}$</p>
+<p>最后得到temperature的loss：<br>$$<br>J(\alpha)=\mathbb{E}<em>{a</em>{t} \sim \pi_{t}}\left[-\alpha \log \pi_{t}\left(a_{t} \mid \pi_{t}\right)-\alpha \mathcal{H}_{0}\right]<br>$$</p>
+</li>
+</ul>
+<img src="https://raw.githubusercontent.com/Lisnol1/CloudIMG/master/20210430180012.png" width="700">
+
+<p>DDPG与SAC的区别：</p>
+<blockquote>
+<ul>
+<li><p>DDPG训练得到的是一个deterministic policy确定性策略，也就是说这个策略对于一种状态state只考虑一个最优的动作。Deterministic policy的最终目标找到最优路径。</p>
+</li>
+<li><p>Stochastic policy随机策略在实际应用中往往是更好的做法。比如我们让机器人抓取一个水杯，机器人是有无数条路径去实现这个过程的，而并不是只有唯一的一种做法。因此，我们就需要DRL算法能够给出一个随机策略，在每一个state上都能输出每一种action的概率，比如有3个action都是最优的，概率一样都最大，那么我们就可以从这些action中随机选择一个做出action输出。<strong>最大熵maximum entropy的核心思想就是不遗落到任意一个有用的action，有用的trajectory</strong>。对比DDPG的deterministic policy的做法，看到一个好的就捡起来，差一点的就不要了，而最大熵是都要捡起来，都要考虑。</p>
+<p>Stochastic policy要求熵最大，就意味着神经网络需要去explore探索所有可能的最优路径，优势如下：</p>
+<ol>
+<li>学到policy可以作为更复杂具体任务的初始化。因为通过最大熵，policy不仅仅学到一种解决任务的方法，而是所有all。因此这样的policy就更有利于去学习新的任务。比如我们一开始是学走，然后之后要学朝某一个特定方向走。</li>
+<li>更强的exploration能力，这是显而易见的，能够更容易的在多模态reward （multimodal reward）下找到更好的模式。比如既要求机器人走的好，又要求机器人节约能源</li>
+<li>更robust鲁棒，更强的generalization。因为要从不同的方式来探索各种最优的可能性，也因此面对干扰的时候能够更容易做出调整。（干扰会是学习过程中看到的一种state，既然已经探索到了，学到了就可以更好的做出反应，继续获取高reward）</li>
+</ol>
+</li>
+</ul>
+</blockquote>
+<p><strong>基于最大熵的RL算法有什么优势？</strong></p>
+<p>以前用deterministic policy的算法，我们找到了一条最优路径，学习过程也就结束了。现在，我们还要求熵最大，就意味着神经网络需要去explore探索所有可能的最优路径，这可以产生以下多种优势：</p>
+<p>1）学到policy可以作为更复杂具体任务的初始化。因为通过最大熵，policy不仅仅学到一种解决任务的方法，而是所有all。因此这样的policy就更有利于去学习新的任务。比如我们一开始是学走，然后之后要学朝某一个特定方向走。</p>
+<p>2）更强的exploration能力，这是显而易见的，能够更容易的在多模态reward （multimodal reward）下找到更好的模式。比如既要求机器人走的好，又要求机器人节约能源</p>
+<p>3）更robust鲁棒，更强的generalization。因为要从不同的方式来探索各种最优的可能性，也因此面对干扰的时候能够更容易做出调整。（干扰会是神经网络学习过程中看到的一种state，既然已经探索到了，学到了就可以更好的做出反应，继续获取高reward）</p>
+<h2 id="Summary-1"><a href="#Summary-1" class="headerlink" title="Summary"></a>Summary</h2><p>DRL中，特别是面向连续控制continuous control，主要的三类算法：</p>
+<ul>
+<li>TRPO,PPO</li>
+<li>DDPG及其拓展（<a href="https://link.zhihu.com/?target=https://arxiv.org/abs/1804.08617">D4PG</a>,TD3等）</li>
+<li>Soft Q-Learning, Soft Actor-Critic</li>
+</ul>
+<p>PPO算法是目前最主流的DRL算法，同时面向离散控制（discrete control）和连续控制（continuous control）。但是PPO是一种on-policy的算法，面临着严重的sample inefficiency，需要巨量的采样才能学习，因此在实际应用中较难实现。</p>
+<p>DDPG及其拓展则是面向连续控制的off policy算法，相对PPO 更sample efficient。DDPG训练的是一种确定性策略deterministic policy，即每一个state下都只考虑最优的一个动作。</p>
+<p>Soft Actor-Critic (SAC)是面向Maximum Entropy Reinforcement learning 开发的一种off policy算法，和DDPG相比，Soft Actor-Critic使用的是随机策略stochastic policy，相比确定性策略具有一定的优势。Soft Actor-Critic效果好，且能直接应用到真实机器人上。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>Xiaoxue Zhang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://zhang-xiaoxue.github.io/2020/04/30/Reinforcement%20Learning/3_RL_algorithms/" title="3. RL algorithms">https://zhang-xiaoxue.github.io/2020/04/30/Reinforcement Learning/3_RL_algorithms/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/03/30/Reinforcement%20Learning/2.%20Bellman%20equation%20of%20optimality/" rel="prev" title="2. Bellman Equation of Optimality">
+                  <i class="fa fa-chevron-left"></i> 2. Bellman Equation of Optimality
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/06/30/Machine%20Learning/Uncertainty_Modelling_in_AI/" rel="next" title="Uncertainty Modelling in AI">
+                  Uncertainty Modelling in AI <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+<script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xiaoxue Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div><script color="0,0,255" opacity="0.5" zIndex="-1" count="199" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{&quot;enable&quot;:true,&quot;tags&quot;:&quot;none&quot;,&quot;single_dollars&quot;:true,&quot;cjk_width&quot;:0.9,&quot;normal_width&quot;:0.6,&quot;append_css&quot;:true,&quot;js&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;mathjax@3.1.4&#x2F;es5&#x2F;tex-mml-chtml.js&quot;}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/Academy-favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Academy-favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/Academy-favicon.png">
+  <link rel="mask-icon" href="/images/Academy-favicon" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;zhang-xiaoxue.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Muse&quot;,&quot;version&quot;:&quot;8.4.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;right&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;Searching...&quot;,&quot;empty&quot;:&quot;We didn&#39;t find any results for the search: ${query}&quot;,&quot;hits_time&quot;:&quot;${hits} results found in ${time} ms&quot;,&quot;hits&quot;:&quot;${hits} results found&quot;}}</script>
+<meta name="description" content="$$\begin{array}{ll}\min\limits_{u\in \mathbb R^{n_u}, v\in \mathbb R^{n_v}} &amp; f(u)+g(v) \\text{s.t. } &amp; Au+bv&#x3D;b\end{array}$$ where $f$ and $g$ are convex.  Consensus ADMM is suitable to solve">
+<meta property="og:type" content="article">
+<meta property="og:title" content="9. ADMM-DMPC">
+<meta property="og:url" content="https://zhang-xiaoxue.github.io/2021/08/16/Nonlinear%20Optimization/8_ADMM_DMPC/index.html">
+<meta property="og:site_name" content="Xiaoxue Zhang - NUS">
+<meta property="og:description" content="$$\begin{array}{ll}\min\limits_{u\in \mathbb R^{n_u}, v\in \mathbb R^{n_v}} &amp; f(u)+g(v) \\text{s.t. } &amp; Au+bv&#x3D;b\end{array}$$ where $f$ and $g$ are convex.  Consensus ADMM is suitable to solve">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/Lisnol1/PicGo--/master/20191203172838.png">
+<meta property="article:published_time" content="2021-08-16T04:00:00.000Z">
+<meta property="article:modified_time" content="2021-08-16T07:03:31.524Z">
+<meta property="article:author" content="Xiaoxue Zhang">
+<meta property="article:tag" content="Reinforcement Learning, Optimization and Control, Intellegent Systems">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Lisnol1/PicGo--/master/20191203172838.png">
+
+
+<link rel="canonical" href="https://zhang-xiaoxue.github.io/2021/08/16/Nonlinear%20Optimization/8_ADMM_DMPC/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;en&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;zhang-xiaoxue.github.io&#x2F;2021&#x2F;08&#x2F;16&#x2F;Nonlinear%20Optimization&#x2F;8_ADMM_DMPC&#x2F;&quot;,&quot;path&quot;:&quot;2021&#x2F;08&#x2F;16&#x2F;Nonlinear Optimization&#x2F;8_ADMM_DMPC&#x2F;&quot;,&quot;title&quot;:&quot;9. ADMM-DMPC&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>9. ADMM-DMPC | Xiaoxue Zhang - NUS</title><script src="/js/config.js"></script>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Xiaoxue Zhang - NUS</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">NUS Ph.D.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#DMPC-ADMM"><span class="nav-number">1.</span> <span class="nav-text">DMPC_ADMM</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Problem-formulation"><span class="nav-number">1.1.</span> <span class="nav-text">Problem formulation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dealing-with-constraints"><span class="nav-number">1.2.</span> <span class="nav-text">Dealing with constraints</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Parallel-Multi-block-ADMM"><span class="nav-number">2.</span> <span class="nav-text">Parallel Multi-block ADMM</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Method-1-Dual-decomposition-dual-ascent-method"><span class="nav-number">2.1.</span> <span class="nav-text">Method 1: Dual decomposition + dual ascent method</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Method-2-ADMM"><span class="nav-number">2.2.</span> <span class="nav-text">Method 2: ADMM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Variable-Splitting-ADMM"><span class="nav-number">2.2.1.</span> <span class="nav-text">Variable Splitting ADMM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sGS-ADMM"><span class="nav-number">2.2.2.</span> <span class="nav-text">sGS-ADMM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Jacobian-ADMM"><span class="nav-number">2.2.3.</span> <span class="nav-text">Jacobian ADMM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Proximal-Jacobian-ADMM"><span class="nav-number">2.2.4.</span> <span class="nav-text">Proximal Jacobian ADMM</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Adaptive-Parameter-Tuning"><span class="nav-number">2.3.</span> <span class="nav-text">Adaptive Parameter Tuning</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Xiaoxue Zhang"
+      src="/images/photo_blue.jpg">
+  <p class="site-author-name" itemprop="name">Xiaoxue Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Zhang-Xiaoxue" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Zhang-Xiaoxue" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:xiaoxuezhang@u.nus.edu" title="E-Mail → mailto:xiaoxuezhang@u.nus.edu" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.linkedin.com/in/xiaoxue-zhang-5233b611a/" title="https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;xiaoxue-zhang-5233b611a&#x2F;" rel="noopener" target="_blank">Linkedin</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.zhihu.com/people/lisnol" title="https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;lisnol" rel="noopener" target="_blank">知乎</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/Zhang-Xiaoxue" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zhang-xiaoxue.github.io/2021/08/16/Nonlinear%20Optimization/8_ADMM_DMPC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/photo_blue.jpg">
+      <meta itemprop="name" content="Xiaoxue Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Xiaoxue Zhang - NUS">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          9. ADMM-DMPC
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-08-16 12:00:00 / Modified: 15:03:31" itemprop="dateCreated datePublished" datetime="2021-08-16T12:00:00+08:00">2021-08-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Nonlinear-Optimization/" itemprop="url" rel="index"><span itemprop="name">Nonlinear Optimization</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>$$<br>\begin{array}{ll}<br>\min\limits_{u\in \mathbb R^{n_u}, v\in \mathbb R^{n_v}} &amp; f(u)+g(v) \<br>\text{s.t. } &amp; Au+bv=b<br>\end{array}<br>$$</p>
+<p>where $f$ and $g$ are convex. </p>
+<p>Consensus ADMM is suitable to solve the distributed model fitting problem. </p>
+<p>Consensus method assign a separate copy of the unknowns, $u_i$, to each processor, and then apply ADMM to solve<br>$$<br>\begin{array}{ll}<br>\min\limits_{u_i\in \mathbb R^{d}, v\in \mathbb R^{d}} &amp; \sum\limits_{i=1}^N f_i(u_i)+g(v) \<br>\text{s.t. } &amp; u_i = v<br>\end{array}<br>$$<br>This is identical to the previous problem. Let $u=(u_1; \cdots; u_N) \in \mathbb R^{dN}$, $A=I_{dN}\in \mathbb R^{dN\times dN}$, and $B=-(I_d;\cdots; I_d)\in \mathbb R^{dN \times d}$.</p>
+<h1 id="DMPC-ADMM"><a href="#DMPC-ADMM" class="headerlink" title="DMPC_ADMM"></a>DMPC_ADMM</h1><h2 id="Problem-formulation"><a href="#Problem-formulation" class="headerlink" title="Problem formulation"></a>Problem formulation</h2><p>$N$ independent agents, $\mathcal G=(\mathcal V,\mathcal E)$, vertex set $\mathcal V={1,\cdots,N}$, edge set $\mathcal E\subseteq \mathcal V\times \mathcal V$. neighbors $\mathcal N_i = {j:(i,j)\in \mathcal E}$.</p>
+<p><strong>Local host system dynamics:</strong><br>$$<br>x_i(t+1) = A_ix_i(t) + B_iu_i(t), \quad i=1,\cdots,N<br>$$</p>
+<p><strong>Global system dynamics:</strong><br>$$<br>x(t+1) = Ax(t) + Bu(t),<br>$$<br>where $x(t) = [x_1(t)^T, \cdots, x_N(t)^T]$ and $u(t) = [u_1(t)^T, \cdots, u_N(t)^T]^T$. </p>
+<p><strong>The objective</strong> is to minimize the prediction horizon cost function<br>$$<br>J=\sum_{t=0}^{T-1} \sum_{i=1}^N \ell_i ( x_{\mathcal N_i}(t), u_{\mathcal N_i}(t) )<br>$$<br>where $\ell_i$ are convex, closed and proper stage cost funciton. $x_{\mathcal N_i}$ and $u_{\mathcal N_i}$ are concatenations of the state and input vectors of agent $i$ and its neighbors. </p>
+<p><strong>local constraints</strong> are $x_{\mathcal N_i} (t) \in \mathcal X_i$, $u_{\mathcal N_i}(t)\in \mathcal U_i$, where the $\mathcal X_i, \mathcal U_i$ are convex subsets that couple the states and inputs of neighboring agents.</p>
+<p><strong>global constraints</strong> are $\mathcal X \subseteq \mathbb R^{\sum_i n_i}, \ \mathcal U\subseteq\mathbb R^{\sum_i m_i}$.</p>
+<p><strong>Problem:</strong><br>$$<br>\begin{array}{ll}<br>\min &amp; \sum\limits_{t=0}^{T-1} \sum\limits_{i=1}^N \ell_i ( x_{\mathcal N_i}(t), u_{\mathcal N_i}(t) ) + \sum\limits_{i=1}^N \ell_{i,f} (x_{\mathcal N_i}(T), u_{\mathcal N_i}(T)) \<br>\text{s.t.} &amp; x_i(t+1) = A_ix_i(t) + B_iu_i(t) \<br>&amp; x_{\mathcal N_i}(t) \in \mathcal X_i, \quad u_{\mathcal N_i}(t) \in \mathcal U_i \<br>&amp; i = 1,\cdots,N, \quad t=0,1,\cdots, T-1, \<br>&amp; x_{\mathcal N_i}(T) \in \mathcal X_{i,f}, \quad i = 1, \cdots, N<br>\end{array}<br>$$</p>
+<blockquote>
+<p>For centralized problem, there are various methods for choosing the terminal cost functions and constraint set s to the feasibility and stability of the closed-loop system.</p>
+<p>For distributed problem, these quantities should be choosen to reflect the information architecture, i.e., the terminal cost and constraint sets for agent $i$ should only depend on $x_{\mathcal N_i}$.</p>
+</blockquote>
+<h2 id="Dealing-with-constraints"><a href="#Dealing-with-constraints" class="headerlink" title="Dealing with constraints"></a>Dealing with constraints</h2><p>All of the coupling constraints can be reduced to so-called consistency constraints by introducing the local copies of variables at each subsystem and requiring the local copies of the coupling vairables to be the same across coupled subsystem. </p>
+<p>let $\mathbf x_i$ be a local variable vector for agent $i$ that includes a copy of the state and input vectors over the finite horizon. For example, if agent 1 is connected to agent 2, the $\mathbf x_1$ includesa local copy of $x_1, u_1, x_2, u_2$ over the finite horizon. Likewise,  for agent 2. the $\mathbf x_2$ containts $x_1, u_1, x_2, u_2$.</p>
+<p>Let $\mathbf x = [\mathbf x_1^T, \cdots, \mathbf x_N^T]$ be a vector that includes all copies of all variables in the problem.</p>
+<p>The problem has the form:<br>$$<br>\begin{array}{ll}<br>\min\limits_{\mathbf x_i \in \mathbf X_i} &amp; \sum\limits_{i=1}^N f_i(\mathbf x_i) \<br>\text{s.t.} &amp; \mathbf x_i = \mathbf E_i \mathbf x_i, \quad i=1,\cdots,N.<br>\end{array}<br>$$</p>
+<p>$\mathbf E_i$ is a matrix that picks out components of $\mathbf x$ that match components of the local variable $\mathbf x_i$. The constraint set $\mathbf X_i$ is convex and includes all constraints for agent $i$ and all of its neighbors. </p>
+<p>Deduction of this simplification:</p>
+<p>$\mathbf x_i = [x_{\mathcal N_i}, u_{\mathcal N_i}] = [x_1,u_1, x_3,u_3, \cdots, x_j,u_j], \quad \forall j \in \mathcal N_i$<br>$$<br>f_i(\mathbf x_i) = \sum_{t=0}^{T-1} \ell_i(x_{\mathcal N_i}(t), u_{\mathcal N_i}(t)) + \ell_{i,f}(x_{\mathcal N_i}(T), u_{\mathcal N_i}(T))<br>$$</p>
+<p>The problem now has a separable equality constraints, which enforce consistency of local variable copies.</p>
+<h1 id="Parallel-Multi-block-ADMM"><a href="#Parallel-Multi-block-ADMM" class="headerlink" title="Parallel Multi-block ADMM"></a>Parallel Multi-block ADMM</h1><p>$$<br>\begin{array}{ll}<br>\min &amp; f_1(x_1) + \cdots + f_N(x_N) \<br>\text{s.t.} &amp; A_1 x_1 + \cdots + A_Nx_N = c \<br>&amp; x_1\in \mathcal X_1, \cdots, x_N \in \mathcal X_N<br>\end{array}<br>$$</p>
+<p>where $x_i\in \mathbb R^{n_i}$, $A_i\in \mathbb R^{m\times n_i}$, $c\in \mathbb R^m$, $f_i:\mathbb R^{n_i} \rightarrow (-\infty, +\infty]$. The constraint $x_i\in \mathcal X_i$ can be incorporated in objective function $f_i$ via indicator function $\delta_{\mathcal X_i}(x_i)$. </p>
+<h2 id="Method-1-Dual-decomposition-dual-ascent-method"><a href="#Method-1-Dual-decomposition-dual-ascent-method" class="headerlink" title="Method 1: Dual decomposition + dual ascent method"></a>Method 1: Dual decomposition + dual ascent method</h2><p>$$<br>\begin{array}{l}<br>{\mathcal{L}\left(\mathrm{x}<em>{1}, \ldots, \mathrm{x}</em>{N}, \lambda\right) =\sum_{i=1}^{N} f_{i}\left(\mathrm{x}<em>{i}\right)-\lambda^{\top}\left(\sum</em>{i=1}^{N} A_{i} \mathrm{x}<em>{i}-c\right)} \<br>{\begin{cases}<br>(x_1^{k+1}, x_2^{k+1}, \cdots, x_N^{k+1}) &amp;= \operatorname{argmin}</em>{x_i} \mathcal L(x_1, \cdots, x_N, \lambda^k)\<br>\lambda^{k+1} &amp;=\lambda^{k}-\alpha_{k}\left(\sum_{i=1}^{N} A_{i} \mathrm{x}_{i}^{k+1}-c\right)<br>\end{cases}}\<br>\end{array}<br>$$</p>
+<p>where  $\lambda \in \mathbb{R}^{m}$ is the Lagrangianl multiplier or the dual variable. Since all the $x_i$ are separable in the Lagrangian<br>function, the $x$-update step reduces to solving $N$ individual $x_i$-subproblems.</p>
+<p>Convergence rate: $O(\frac{1}{\sqrt{k}})$.</p>
+<h2 id="Method-2-ADMM"><a href="#Method-2-ADMM" class="headerlink" title="Method 2: ADMM"></a>Method 2: ADMM</h2><p>Augmented Lagrangian function<br>$$<br>\mathcal{L}<em>{\rho}\left(\mathrm{x}</em>{1}, \ldots, \mathrm{x}<em>{N}, \lambda\right)=\sum</em>{i=1}^{N} f_{i}\left(\mathrm{x}<em>{i}\right)-\lambda^{\top}\left(\sum</em>{i=1}^{N} A_{i} \mathrm{x}<em>{i}-c\right)+\frac{\rho}{2}\left|\sum</em>{i=1}^{N} A_{i} \mathrm{x}<em>{i}-c\right|</em>{2}^{2}<br>$$<br>introduce a quadratic penalty of the constraints. </p>
+<p>To solve multi-block ADMM, one can first convert the multi-block problem into 2-block problem via variable splitting:<br>$$<br>\begin{aligned}<br>\min <em>{\left{\mathbf{x}</em>{i}\right},\left{\mathbf{z}<em>{i}\right}} &amp; \sum</em>{i=1}^{N} f_{i}\left(\mathbf{x}<em>{i}\right)+I</em>{\mathcal{Z}}\left(\mathbf{z}<em>{1}, \ldots, \mathbf{z}</em>{N}\right) \ \text { s.t. } &amp; A_{i} \mathbf{x}<em>{i}-\mathbf{z}</em>{i}=\frac{c}{N}, \forall i=1,2, \ldots, N<br>\end{aligned}<br>$$<br>Here, the convex set $\mathcal{Z}=\left{\left(\mathbf{z}<em>{1}, \ldots, \mathbf{z}</em>{N}\right): \sum_{i=1}^{N} \mathbf{z}_{i}=0\right}$. </p>
+<p>Two block: $x:= (x_1, \cdots, x_N)$ and $z:= (z_1, \cdots, z_N)$. –&gt;  ADMM</p>
+<h3 id="Variable-Splitting-ADMM"><a href="#Variable-Splitting-ADMM" class="headerlink" title="Variable Splitting ADMM"></a>Variable Splitting ADMM</h3><p>$$<br>\mathcal{L}<em>{\rho}(\mathrm{x}, \mathrm{z}, \lambda)=\sum</em>{i=1}^{N} f_{i}\left(\mathrm{x}<em>{i}\right)+I</em>{\mathcal{Z}}(\mathrm{z})-\sum_{i=1}^{N} \lambda_{i}^{\top}\left(A_{i} \mathrm{x}<em>{i}-\mathrm{z}</em>{i}-\frac{c}{N}\right)+\frac{\rho}{2} \sum_{i=1}^{N}\left|A_{i} \mathrm{x}<em>{i}-\mathrm{z}</em>{i}-\frac{c}{N}\right|_{2}^{2}<br>$$</p>
+<p>$$<br>\mathrm{z}^{k+1}=\underset{\left{\mathrm{z}: \sum_{i=1}^{N} \mathrm{z}<em>{i}=0\right}}{\arg \min } \sum</em>{i=1}^{N} \frac{\rho}{2}\left|A_{i} \mathrm{x}<em>{i}^k-\mathrm{z}</em>{i}-\frac{c}{N}-\frac{\lambda_{i}^{k}}{\rho}\right|_{2}^{2}<br>$$</p>
+<p>$$<br>\begin{cases}<br>\mathrm{z_i}^{k+1}= \left(A_i\mathrm x_i^k -\frac{c}{N}-\frac{\lambda_{i}^{k}}{\rho} \right) -\frac{1}{N} \left{ \sum_{j=1}^N A_j\mathrm x_j^k -\frac{c}{N}-\frac{\lambda_{j}^{k}}{\rho} \right} \<br>\mathrm{x}<em>i^{k+1}=\underset{\left{\mathrm{x}<em>i\right}}{\arg \min } \sum</em>{i=1}^{N} f</em>{i}\left(\mathrm{x}<em>{i}\right)+I</em>{\mathcal{Z}}(\mathrm{z}) + \sum_{i=1}^{N} \frac{\rho}{2}\left|A_{i} \mathrm{x}<em>{i}-\mathrm{z}</em>{i}-\frac{c}{N}-\frac{\lambda_{i}^{k}}{\rho}\right|<em>{2}^{2}\<br>\lambda^{k+1}<em>i =\lambda_i^{k}-\rho\left(A</em>{i} \mathrm{x}</em>{i}^{k+1}-\mathrm{z}_{i}^{k+1}-\frac{c}{N}\right)<br>\end{cases}<br>$$</p>
+<p>This method introduce splitting variables, which substantially increases the number of variables and constraints in the problem, especially when $N$ is large.</p>
+<blockquote>
+<p>first convert problem to a 2-block problem, then apply the classic ADMM</p>
+</blockquote>
+<h3 id="sGS-ADMM"><a href="#sGS-ADMM" class="headerlink" title="sGS-ADMM"></a>sGS-ADMM</h3><p>simply replace the two-block alternating minimization scheme by a sweep of Gauss-Seidel update, namely, update $x_i$ for $i = 1, 2, \cdots, N$ sequentially as follows:<br>$$<br>\begin{aligned} \mathrm{x}<em>{i}^{k+1} &amp;=\underset{\mathrm{x}</em>{i}}{\arg \min } \ \mathcal{L}<em>{\rho}\left(\mathrm{x}</em>{1}^{k+1}, \ldots, \mathrm{x}<em>{i-1}^{k+1}, \mathrm{x}</em>{i}, \mathrm{x}<em>{i+1}^{k}, \ldots, \mathrm{x}</em>{N}^{k}, \lambda^{k}\right) \ &amp;=\underset{\mathrm{x}<em>{i}}{\arg \min }\ f</em>{i}\left(\mathrm{x}<em>{i}\right)+\frac{\rho}{2}\left|\sum</em>{j&lt;i} A_{j} \mathrm{x}<em>{j}^{k+1}+A_{i} \mathrm{x}<em>{i}+\sum</em>{j&gt;i} A</em>{j} \mathrm{x}<em>{j}^{k}-c-\frac{\lambda^{k}}{\rho}\right|</em>{2}^{2} \end{aligned}<br>$$</p>
+<p>$$<br>\begin{cases}<br>{\mathbf{x}<em>{i}^{k+1}=\min <em>{\mathbf{x}</em>{i}} f</em>{i}\left(\mathbf{x}<em>{i}\right)+\frac{\rho}{2}\left|\sum</em>{j&lt;i} A_{j} \mathbf{x}<em>{j}^{k+1}+A_{i} \mathbf{x}<em>{i}+\sum</em>{j&gt;i} A</em>{j} \mathbf{x}<em>{j}^{k}-c-\frac{\lambda^{k}}{\rho}\right|</em>{2}^{2}} \<br>{\lambda^{k+1}=\lambda^{k}-\rho\left(\sum_{i=1}^{N} A_{i} \mathbf{x}_{i}^{k+1}-c\right)}<br>\end{cases}<br>$$</p>
+<p>The algorithm may not converge for $N&gt;3$. Although lack of convergence guarantee, some empirical studies show that Algorithm is still very effective at solving many practical problems.</p>
+<p>A disadvantage of Gauss-Seidel ADMM is that the blocks are updated one after another, which is not amenable for parallelization.</p>
+<h3 id="Jacobian-ADMM"><a href="#Jacobian-ADMM" class="headerlink" title="Jacobian ADMM"></a>Jacobian ADMM</h3><p>Jacobi-type scheme that updates all the N blocks in parallel<br>$$<br>\begin{aligned} \mathrm{x}<em>{i}^{k+1} &amp;=\underset{\mathrm{x}</em>{i}}{\arg \min } \ \mathcal{L}<em>{\rho}\left(\mathrm{x}</em>{1}^{k}, \ldots, \mathrm{x}<em>{i-1}^{k}, \mathrm{x}</em>{i}, \mathrm{x}<em>{i+1}^{k}, \ldots, \mathrm{x}</em>{N}^{k}, \lambda^{k}\right) \ &amp;=\underset{\mathrm{x}<em>{i}}{\arg \min }\ f</em>{i}\left(\mathrm{x}<em>{i}\right)+\frac{\rho}{2}\left|\sum</em>{j\neq i} A_{j} \mathrm{x}<em>{j}^{k+1}+A</em>{i} \mathrm{x}<em>{i}-c-\frac{\lambda^{k}}{\rho}\right|</em>{2}^{2} \end{aligned}<br>$$</p>
+<p>$$<br>\begin{cases}<br>{\mathbf{x}<em>{i}^{k+1}=\underset{\mathrm{x}</em>{i}}{\arg \min }\ f_{i}\left(\mathrm{x}<em>{i}\right)+\frac{\rho}{2}\left|\sum</em>{j\neq i} A_{j} \mathrm{x}<em>{j}^{k+1}+A</em>{i} \mathrm{x}<em>{i}-c-\frac{\lambda^{k}}{\rho}\right|</em>{2}^{2} }\<br>{\lambda^{k+1}=\lambda^{k}-\rho\left(\sum_{i=1}^{N} A_{i} \mathbf{x}_{i}^{k+1}-c\right)}<br>\end{cases}<br>$$</p>
+<p>this scheme is more likely to diverge than the Gauss-Seidel scheme for the same parameter $\rho$. In fact, it may diverge<br>even in the two-block case; see [16] for such an example. In order to guarantee its convergence, either additional assumptions or modifications to the algorithm must be made.</p>
+<h3 id="Proximal-Jacobian-ADMM"><a href="#Proximal-Jacobian-ADMM" class="headerlink" title="Proximal Jacobian ADMM"></a>Proximal Jacobian ADMM</h3><p>adding proximal term  $\frac{1}{2}|\mathrm x_i - \mathrm x_i^k |<em>{P_i}^2$ for each $\mathrm x_i$-subproblem. Here $P_i \succ  0$ is some symmetric and positive semi-definite matrix and we let $|\mathrm x_i |</em>{P_i}^2 := \mathrm x_i^T P_i \mathrm x_i$. </p>
+<p>adding damping parameter $\gamma &gt;0$ for the update of $\lambda$.<br>$$<br>\begin{cases}<br>{\mathbf{x}<em>{i}^{k+1}=\underset{\mathrm{x}</em>{i}}{\arg \min }\ f_{i}\left(\mathrm{x}<em>{i}\right)+\frac{\rho}{2}\left|\sum</em>{j\neq i} A_{j} \mathrm{x}<em>{j}^{k+1}+A</em>{i} \mathrm{x}<em>{i}-c-\frac{\lambda^{k}}{\rho}\right|</em>{2}^{2}+\frac{1}{2}| \mathrm{x}<em>i-\mathrm{x}<em>i^k|</em>{P_i}^2 }\<br>{\lambda^{k+1}=\lambda^{k}-\gamma\rho\left(\sum</em>{i=1}^{N} A_{i} \mathbf{x}<em>{i}^{k+1}-c\right)}<br>\end{cases}<br>$$<br>where<br>$$<br>\left{\begin{array}{l}{P</em>{i} \succ \rho\left(\frac{1}{\epsilon_{i}}-1\right) A_{i}^{\top} A_{i}, i=1,2, \ldots, N} \ {\sum_{i=1}^{N} \epsilon_{i}&lt;2-\gamma}\end{array}\right.<br>$$<br>Disadvantages:</p>
+<p>global convergence as well as an $o(\frac{1}{k})$ convergence rate under conditions on $P_i$ and $\gamma$.</p>
+<p>when the $\mathrm x_i$-subproblem is not strictly convex, adding the proximal term can make the subproblem strictly or strongly convex, making it more stable.</p>
+<p>provide multiple choices for matrices $P_i$ with which the subproblems can be made easier to solve.</p>
+<blockquote>
+<p>$x_i$-subproblem contains a quadratic term $\frac{\rho}{2} \mathrm x_i \mathrm A_i^T \mathrm A_i \mathrm x_i$. When $\mathrm A_i^T\mathrm A_i$ is ill-conditioned or computationally expensive to invert, one can let $P_i = D_i - \rho \mathrm A_i^T \mathrm A_i$, which cancels the quadratic term $\frac{\rho}{2} \mathrm x_i \mathrm A_i^T \mathrm A_i \mathrm x_i$ and adds $\frac{1}{2} \mathrm x_i D_i \mathrm x_i$. The matrix $D_i$ can be chosen as some well-conditioned and simple matrix (e.g., a diagonal matrix), thereby leading to an easier subproblem.</p>
+<ul>
+<li><p>$P_i=\tau_iI (\tau_i&gt;0)$: Proximal method</p>
+</li>
+<li><p>$P_i=\tau_iI - \rho A_i^TA_i (\tau_i&gt;0)$: Prox-linear method. linearize the quadratic penalty term of lagrangian at the current $\mathrm x_i^k$ and adds a proximal term.<br>$$<br>\mathbf{x}<em>{i}^{k+1}=\underset{\mathbf{x}</em>{i}}{\arg \min } f_{i}\left(\mathbf{x}<em>{i}\right)+\left\langle\rho A</em>{i}^{\top}\left(A \mathbf{x}^{k}-c-\lambda^{k} / \rho\right), \mathbf{x}<em>{i}\right\rangle+\frac{\tau</em>{i}}{2}\left|\mathbf{x}<em>{i}-\mathbf{x}</em>{i}^{k}\right|^{2}<br>$$<br>use $\tau_i I$ to approximate the Hessian matrix $\rho A_i^T A_i$  of the quadratic penalty term.</p>
+</li>
+</ul>
+</blockquote>
+<h2 id="Adaptive-Parameter-Tuning"><a href="#Adaptive-Parameter-Tuning" class="headerlink" title="Adaptive Parameter Tuning"></a>Adaptive Parameter Tuning</h2><p>adaptively adjusting the matrices ${P_i}$</p>
+<img src="https://raw.githubusercontent.com/Lisnol1/PicGo--/master/20191203172838.png" style="zoom:40%">
+
+<p>The above strategy starts with relatively small proximal terms and gradually increase them. After a finite<br>number of iterations, ${P_i}$ will remain constant for convergence. </p>
+<p>Empirical evidence shows that the paramters ${P_i}$ typically adjust themselves only during the first few iterations and then remain constant afterwards. Alternatively, one may also decrease the parameters after every few iterations or after they have not been updated for a certain number of iterations. But the total times of decrease should be bounded to guarantee convergence. By using this adaptive strategy, the resulting paramters ${P_i}$ are usually much smaller than those required by the condition (2.8), thereby leading to substantially faster convergence in practice.</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>Xiaoxue Zhang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://zhang-xiaoxue.github.io/2021/08/16/Nonlinear%20Optimization/8_ADMM_DMPC/" title="9. ADMM-DMPC">https://zhang-xiaoxue.github.io/2021/08/16/Nonlinear Optimization/8_ADMM_DMPC/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/08/16/Nonlinear%20Optimization/3_Basic%20Convex%20Analysis/" rel="prev" title="3. Convex Analysis">
+                  <i class="fa fa-chevron-left"></i> 3. Convex Analysis
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/08/16/Nonlinear%20Optimization/6_Basic%20Lagrangian%20duality%20and%20Saddle%20point/" rel="next" title="6. Basic Lagrangian Duality and Saddle Point">
+                  6. Basic Lagrangian Duality and Saddle Point <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+<script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xiaoxue Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div><script color="0,0,255" opacity="0.5" zIndex="-1" count="199" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{&quot;enable&quot;:true,&quot;tags&quot;:&quot;none&quot;,&quot;single_dollars&quot;:true,&quot;cjk_width&quot;:0.9,&quot;normal_width&quot;:0.6,&quot;append_css&quot;:true,&quot;js&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;mathjax@3.1.4&#x2F;es5&#x2F;tex-mml-chtml.js&quot;}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

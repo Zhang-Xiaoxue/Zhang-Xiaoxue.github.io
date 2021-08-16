@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/Academy-favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Academy-favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/Academy-favicon.png">
+  <link rel="mask-icon" href="/images/Academy-favicon" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;zhang-xiaoxue.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Muse&quot;,&quot;version&quot;:&quot;8.4.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;right&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;Searching...&quot;,&quot;empty&quot;:&quot;We didn&#39;t find any results for the search: ${query}&quot;,&quot;hits_time&quot;:&quot;${hits} results found in ${time} ms&quot;,&quot;hits&quot;:&quot;${hits} results found&quot;}}</script>
+<meta name="description" content="Chance-constrained Collision Avoidance for MAVs in Dynamics EnvironmentsChance-constrained nonlinear model predictive control (CCNMPC)  assume uncertainties as Gaussian distribution, transform chance">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Chance-constrained Collision Avoidance for MAVs in Dynamics Environments">
+<meta property="og:url" content="https://zhang-xiaoxue.github.io/2020/06/30/Chance%20Constraints/Chance-constrained%20Collision%20Avoidance%20for%20MAVs%20in%20Dynamics%20Environments/index.html">
+<meta property="og:site_name" content="Xiaoxue Zhang - NUS">
+<meta property="og:description" content="Chance-constrained Collision Avoidance for MAVs in Dynamics EnvironmentsChance-constrained nonlinear model predictive control (CCNMPC)  assume uncertainties as Gaussian distribution, transform chance">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/006y8mN6gy1g6qzx6pvzqj319u0osqh6.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/006y8mN6gy1g6r0ccv01oj319s0nqgzq.jpg">
+<meta property="article:published_time" content="2020-06-30T04:00:00.000Z">
+<meta property="article:modified_time" content="2021-08-16T07:05:39.591Z">
+<meta property="article:author" content="Xiaoxue Zhang">
+<meta property="article:tag" content="Reinforcement Learning, Optimization and Control, Intellegent Systems">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/006y8mN6gy1g6qzx6pvzqj319u0osqh6.jpg">
+
+
+<link rel="canonical" href="https://zhang-xiaoxue.github.io/2020/06/30/Chance%20Constraints/Chance-constrained%20Collision%20Avoidance%20for%20MAVs%20in%20Dynamics%20Environments/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;en&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;zhang-xiaoxue.github.io&#x2F;2020&#x2F;06&#x2F;30&#x2F;Chance%20Constraints&#x2F;Chance-constrained%20Collision%20Avoidance%20for%20MAVs%20in%20Dynamics%20Environments&#x2F;&quot;,&quot;path&quot;:&quot;2020&#x2F;06&#x2F;30&#x2F;Chance Constraints&#x2F;Chance-constrained Collision Avoidance for MAVs in Dynamics Environments&#x2F;&quot;,&quot;title&quot;:&quot;Chance-constrained Collision Avoidance for MAVs in Dynamics Environments&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>Chance-constrained Collision Avoidance for MAVs in Dynamics Environments | Xiaoxue Zhang - NUS</title><script src="/js/config.js"></script>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Xiaoxue Zhang - NUS</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">NUS Ph.D.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Chance-constrained-Collision-Avoidance-for-MAVs-in-Dynamics-Environments"><span class="nav-number">1.</span> <span class="nav-text">Chance-constrained Collision Avoidance for MAVs in Dynamics Environments</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Model"><span class="nav-number">1.1.</span> <span class="nav-text">Model:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Chance-Constraints"><span class="nav-number">1.2.</span> <span class="nav-text">Chance Constraints:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Deterministic-MPC-Formulation"><span class="nav-number">1.3.</span> <span class="nav-text">Deterministic MPC Formulation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Deterministic-MPC-formulation"><span class="nav-number">1.3.1.</span> <span class="nav-text">Deterministic MPC formulation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#How-to-obtain-the-mean-and-covariance-of-position"><span class="nav-number">1.3.2.</span> <span class="nav-text">How to obtain the mean and covariance of position</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Xiaoxue Zhang"
+      src="/images/photo_blue.jpg">
+  <p class="site-author-name" itemprop="name">Xiaoxue Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Zhang-Xiaoxue" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Zhang-Xiaoxue" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:xiaoxuezhang@u.nus.edu" title="E-Mail → mailto:xiaoxuezhang@u.nus.edu" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.linkedin.com/in/xiaoxue-zhang-5233b611a/" title="https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;xiaoxue-zhang-5233b611a&#x2F;" rel="noopener" target="_blank">Linkedin</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.zhihu.com/people/lisnol" title="https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;lisnol" rel="noopener" target="_blank">知乎</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/Zhang-Xiaoxue" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zhang-xiaoxue.github.io/2020/06/30/Chance%20Constraints/Chance-constrained%20Collision%20Avoidance%20for%20MAVs%20in%20Dynamics%20Environments/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/photo_blue.jpg">
+      <meta itemprop="name" content="Xiaoxue Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Xiaoxue Zhang - NUS">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Chance-constrained Collision Avoidance for MAVs in Dynamics Environments
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-06-30 12:00:00" itemprop="dateCreated datePublished" datetime="2020-06-30T12:00:00+08:00">2020-06-30</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-08-16 15:05:39" itemprop="dateModified" datetime="2021-08-16T15:05:39+08:00">2021-08-16</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Chance-Constraints/" itemprop="url" rel="index"><span itemprop="name">Chance Constraints</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="Chance-constrained-Collision-Avoidance-for-MAVs-in-Dynamics-Environments"><a href="#Chance-constrained-Collision-Avoidance-for-MAVs-in-Dynamics-Environments" class="headerlink" title="Chance-constrained Collision Avoidance for MAVs in Dynamics Environments"></a>Chance-constrained Collision Avoidance for MAVs in Dynamics Environments</h1><p>Chance-constrained nonlinear model predictive control (CCNMPC)</p>
+<ul>
+<li>assume uncertainties as Gaussian distribution, transform chance constraints into deterministic constraints</li>
+</ul>
+<h2 id="Model"><a href="#Model" class="headerlink" title="Model:"></a>Model:</h2><ol>
+<li><p>robot model:<br>$$<br>\mathbf{x}<em>{i}^{k+1}=\mathbf{f}</em>{i}\left(\mathbf{x}<em>{i}^{k}, \mathbf{u}</em>{i}^{k}\right)+\omega_{i}^{k}, \quad \mathbf{x}<em>{i}^{0} \sim \mathcal{N}\left(\hat{\mathbf{x}}</em>{i}^{0}, \Gamma_{i}^{0}\right),\quad \omega_i^k\sim\mathcal{N}(0,Q_i^k)<br>$$<br>where $\mathbf{x}<em>{i}^{k}=\left[\mathbf{p}</em>{i}^{k}, \mathbf{v}<em>{i}^{k}, \phi</em>{i}^{k}, \theta_{i}^{k}, \psi_{i}^{k}\right]^{T} \in \mathcal{X}<em>{i} \subset \mathbb{R}^{n</em>{x}}$, the mean and covariance of initial state$\mathbf{x}_i^0$ are obtained by state estimator (UKF). </p>
+</li>
+<li><p>Obstacle model:</p>
+<p>$o\in \mathcal{I}_0={1,2,\cdots,n_0} \subset \mathbb{N}$ at position $\mathbf{p}_o \in \mathbb{R}^3$, can be represented by <em>ellipsoid</em> $S_0$ with semi-principal axes $(a_0,b_o,c_o)$ and rotation matrix $R_o$. </p>
+<p>moving obstacles has constant velocity with Gaussian noise $\omega_o(t)\sim\mathcal{N}(0,Q_o(t))$ in acceleration, i.e. $\ddot{\mathbf{p}}_o=\omega_o(t)$. estimate and predict the future position and uncertainty by linear KF.</p>
+</li>
+<li><p>Collision Chance Constraints:</p>
+<ol>
+<li><p>Collision condition:</p>
+<ul>
+<li><p>collision of robot $i$ with robot $j$<br>$$<br>C_{i j}^{k} :=\left{\mathbf{x}<em>{i}^{k} |\left|\mathbf{p}</em>{i}^{k}-\mathbf{p}<em>{j}^{k}\right| \leq r</em>{i}+r_{j}\right}<br>$$</p>
+</li>
+<li><p>collision of robot $i$ with obstacle $o$:</p>
+<p>obstacle: enlarged ellipsoid and check if the robot is inside it.<br>$$<br>C_{i o}^{k} :=\left{\mathbf{x}<em>{i}^{k} |\left|\mathbf{p}</em>{i}^{k}-\mathbf{p}<em>{o}^{k}\right|</em>{\Omega_{i o}} \leq 1\right},\quad<br>\Omega_{i o}=R_{o}^{T} \operatorname{diag}\left(1 /\left(a_{o}+r_{i}\right)^{2}, 1 /\left(b_{o}+r_{i}\right)^{2}, 1 /\left(c_{o}+r_{i}\right)^{2}\right) {R_{o}}<br>$$</p>
+</li>
+</ul>
+</li>
+<li><p>Chance constraints:<br>$$<br>\begin{array}{ll}{\operatorname{Pr}\left(\mathbf{x}<em>{i}^{k} \notin C</em>{i j}^{k}\right) \geq 1-\delta_{r},} &amp; {\forall j \in \mathcal{I}, j \neq i} \ {\operatorname{Pr}\left(\mathbf{x}<em>{i}^{k} \notin C</em>{i o}^{k}\right) \geq 1-\delta_{o},} &amp; {\forall o \in \mathcal{I}_{o}}\end{array}<br>$$</p>
+</li>
+</ol>
+</li>
+<li><p>Problem Formulation: </p>
+<p>optimization problem with $N$ time steps and planning horizon $\tau=N\Delta t$, $\Delta t$ is time step.<br>$$<br>\begin{aligned} \min <em>{\hat{x}</em>{i}^{1}, \cdots, u_{i}^{0}, N-1} \quad &amp; \sum_{k=0}^{N-1} J_{i}^{k}\left(\hat{\mathbf{x}}<em>{i}^{k}, \mathbf{u}</em>{i}^{k}\right)+J_{i}^{N}\left(\hat{\mathbf{x}}<em>{i}^{N}\right) \ \text { s.t. }\quad &amp; \mathbf{x}</em>{i}^{0}=\hat{\mathbf{x}}<em>{i}(0), \quad \hat{\mathbf{x}}</em>{i}^{k}=\mathbf{f}<em>{i}\left(\hat{\mathbf{x}}</em>{i}^{k-1}, \mathbf{u}<em>{i}^{k-1}\right) \ &amp; \operatorname{Pr}\left(\mathbf{x}</em>{i}^{k} \notin C_{i j}^{k}\right) \geq 1-\delta_{r}, \forall j \in \mathcal{I}, j \neq i \ &amp; \operatorname{Pr}\left(\mathbf{x}<em>{i}^{k} \notin C</em>{i o}^{k}\right) \geq 1-\delta_{o}, \forall o \in \mathcal{I}<em>{o} \ &amp; \mathbf{u}</em>{i}^{k-1} \in \mathcal{U}<em>{i}, \quad \hat{\mathbf{x}}</em>{i}^{k} \in \mathcal{X}_{i} \ &amp; \forall k \in{1, \ldots, N} \end{aligned}<br>$$</p>
+</li>
+<li><p>Compute uncertainty propagation</p>
+<p>Methods:</p>
+<blockquote>
+<p>Y. Z. Luo and Z. Yang, “A review of uncertainty propagation in orbital mechanics,” <em>Progr. Aerosp. Sci.</em>, vol. 89, pp. 23–39, 2017.</p>
+</blockquote>
+</li>
+</ol>
+<ul>
+<li>Unscented transformation<blockquote>
+<p>A.Vo ̈lzandK.Graichen,“Stochastic model predictive control of nonlinear continuous-time systems using the unscented transformation,” in<em>Proc. Eur. Control Conf.</em>, 2015, pp. 3365–3370.</p>
+</blockquote>
+<ul>
+<li>polynomial chaos expansions</li>
+</ul>
+<blockquote>
+<p>A. Mesbah, S. Streif, R. Findeisen, and R. D. Braatz, “Stochastic nonlinear model predictive control with probabilistic constraints,” in <em>Proc. Amer. Control Conf.</em>, 2014, pp. 2413–2419.</p>
+</blockquote>
+</li>
+</ul>
+<p>These methods are computational intensive and only outperform linearization methods when the propagation time is very long.</p>
+<p>   In this paper, propagate the uncertainty using EKF-type update.<br>$$<br>\Gamma_{i}^{k+1}={F_{i}^{k}} {\Gamma_{i}^{k}} {F_{i}^{k}}^{T}+Q_{i}^{k}<br>$$<br>${\Gamma_{i}^{k}}$ is the state uncertainty covariance at time $k$, $F_{i}^{k}=\left.\frac{\partial \mathbf{f}<em>{i}}{\partial \mathbf{x}</em>{i}}\right|<em>{\hat{\mathbf{x}}</em>{i}^{k-1}, \mathbf{u}_{i}^{k}}$ is the state transition matrix of robot.</p>
+<h2 id="Chance-Constraints"><a href="#Chance-Constraints" class="headerlink" title="Chance Constraints:"></a>Chance Constraints:</h2><p>Idea: linearize the collision conditions to get linear chance constraints. Then reformulate them into deterministic constraints</p>
+<ol>
+<li><p>Linear Constraints:<br>$$<br>\operatorname{Pr}(\mathbf{a}^T \mathbf{x}\leq b) \leq \delta<br>$$<br>$\mathbf{x}$ Follows Gaussian distribution, the chance constraint can be transformed into deterministic constraint</p>
+<p><strong>Lemma 1:</strong></p>
+<p>Given a multivariate random variable $\mathbf{x}\sim\mathcal{N}(\hat{\mathbf{x}},\Sigma)$, then<br>$$<br>\operatorname{Pr}\left(\mathbf{a}^{T} \mathbf{x} \leq b\right)=\frac{1}{2}+\frac{1}{2} \operatorname{erf}\left(\frac{b-\mathbf{a}^{T} \hat{\mathbf{x}}}{\sqrt{2 \mathbf{a}^{T} \Sigma \mathbf{a}}}\right)<br>$$<br>where $\operatorname{erf}(\cdot)$ is standard error function as $\operatorname{erf}(x)=\frac{2}{\sqrt{\pi}}\int_0^x e^{-t^2} dt$.</p>
+<p><strong>Lemma 2:</strong></p>
+<p>Given a multivariate random variable $\mathbf{x}\sim\mathcal{N}(\hat{\mathbf{x}},\Sigma)$ and a probability threshold $\delta\in(0,0.5)$, then<br>$$<br>\operatorname{Pr}\left(\mathbf{a}^{T} \mathbf{x} \leq b\right) \leq \delta \Longleftrightarrow \mathbf{a}^{T} \hat{\mathbf{x}}-b \geq c<br>$$<br>where $c=\operatorname{erf}^{-1}(1-2 \delta) \sqrt{2 \mathbf{a}^{T} \Sigma \mathbf{a}}$. </p>
+<blockquote>
+<p>Gaussian distribution:</p>
+<ul>
+<li>pdf: $f(x|\mu,\sigma^2)=\frac{1}{\sqrt{2\pi \sigma^2}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}$</li>
+<li>cdf: $\Phi(x) = \frac{1}{\sqrt{2\pi}} \int\limits_{-\inf}^x e^{- \frac{t^2}{2}} dt$</li>
+<li>erf: $\operatorname{erf}(x) = \frac{2}{\sqrt{\pi}} \int\limits_0^x e^{-t^2} dt$   (gives the probability of a random variable with normal distribution of mean 0 and variance 1/2 falling in the range $[-x,x]$)</li>
+<li>Gaussian form translation: $f(x|\mu,\sigma^2)=\frac{1}{\sigma} \varphi(\frac{x-\mu}{\sigma})$</li>
+</ul>
+</blockquote>
+</li>
+<li><p>Inter-robot Collision Avoidance Constraint</p>
+<p>Two robot position $\mathbf{p}<em>{i} \sim \mathcal{N}\left(\hat{\mathbf{p}}</em>{i}, \Sigma_{i}\right)$, $\mathbf{p}<em>{j} \sim \mathcal{N}\left(\hat{\mathbf{p}}</em>{j}, \Sigma_{j}\right)$, the collision probability is<br>$$<br>\operatorname{Pr}\left(\mathbf{x}<em>{i} \in C</em>{i j}\right)=\int_{\mathbb{R}^{3}} I_{C}\left(\mathbf{p}<em>{i}, \mathbf{p}</em>{j}\right) p\left(\mathbf{p}<em>{i}\right) p\left(\mathbf{p}</em>{j}\right) d \mathbf{p}<em>{i} d \mathbf{p}</em>{j}<br>$$<br>where $I_C$ is the indicator function, i.e.,<br>$$<br>I_{C}\left(\mathbf{p}<em>{i}, \mathbf{p}</em>{j}\right)=\left{\begin{array}{ll}{1,} &amp; {\text { if }\left|\mathbf{p}<em>{i}-\mathbf{p}</em>{j}\right| \leq r_{i}+r_{j}} \ {0,} &amp; {\text { otherwise }}\end{array}\right.<br>$$</p>
+<p>Assume $\mathbf{p}<em>{i}$ and $\mathbf{p}</em>{j}$ independent. $\mathbf{p}<em>{i}-\mathbf{p}</em>{j}\sim \mathcal{N}\left({\mathbf{p}<em>{i}}-{\mathbf{p}</em>{j}}, \Sigma_{i}-\Sigma_{j} \right)$, so<br>$$<br>\operatorname{Pr}\left(\mathbf{x}<em>{i} \in C</em>{i j}\right)=\int_{\left|\mathbf{p}<em>{i}-\mathbf{p}</em>{j}\right| \leq r_{i}+r_{j}} p\left(\mathbf{p}<em>{i}-\mathbf{p}</em>{j}\right) d\left(\mathbf{p}<em>{i}-\mathbf{p}</em>{j}\right).<br>$$</p>
+<p>Here, Collision region is a sphere, and the distribution of $\mathbf{p}_{ij}$ is a ellipsoid. Hard to compute.</p>
+<p><strong>Transform the spherical collision region $C_{ij}$ into half space $\tilde{C}_{ij}$</strong><br>$$<br>\tilde{C}<em>{i j} :=\left{\mathbf{x} | \mathbf{a}</em>{i j}^{T}\left(\mathbf{p}<em>{i}-\mathbf{p}</em>{j}\right) \leq b_{i j}\right}<br>$$<br>where $\mathbf{a}<em>{i j}=\left(\hat{\mathbf{p}}</em>{i}-\hat{\mathbf{p}}<em>{j}\right) /\left|\hat{\mathbf{p}}</em>{i}-\hat{\mathbf{p}}<em>{j}\right| \text { and } b</em>{i j}=r_{i}+r_{j}$</p>
+<p>Because $C_{ij} \subset \tilde{C}<em>{ij}$, $\operatorname{Pr}\left(\mathbf{x}</em>{i} \in C_{i j}\right) \leq \operatorname{Pr}\left(\mathbf{x}<em>{i} \in \tilde{C}</em>{i j}\right)$. </p>
+<p>Based on Lemma 1, <em>an <u>upper bound</em></u> can be obtained:<br>$$<br>\operatorname{Pr}\left(\mathbf{x}<em>{i} \in C</em>{i j}\right) \leq \frac{1}{2}+\frac{1}{2} \operatorname{erf}\left(\frac{b_{i j}-\mathbf{a}<em>{i j}^{T}\left(\hat{\mathbf{p}}</em>{i}-\hat{\mathbf{p}}<em>{j}\right)}{\sqrt{2 \mathbf{a}</em>{i j}^{T}\left(\Sigma_{i}+\Sigma_{j}\right) \mathbf{a}<em>{i j}}}\right)<br>$$<br>Based on Lemma 2, <u><em>transform the chance constraint into deterministic constraint</em></u>:<br>$$<br>\mathbf{a}</em>{i j}^{T}\left(\hat{\mathbf{p}}<em>{i}-\hat{\mathbf{p}}</em>{j}\right)-b_{i j} \geq \operatorname{erf}^{-1}\left(1-2 \delta_{r}\right) \sqrt{2 \mathbf{a}<em>{i j}^{T}\left(\Sigma</em>{i}+\Sigma_{j}\right) \mathbf{a}_{i j}}<br>$$</p>
+<img src="http://ww1.sinaimg.cn/large/006y8mN6gy1g6qzx6pvzqj319u0osqh6.jpg" style="zoom:40%"></li>
+<li><p>Robot-Obstacle Collision Chance constraint</p>
+<p>position of robots and obstacles are independent.<br>$$<br>\operatorname{Pr}\left(\mathbf{x}<em>{i} \in C</em>{i o}\right)=\int_{\left|\mathbf{p}<em>{i}-\mathbf{p}</em>{o}\right|<em>{\Omega</em>{i o}} \leq 1} p\left(\mathbf{p}<em>{i}-\mathbf{p}</em>{o}\right) d\left(\mathbf{p}<em>{i}-\mathbf{p}</em>{o}\right)<br>$$<br>Here, collision region is ellipsoid. </p>
+<p><strong>Linearize the collision</strong></p>
+<p>Affine coordinate transformation $\tilde{\mathbf{y}}=\Omega_{jo}^{\frac{1}{2}} \mathbf{y}$ to <u><em>transform ellipsoid to unit sphere</em></u> $\tilde{C}_{io}$. Accordingly, the robot and obstacel position need to be transformed into new distribution</p>
+<p>$\tilde{\mathbf{p}}<em>{i} \sim \mathcal{N}\left(\hat{\tilde{\mathbf{p}}}</em>{i}, \tilde{\Sigma}<em>{i}\right)$, $\tilde{\mathbf{p}}</em>{o} \sim \mathcal{N}\left(\hat{\mathbf{p}}<em>{o}, \tilde{\Sigma}</em>{o}\right)$, where<br>$$<br>\begin{aligned} \hat{\mathbf{p}}<em>{i}=\Omega</em>{i o}^{\frac{1}{2}} \hat{\mathbf{p}}<em>{i}, &amp; \tilde{\Sigma}</em>{i}=\Omega_{i o}^{\frac{1}{2} T} \Sigma_{i} \Omega_{i o}^{\frac{1}{2}} \ \hat{\hat{\mathbf{p}}}<em>{o}=\Omega</em>{i o}^{\frac{1}{2}} \hat{\mathbf{p}}<em>{o}, &amp; \tilde{\Sigma}</em>{o}=\Omega_{i o}^{\frac{1}{2} T} \Sigma_{o} \Omega_{i o}^{\frac{1}{2}} \end{aligned}<br>$$<br>let $\operatorname{Pr}\left(\tilde{\mathbf{x}}<em>{i} \in \tilde{C}</em>{i o}\right)=\int_{\left|\mathbb{D}<em>{i}-\tilde{\mathbf{p}}</em>{o}\right| \leq 1} p\left(\tilde{\mathbf{p}}<em>{i}-\tilde{\mathbf{p}}</em>{o}\right) d\left(\tilde{\mathbf{p}}<em>{i}-\tilde{\mathbf{p}}</em>{o}\right) $, we have<br>$$<br>\operatorname{Pr}\left(\mathbf{x}<em>{i} \in C</em>{i o}\right)=\operatorname{Pr}\left(\tilde{\mathbf{x}}<em>{i} \in \tilde{C}</em>{i o}\right)<br>$$<br>Use same <u><em>linearization method</em></u> for phere with $\mathbf{a}<em>{i o}=\left(\hat{\mathbf{p}}</em>{i}-\hat{\mathbf{p}}<em>{o}\right) /\left|\hat{\mathbf{p}}</em>{i}-\hat{\mathbf{p}}<em>{o}\right| \text { and } b</em>{i o}=1$.</p>
+<p><u><em>Transform into deterministic constraint:</em></u><br>$$<br>\mathbf{a}<em>{i o}^{T} \Omega</em>{i o}^{\frac{1}{2}}\left(\hat{\mathbf{p}}<em>{i}-\hat{\mathbf{p}}</em>{j}\right)- b_{i o} \geq \operatorname{erf}^{-1}\left(1-2 \delta_{o}\right) \cdot \sqrt{2 \mathbf{a}<em>{i o}^{T} \Omega</em>{i o}^{\frac{1}{2}}\left(\Sigma_{i}+\Sigma_{j}\right) \Omega_{i o}^{\frac{1}{2} T} \mathbf{a}_{i o}}<br>$$</p>
+<img src="http://ww1.sinaimg.cn/large/006y8mN6gy1g6r0ccv01oj319s0nqgzq.jpg" style="zoom:40%"></li>
+</ol>
+<h2 id="Deterministic-MPC-Formulation"><a href="#Deterministic-MPC-Formulation" class="headerlink" title="Deterministic MPC Formulation"></a>Deterministic MPC Formulation</h2><h3 id="Deterministic-MPC-formulation"><a href="#Deterministic-MPC-formulation" class="headerlink" title="Deterministic MPC formulation"></a>Deterministic MPC formulation</h3><ul>
+<li><p>Cost function</p>
+<ul>
+<li><p>terminal cost: </p>
+</li>
+<li><p>stage cost</p>
+</li>
+<li><p>potential field cost : increase the separation between robots and obstacles<br>$$<br>J_{i, c}^{k}\left(\hat{\mathbf{x}}<em>{i}^{k}\right)=\sum</em>{j \in \mathcal{I} \cup \mathcal{I}<em>{o}, j \neq i}  {J</em>{i, j, c}^{k}(\hat{\mathbf{x}}<em>{i}^{k}})<br>$$<br>With<br>$$<br>J</em>{i, j, c}^{k}\left(\hat{\mathbf{x}}<em>{i}^{k}\right)=<br>\begin{cases}<br>l</em>{i, c}^{k}\left(d_{i j}^{\text {safe }}-d_{i j}\right), &amp; d_{i j}&lt;d_{i j}^{\text {safe }} \<br>0, &amp; d_{i j}\ge d_{i j}^{\text {safe }}<br>\end{cases}<br>$$</p>
+</li>
+</ul>
+</li>
+<li><p>Constraints:</p>
+<ul>
+<li>transformed into deterministic constraints</li>
+</ul>
+</li>
+<li><p>Problem:<br>$$<br>\begin{array}{c}{\min <em>{\hat{\mathbf{x}}</em>{i}^{1 : N}, \mathbf{u}<em>{i}^{0 : N-1}} \quad J</em>{i}^{N}\left(\hat{\mathbf{x}}<em>{i}^{N}\right)+\sum</em>{k=0}^{N-1} J_{i, u}^{k}\left(\mathbf{u}<em>{i}^{k}\right)+\sum</em>{k=1}^{N} J_{i, c}^{k}\left(\hat{\mathbf{x}}<em>{i}^{k}\right)} \ {\text { s.t. } \quad \mathbf{x}</em>{i}^{0}=\hat{\mathbf{x}}<em>{i}(0), \quad \hat{\mathbf{x}}</em>{i}^{k}=\mathbf{f}<em>{i}\left(\hat{\mathbf{x}}</em>{i}^{k-1}, \mathbf{u}<em>{i}^{k-1}\right)} \ {g</em>{i j}^{k}\left(\hat{\mathbf{x}}<em>{i}^{k}, \hat{\mathbf{p}}</em>{j}^{k}, \Sigma_{i}^{k}, \Sigma_{j}^{k}, \delta_{r}\right) \leq 0} \ {g_{i o}^{k}\left(\hat{\mathbf{x}}<em>{i}^{k}, \hat{\mathbf{p}}</em>{o}^{k}, \Sigma_{i}^{k}, \Sigma_{o}^{k}, \delta_{o}\right) \leq 0} \ {\mathbf{u}<em>{i}^{k-1} \in \mathcal{U}</em>{i}, \quad \hat{\mathbf{x}}<em>{i}^{k} \in \mathcal{X}</em>{i}} \ {\forall j \neq i \in \mathcal{I} ; \forall o \in \mathcal{I}<em>{o} ; \forall k \in{1, \ldots, N}}\end{array}<br>$$<br>where $g</em>{ij}$ and $g_{io}$ are deterministic constraints.</p>
+</li>
+</ul>
+<h3 id="How-to-obtain-the-mean-and-covariance-of-position"><a href="#How-to-obtain-the-mean-and-covariance-of-position" class="headerlink" title="How to obtain the mean and covariance of position"></a>How to obtain the mean and covariance of position</h3><ol>
+<li>Constant velocity model without communication</li>
+<li>Sequential Planning with communication</li>
+<li>Distributed planning with communication</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>Xiaoxue Zhang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://zhang-xiaoxue.github.io/2020/06/30/Chance%20Constraints/Chance-constrained%20Collision%20Avoidance%20for%20MAVs%20in%20Dynamics%20Environments/" title="Chance-constrained Collision Avoidance for MAVs in Dynamics Environments">https://zhang-xiaoxue.github.io/2020/06/30/Chance Constraints/Chance-constrained Collision Avoidance for MAVs in Dynamics Environments/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/06/30/Chance%20Constraints/Chance-constrained%20add%20velocity%20obstacles/" rel="prev" title="Chance-constrained ADD Velocity Obstacles">
+                  <i class="fa fa-chevron-left"></i> Chance-constrained ADD Velocity Obstacles
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/06/30/Chance%20Constraints/Chance-Constrained%20Optimal%20Path%20Planning%20with%20Obstacles/" rel="next" title="Chance-Constrained Optimal Path Planning with Obstacles">
+                  Chance-Constrained Optimal Path Planning with Obstacles <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+<script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xiaoxue Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div><script color="0,0,255" opacity="0.5" zIndex="-1" count="199" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{&quot;enable&quot;:true,&quot;tags&quot;:&quot;none&quot;,&quot;single_dollars&quot;:true,&quot;cjk_width&quot;:0.9,&quot;normal_width&quot;:0.6,&quot;append_css&quot;:true,&quot;js&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;mathjax@3.1.4&#x2F;es5&#x2F;tex-mml-chtml.js&quot;}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

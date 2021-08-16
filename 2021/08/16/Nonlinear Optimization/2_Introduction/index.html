@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/Academy-favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Academy-favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/Academy-favicon.png">
+  <link rel="mask-icon" href="/images/Academy-favicon" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;zhang-xiaoxue.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Muse&quot;,&quot;version&quot;:&quot;8.4.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;right&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;Searching...&quot;,&quot;empty&quot;:&quot;We didn&#39;t find any results for the search: ${query}&quot;,&quot;hits_time&quot;:&quot;${hits} results found in ${time} ms&quot;,&quot;hits&quot;:&quot;${hits} results found&quot;}}</script>
+<meta name="description" content="in general, Hessian $H_f(\mathbb x)$ is not symmetric. But, if $f$ has continuous second order derivatives, then the Hessian matrix $H_f( \mathbb x)$ is symmetric. Positive semidefinite: if $\mathbb x">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2. Introduction">
+<meta property="og:url" content="https://zhang-xiaoxue.github.io/2021/08/16/Nonlinear%20Optimization/2_Introduction/index.html">
+<meta property="og:site_name" content="Xiaoxue Zhang - NUS">
+<meta property="og:description" content="in general, Hessian $H_f(\mathbb x)$ is not symmetric. But, if $f$ has continuous second order derivatives, then the Hessian matrix $H_f( \mathbb x)$ is symmetric. Positive semidefinite: if $\mathbb x">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-08-16T04:00:00.000Z">
+<meta property="article:modified_time" content="2021-08-16T07:00:12.182Z">
+<meta property="article:author" content="Xiaoxue Zhang">
+<meta property="article:tag" content="Reinforcement Learning, Optimization and Control, Intellegent Systems">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zhang-xiaoxue.github.io/2021/08/16/Nonlinear%20Optimization/2_Introduction/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;en&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;zhang-xiaoxue.github.io&#x2F;2021&#x2F;08&#x2F;16&#x2F;Nonlinear%20Optimization&#x2F;2_Introduction&#x2F;&quot;,&quot;path&quot;:&quot;2021&#x2F;08&#x2F;16&#x2F;Nonlinear Optimization&#x2F;2_Introduction&#x2F;&quot;,&quot;title&quot;:&quot;2. Introduction&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>2. Introduction | Xiaoxue Zhang - NUS</title><script src="/js/config.js"></script>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Xiaoxue Zhang - NUS</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">NUS Ph.D.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Xiaoxue Zhang"
+      src="/images/photo_blue.jpg">
+  <p class="site-author-name" itemprop="name">Xiaoxue Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Zhang-Xiaoxue" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Zhang-Xiaoxue" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:xiaoxuezhang@u.nus.edu" title="E-Mail → mailto:xiaoxuezhang@u.nus.edu" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.linkedin.com/in/xiaoxue-zhang-5233b611a/" title="https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;xiaoxue-zhang-5233b611a&#x2F;" rel="noopener" target="_blank">Linkedin</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.zhihu.com/people/lisnol" title="https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;lisnol" rel="noopener" target="_blank">知乎</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/Zhang-Xiaoxue" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zhang-xiaoxue.github.io/2021/08/16/Nonlinear%20Optimization/2_Introduction/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/photo_blue.jpg">
+      <meta itemprop="name" content="Xiaoxue Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Xiaoxue Zhang - NUS">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          2. Introduction
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-08-16 12:00:00 / Modified: 15:00:12" itemprop="dateCreated datePublished" datetime="2021-08-16T12:00:00+08:00">2021-08-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Nonlinear-Optimization/" itemprop="url" rel="index"><span itemprop="name">Nonlinear Optimization</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>in general, Hessian $H_f(\mathbb x)$ is not symmetric. But, if $f$ has continuous second order derivatives, then the Hessian matrix $H_f( \mathbb x)$ is symmetric.</p>
+<p>Positive semidefinite: if $\mathbb x^T \mathbf A \mathbb x \ge 0, \forall \mathbb x \in \mathbb R^n$.</p>
+<p>positive definite: if $\mathbb x^T \mathbf A \mathbb x \ge 0, \forall \mathbb x  \neq 0$.</p>
+<p>if $\mathbf A$ is a real symmetric $n\times n$ matrix.</p>
+<ul>
+<li>if $\mathbf A$ is positive semidefinite $\iff$ every eigenvalue of $A$ is nonnegative $\lambda &gt; 0$.</li>
+<li>$\lambda_{\min} (\mathbf A) | \mathbb x |^2 \leq \langle \mathbb x, \mathbf A \mathbb x\rangle \leq \lambda_{\max} (\mathbf A) |\mathbb x |^2, \  \forall \mathbb x \in \mathbb R^{n\times n}$</li>
+</ul>
+<p>Inner product of matrix:</p>
+<ul>
+<li>$A,B \in \mathbb R^{m\times n}$, have $\langle A,B \rangle = \sum\limits_{i=1}^{m} \sum\limits_{j=1}^{n} A_{ij} B_{ij} = \operatorname{Tr}(A^TB)$</li>
+</ul>
+<p>Frobenius norm: </p>
+<ul>
+<li>$|A|<em>F = \sqrt{ \sum\limits</em>{i=1}^{m} \sum\limits_{j=1}^{n} |A_{ij}|^2} = \sqrt{\operatorname{Tr}(A^TA)}$</li>
+</ul>
+<p><strong>Sherman-Morrison-Woodbury (SMW) formula</strong> </p>
+<p>Suppose $U,V \in \mathbb R^{n\times p}$ and $| UV^T | &lt;1$, Then<br>$$<br>(I+UV^T)^{-1} = I-UG^{-1} V^T \quad \in \mathbb R^{n\times n}<br>$$<br>where $G=I_p + V^TU \in \mathbb R^{p\times p}$</p>
+<blockquote>
+<p>When $n$  is large, it’s hard to compute the inverse of $(I+UV^T)$. But if using the SMW formula, it’s easy to compute by transforming it as $I-UG^{-1} V^T$, because the inverse of $G$ is easy to compute ($p$ is small).</p>
+</blockquote>
+<p>If $(I+UV^T)$ is nonsingular, than the SMW formula $(I+UV^T)^{-1} = I-UG^{-1} V^T$holds <u>without</u> requiring $| UV^T | &lt;1$</p>
+<p>Bounded: $|\mathbb x | \leq M, \forall \mathbb x \in S$. If $C_1, C_2$ are bounded, then $C_1 \cup C_2$ is bounded. </p>
+<p>Closed: $\lim\limits_{n\rightarrow \infin} \mathbb x_n \in S$. If $C_1, C_2$ are closed, then $C_1\cap C_2$ is closed.</p>
+<p>Prove method: if function $g$ is continuous, then set $S={\mathbb x\in \mathbb R^n | g(\mathbb x) \le 0}$ is closed. Or $S={\mathbb x\in \mathbb R^n | g(\mathbb x) \ge 0}$ is closed. Or $S={\mathbb x\in \mathbb R^n | g(\mathbb x) = 0}$ is closed.</p>
+<blockquote>
+<p>Example:</p>
+<p>Prove $C = \left{ \begin{pmatrix} x \ x^2 \end{pmatrix} \in \mathbb R^2 \right}$ is closed.</p>
+<p>Solution:<br>$$<br>C = \left{ \begin{pmatrix} x \ x^2 \end{pmatrix} \in \mathbb R^2 \right} = \left{ \begin{pmatrix} x_1 \ x_2 \end{pmatrix} \in \mathbb R^2 \quad \vert \quad g(\mathbb x) := x_2-x_1^2 = 0 \right}.<br>$$<br>since $g$ is continuous, so $C$ is closed.</p>
+</blockquote>
+<p>Compactness: Closed + Bounded</p>
+<p>Coercive function:<br>$$<br>\lim\limits_{|\mathbb x| \rightarrow \infty} f(\mathbb x) = +\infty<br>$$<br>Which means that the function value $f(\mathbb x)$ will increase without bound as $\mathbb x$ moves away from the origin in all possible directions.</p>
+<p><strong>==Existence of optimal solution:==</strong></p>
+<ol>
+<li><p>a continuous function $g:\mathbb R^n \rightarrow \mathbb R$ on a nonempty closed and bounded set $S \subset \mathbb R^n$ has a global maximum and a global minimum point in $S$.</p>
+</li>
+<li><p>$f:\mathbb R^n \rightarrow \mathbb R$ is continuous function. If $f$ is coercive, then $f$ has at least one global minimizer.  (when x is not bounded)</p>
+</li>
+</ol>
+<p>A stationary point $\mathbb x^*$ with $H_f(\mathbb x^*)$ positive semi-definite, the status of $\mathbb x^*$ can only be determined by analyzing $f(\mathbb x^*)$ is a neighborhood of $\mathbb x^*$.  Can obtain a global minimizer by comparing the objective value at the stationary points.</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>Xiaoxue Zhang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://zhang-xiaoxue.github.io/2021/08/16/Nonlinear%20Optimization/2_Introduction/" title="2. Introduction">https://zhang-xiaoxue.github.io/2021/08/16/Nonlinear Optimization/2_Introduction/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/08/16/Nonlinear%20Optimization/4_Gradient%20Method/" rel="prev" title="4. Gradient Method">
+                  <i class="fa fa-chevron-left"></i> 4. Gradient Method
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/08/16/Nonlinear%20Optimization/0_Supplementary/" rel="next" title="3. Convex Analysis">
+                  3. Convex Analysis <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+<script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xiaoxue Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div><script color="0,0,255" opacity="0.5" zIndex="-1" count="199" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{&quot;enable&quot;:true,&quot;tags&quot;:&quot;none&quot;,&quot;single_dollars&quot;:true,&quot;cjk_width&quot;:0.9,&quot;normal_width&quot;:0.6,&quot;append_css&quot;:true,&quot;js&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;mathjax@3.1.4&#x2F;es5&#x2F;tex-mml-chtml.js&quot;}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/Academy-favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Academy-favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/Academy-favicon.png">
+  <link rel="mask-icon" href="/images/Academy-favicon" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;zhang-xiaoxue.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Muse&quot;,&quot;version&quot;:&quot;8.4.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;right&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;Searching...&quot;,&quot;empty&quot;:&quot;We didn&#39;t find any results for the search: ${query}&quot;,&quot;hits_time&quot;:&quot;${hits} results found in ${time} ms&quot;,&quot;hits&quot;:&quot;${hits} results found&quot;}}</script>
+<meta name="description" content="Uncertainty Modelling in AIAll materials are from Module CS5340 (NUS Computing) PGM (Probabilistic Graphical Modeling)  gain global insight based on local observations  Key Ideas:   Represent the worl">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Uncertainty Modelling in AI">
+<meta property="og:url" content="https://zhang-xiaoxue.github.io/2020/06/30/Machine%20Learning/Uncertainty_Modelling_in_AI/index.html">
+<meta property="og:site_name" content="Xiaoxue Zhang - NUS">
+<meta property="og:description" content="Uncertainty Modelling in AIAll materials are from Module CS5340 (NUS Computing) PGM (Probabilistic Graphical Modeling)  gain global insight based on local observations  Key Ideas:   Represent the worl">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNc79gy1g1s5poa8zrj31qi0ssjvq.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79gy1g1wgc7mwjuj30s108tn0d.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79gy1g1wivh3gerj31c50u043s.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNc79gy1g1wr8wvaqnj316g0u0wip.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNc79gy1g1wrn49rwlj31r40hqdiq.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79gy1g1wrvlq93nj31jc0ie41z.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNc79gy1g1ws3foo57j31c20i80vy.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79gy1g1ws7oimc0j31aq0qm0ww.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79gy1g1z3hfsl4aj30eq0segmy.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79gy1g1z3ldzy0gj30fu0lq3zg.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNc79gy1g1zu068f7cj30j00pu400.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79gy1g1zvgeth6yj30so0o80ur.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79gy1g1zzdepvxmj30wm0i8aba.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNc79gy1g1zzipmzg9j318q0r0jvl.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79gy1g1zzl4degbj313w0ten0o.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79gy1g212h03612j30wu0gp0xs.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79gy1g213c8ln66j317a0u0gwk.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNc79gy1g21aej5tedj31jj0u0gwy.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNc79gy1g21d9saz2bj30vl0lzgnm.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79gy1g21ddcvle3j30x50heael.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79gy1g21e3c4a9cj30a407vaar.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79gy1g22b3j4or3j31p00u07wh.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79gy1g22bmtv4dqj31kc0u04q6.jpg">
+<meta property="article:published_time" content="2020-06-30T04:00:00.000Z">
+<meta property="article:modified_time" content="2021-08-16T07:12:14.643Z">
+<meta property="article:author" content="Xiaoxue Zhang">
+<meta property="article:tag" content="Reinforcement Learning, Optimization and Control, Intellegent Systems">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ws3.sinaimg.cn/large/006tNc79gy1g1s5poa8zrj31qi0ssjvq.jpg">
+
+
+<link rel="canonical" href="https://zhang-xiaoxue.github.io/2020/06/30/Machine%20Learning/Uncertainty_Modelling_in_AI/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;en&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;zhang-xiaoxue.github.io&#x2F;2020&#x2F;06&#x2F;30&#x2F;Machine%20Learning&#x2F;Uncertainty_Modelling_in_AI&#x2F;&quot;,&quot;path&quot;:&quot;2020&#x2F;06&#x2F;30&#x2F;Machine Learning&#x2F;Uncertainty_Modelling_in_AI&#x2F;&quot;,&quot;title&quot;:&quot;Uncertainty Modelling in AI&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>Uncertainty Modelling in AI | Xiaoxue Zhang - NUS</title><script src="/js/config.js"></script>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Xiaoxue Zhang - NUS</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">NUS Ph.D.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Uncertainty-Modelling-in-AI"><span class="nav-number">1.</span> <span class="nav-text">Uncertainty Modelling in AI</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">2.</span> <span class="nav-text">Introduction</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Probability-space"><span class="nav-number">2.1.</span> <span class="nav-text">Probability space</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Basic-operations"><span class="nav-number">2.1.1.</span> <span class="nav-text">Basic operations</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Marginalization"><span class="nav-number">2.1.1.1.</span> <span class="nav-text">Marginalization</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Conditional-probability"><span class="nav-number">2.1.1.2.</span> <span class="nav-text">Conditional probability</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Bayes-rule"><span class="nav-number">2.1.1.3.</span> <span class="nav-text">Bayes rule</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Independence"><span class="nav-number">2.1.1.4.</span> <span class="nav-text">Independence</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Expectation"><span class="nav-number">2.1.1.5.</span> <span class="nav-text">Expectation</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Probability-Distribution"><span class="nav-number">2.1.2.</span> <span class="nav-text">Probability Distribution</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Fitting-Probability-Models"><span class="nav-number">3.</span> <span class="nav-text">Fitting Probability Models</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Learning"><span class="nav-number">3.1.</span> <span class="nav-text">Learning</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Maximum-Likelihood-Estimation-MLE"><span class="nav-number">3.1.1.</span> <span class="nav-text">Maximum Likelihood Estimation (MLE)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bayesian-Approach"><span class="nav-number">3.1.2.</span> <span class="nav-text">Bayesian Approach</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Maximum-a-Posterior-Estimation-MAP"><span class="nav-number">3.1.3.</span> <span class="nav-text">Maximum a Posterior Estimation (MAP)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Prediction"><span class="nav-number">3.2.</span> <span class="nav-text">Prediction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Exponential-Family"><span class="nav-number">3.3.</span> <span class="nav-text">Exponential Family</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Bayesian-Networks"><span class="nav-number">4.</span> <span class="nav-text">Bayesian Networks</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Conditional-Independence"><span class="nav-number">4.1.</span> <span class="nav-text">Conditional Independence</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Learning-with-conditional-independence-MLE"><span class="nav-number">4.1.1.</span> <span class="nav-text">Learning  with conditional independence: MLE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Learning-with-conditional-independence-MAP"><span class="nav-number">4.1.2.</span> <span class="nav-text">Learning with conditional independence: MAP</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bayesian-Networks-1"><span class="nav-number">4.2.</span> <span class="nav-text">Bayesian Networks</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Interpreting-Analyzing-Bayesian-Networks"><span class="nav-number">4.2.1.</span> <span class="nav-text">Interpreting&#x2F;Analyzing Bayesian Networks</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Graph-seperation"><span class="nav-number">4.2.2.</span> <span class="nav-text">Graph seperation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bayes-Ball"><span class="nav-number">4.2.3.</span> <span class="nav-text">Bayes Ball</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bayes-Network-Examples"><span class="nav-number">4.3.</span> <span class="nav-text">Bayes Network Examples:</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Linear-Regression"><span class="nav-number">4.3.1.</span> <span class="nav-text">Linear Regression</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Naiive-Bayes"><span class="nav-number">4.3.2.</span> <span class="nav-text">Naiive Bayes</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Undirected-Graphical-Models-Markov-Random-Fields"><span class="nav-number">5.</span> <span class="nav-text">Undirected Graphical Models (Markov Random Fields)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Parameterization-of-MRFs"><span class="nav-number">5.1.</span> <span class="nav-text">Parameterization of MRFs</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Gibbs-distribution"><span class="nav-number">5.1.1.</span> <span class="nav-text">Gibbs distribution</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example-of-MRF"><span class="nav-number">5.2.</span> <span class="nav-text">Example of MRF</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Parameter-Learning"><span class="nav-number">5.3.</span> <span class="nav-text">Parameter Learning</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Conditional-Random-Fields-CRF"><span class="nav-number">5.4.</span> <span class="nav-text">Conditional Random Fields (CRF)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Probabilistic-inference"><span class="nav-number">5.5.</span> <span class="nav-text">Probabilistic inference</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Xiaoxue Zhang"
+      src="/images/photo_blue.jpg">
+  <p class="site-author-name" itemprop="name">Xiaoxue Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Zhang-Xiaoxue" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Zhang-Xiaoxue" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:xiaoxuezhang@u.nus.edu" title="E-Mail → mailto:xiaoxuezhang@u.nus.edu" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.linkedin.com/in/xiaoxue-zhang-5233b611a/" title="https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;xiaoxue-zhang-5233b611a&#x2F;" rel="noopener" target="_blank">Linkedin</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.zhihu.com/people/lisnol" title="https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;lisnol" rel="noopener" target="_blank">知乎</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/Zhang-Xiaoxue" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zhang-xiaoxue.github.io/2020/06/30/Machine%20Learning/Uncertainty_Modelling_in_AI/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/photo_blue.jpg">
+      <meta itemprop="name" content="Xiaoxue Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Xiaoxue Zhang - NUS">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Uncertainty Modelling in AI
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-06-30 12:00:00" itemprop="dateCreated datePublished" datetime="2020-06-30T12:00:00+08:00">2020-06-30</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-08-16 15:12:14" itemprop="dateModified" datetime="2021-08-16T15:12:14+08:00">2021-08-16</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="Uncertainty-Modelling-in-AI"><a href="#Uncertainty-Modelling-in-AI" class="headerlink" title="Uncertainty Modelling in AI"></a>Uncertainty Modelling in AI</h1><p>All materials are from Module CS5340 (NUS Computing)</p>
+<p>PGM (Probabilistic Graphical Modeling)</p>
+<ul>
+<li>gain global insight based on local observations</li>
+</ul>
+<p><strong>Key Ideas:</strong> </p>
+<ul>
+<li><p><strong>Represent</strong> the world as a collection of random variables $X_1, \cdots, X_N$ with joint distribution $p(X_1, \cdots, X_N)$</p>
+</li>
+<li><p><strong>Learn</strong> the distribution from data. </p>
+</li>
+<li><p>Perform “<strong>inference</strong>” (compute conditional distributions ($p(X_i|X_1=x_1,\cdots,X_N=x_N)$).</p>
+</li>
+</ul>
+<h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><h2 id="Probability-space"><a href="#Probability-space" class="headerlink" title="Probability space"></a>Probability space</h2><p>Three parts:</p>
+<ul>
+<li>Outcome space $\Omega$: space of possible outcomes </li>
+<li>Event space $E$: $E\subseteq 2^{\Omega}$, subset of power set of $\Omega$<ul>
+<li>contains <u>empty</u> $\emptyset$ and <u>trivial event</u> $\Omega$</li>
+<li><u>closed under union.</u> if $\alpha, \beta \in E$, so is $\alpha \cup\beta$</li>
+<li><u>closed under complement</u>. if $\alpha \in E$, So is $\Omega -\alpha$</li>
+</ul>
+</li>
+<li><strong>Probability distribution $P$:</strong> mapping from events in $E$ into real values<ul>
+<li>Non negativity</li>
+<li>sum to 1</li>
+<li>Mutually disjoint events: if $\alpha, \beta \in E$, and $\alpha \cap \beta=\emptyset$, then $P(\alpha\cup\beta)=P(\alpha)\cup P(\beta)$.</li>
+</ul>
+</li>
+</ul>
+<p>Probability distribution:</p>
+<ul>
+<li><p>$X$: random variables. $x$: generic values [$x\in Val(X)$].</p>
+</li>
+<li><p>Indicator Random Variables: map every outcome to 0 or 1.: Just indication</p>
+</li>
+<li><p>Discrete vs.. continuous</p>
+<ul>
+<li>Discrete:<ul>
+<li>PMF (Probability mass function): $p(x)$</li>
+</ul>
+</li>
+<li>Continuous:<ul>
+<li>PDF (Probability Density function) : $p(x):R\rightarrow R_{\geq 0}$</li>
+<li>$P(X)$ is a cumulative function</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Probability:</p>
+<ul>
+<li>Joint probability:</li>
+</ul>
+<h3 id="Basic-operations"><a href="#Basic-operations" class="headerlink" title="Basic operations"></a>Basic operations</h3><h4 id="Marginalization"><a href="#Marginalization" class="headerlink" title="Marginalization"></a>Marginalization</h4><p>Recover probability distribution of any variable <u>in a joint distribution</u> by <u>integrating (or summing)</u> over all other variables.</p>
+<p>$${} p(x)=\int p(x,y) dy ;\quad p(y)=\int(x,y) dx$$</p>
+<p>$p(x)=\sum\limits_y p(x,y) ;\quad p(y)=\sum\limits_x(x,y) $</p>
+<h4 id="Conditional-probability"><a href="#Conditional-probability" class="headerlink" title="Conditional probability"></a>Conditional probability</h4><p>$p(x|Y=y^*)$</p>
+<p>can be extracted from joint probability.</p>
+<p>$P(x|Y=y^*)=\frac{p(x,Y=y^*)}{\int\limits_x p(x,Y=y^*) dx} = \frac{p(x,Y=y^*)}{p(Y=y^*)}$</p>
+<p>i.e. $p(x|y)=\frac{p(x,y)}{p(y)}$</p>
+<p>So, $p(x,y)=p(x|y)p(y)=p(y|x)p(x)$   : <em>chain rule of product rule</em></p>
+<h4 id="Bayes-rule"><a href="#Bayes-rule" class="headerlink" title="Bayes rule"></a>Bayes rule</h4><p>$$p(x|y)p(y)=p(y|x)p(x) \Longrightarrow p(y|x)=\frac{p(x|y)p(y)}{p(x)}=\frac{p(x|y)p(y)}{\int p(x,y) dy} = \frac{p(x|y)p(y)}{\int p(x|y)p(y)dy}$$</p>
+<h4 id="Independence"><a href="#Independence" class="headerlink" title="Independence"></a>Independence</h4><p>independence of X and Y means that every conditional distribution is the same.</p>
+<p>when variables are independent, $p(x,y)=p(x|y)p(y)=p(x)p(y)$</p>
+<h4 id="Expectation"><a href="#Expectation" class="headerlink" title="Expectation"></a>Expectation</h4><p>$E[f(x)]=\sum\limits_x f(x)p(x)\ \text{or} \ \int f(x)p(x)dx$</p>
+<p>$E[f(x)+g(x)]=E[f(x)]+E[g(x)]$     </p>
+<p>$E[f(x)g(x)]=E[f(x)]E[g(x)]$(if X, Y independent)</p>
+<h3 id="Probability-Distribution"><a href="#Probability-Distribution" class="headerlink" title="Probability Distribution"></a>Probability Distribution</h3><table>
+<thead>
+<tr>
+<th>Data Type</th>
+<th>Domain</th>
+<th>Distributions</th>
+<th>PDF(PMF)</th>
+<th>Parameter</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Univariate, discrete, binary</td>
+<td>$x\in{0,1}$</td>
+<td>Bernoulli</td>
+<td>$p(x)=\lambda^x(1-\lambda)^{1-x}$</td>
+<td>$\lambda$</td>
+</tr>
+<tr>
+<td>Univariate, discrete, multi-valued</td>
+<td>$x\in{1,2,\cdots,K}$</td>
+<td>Categorical</td>
+<td>$p(\mathbb{x})=\prod\limits_{k=1}^K \lambda_k^{x_k}=\lambda_k$</td>
+<td>$\lambda=[\lambda_1,\cdots,\lambda_K]^T$, where $\lambda\geq 0$, $\sum_k\lambda_k=1$</td>
+</tr>
+<tr>
+<td>Univariate, continuous, unbounded</td>
+<td>$x\in R$</td>
+<td>Univariate normal (Gaussian)</td>
+<td>$p(x</td>
+<td>\mu,\sigma^2)=\frac{1}{\sqrt{2\pi\sigma^2}} \exp -\frac{(x-\mu)^2}{2\sigma^2}$</td>
+</tr>
+<tr>
+<td>Univariate, continuous, bounded</td>
+<td>$x\in [0,1]$</td>
+<td>Beta</td>
+<td>$p(x)=\frac{\Gamma[\alpha+\beta]}{\Gamma[\alpha]\Gamma[\beta]} x^{\alpha-1}(1-x)^{\beta-1}$</td>
+<td>$\alpha$, $\beta$</td>
+</tr>
+<tr>
+<td>Multivariate, continuous, unbounded</td>
+<td>$\mathbf{x}\in \mathbb{R}^D$</td>
+<td>Multivariate normal</td>
+<td>$\frac{1}{(2\pi)^{D/2}</td>
+<td>\boldsymbol{\Sigma}</td>
+</tr>
+<tr>
+<td>Multivariate, continuous, bounded, sum to 1</td>
+<td>$\mathbf{x}=[x_1,x_2,\cdots,x_K]^T$, $x_k\in[0,1]$, $\sum\limits_{k=1}^K x_k=1$</td>
+<td>Dirichlet</td>
+<td>$p\left(\mathbb{x}\right)=\frac{\Gamma\left[\sum_{k=1}^{K} \alpha_{k}\right]}{\prod_{k=1}^{K} \Gamma\left[\alpha_{k}\right]} \prod_{k=1}^{K} x_{k}^{\alpha_{k}-1}$</td>
+<td>$\alpha_k$ (k个)</td>
+</tr>
+<tr>
+<td>Bivariate, continuous, $x_1$ unbounded, $x_2$ bounded below</td>
+<td>$\mathbf{x}=[x_1, x_2]$, $x_1\in\mathbb{R}$, $x_2\in\mathbb{R}^+$</td>
+<td>Normal-scaled inverse gamma</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Multivariate vector $\mathbf{x}$ and matrix $\mathbf{X}$. $\mathbf{x}$ Unbounded, $\mathbf{X}$ square, positive definite</td>
+<td>$\mathbf{x}\in\mathbb{R}^K$, $\mathbf{X}\in\mathbb{R}^{K\times K}$, $\mathbf{z}^T\mathbf{X}\mathbf{z}&gt;0\quad \forall\mathbf{z}\in\mathbb{R}^K$</td>
+<td>Normal inverse Wishart</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<ul>
+<li><p><strong>Conjugate Distributions</strong></p>
+<ul>
+<li><p>Parameters of conjugate distributions are known as hyperparameters because they control the parameter distribution</p>
+</li>
+<li><p><strong>Aim:</strong> Learning the parameters $\theta$ of a probability distribution:</p>
+<p>​    $$p(\theta|x)=\frac{p(x|\theta)p(\theta)}{\int p(x|\theta)p(\theta)d\theta}$$</p>
+<ul>
+<li>$p(\theta)$: prior.  $p(x|\theta)$: likelihood.  $p(\theta|x)$: posterior</li>
+<li>Use prior and likelihood to compute posterior. Posterior has the same form as prior $\longrightarrow$ conjugate</li>
+</ul>
+</li>
+<li><p>使用共轭先验的原因是，可以使得先验分布和后验分布的形式相同，这样符合人的直观感受，另一方面，是可以形成一个先验链，即现在的后验分布可以作为下一次计算的先验分布，也就是带来了计算的简单性。</p>
+</li>
+<li><p>使得Bayes inference更加方便， 比如在 sequential Bayesian inference中，得到一个observation之后，可以算出一个posterior。由于选取的是conjugate prior，因此posterior和prior的形式一样，可以把该posterior当作新的prior，用于下一次的observation，继续下一次迭代。</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Distribution</th>
+<th>Domain</th>
+<th>Prior</th>
+<th>Prior Distribution</th>
+<th>hyper parameters</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Bernouli</td>
+<td>$x\in{0,1}$</td>
+<td>Beta</td>
+<td>$p(\lambda)=\frac{\Gamma[\alpha+\beta]}{\Gamma[\alpha]\Gamma[\beta]}\lambda^{\alpha-1}(1-\lambda)^{\beta-1}$, $\lambda\in[0,1]​$</td>
+<td>$\alpha$, $\beta​$</td>
+</tr>
+<tr>
+<td>Binomial</td>
+<td>$x\in{0,1,\cdots,n}$</td>
+<td>Beta</td>
+<td>$p(\lambda)=\frac{\Gamma[\alpha+\beta]}{\Gamma[\alpha]\Gamma[\beta]}\lambda^{\alpha-1}(1-\lambda)^{\beta-1}$, $\lambda\in[0,1]$</td>
+<td>$\alpha$, $\beta$</td>
+</tr>
+<tr>
+<td>Categorical</td>
+<td>$x\in {1, 2, \cdots,K}$</td>
+<td>Dirichlet</td>
+<td>$p\left(\lambda_{1}, \ldots, \lambda_{K}\right)=\frac{\Gamma\left[\sum_{k=1}^{K} \alpha_{k}\right]}{\prod_{k=1}^{K} \Gamma\left[\alpha_{k}\right]} \prod_{k=1}^{K} \lambda_{k}^{\alpha_{k}-1}$</td>
+<td>k 个 $\alpha_k&gt;0$</td>
+</tr>
+<tr>
+<td>Univariate normal (Given Variance, mean unknot)</td>
+<td></td>
+<td>Univariate normal</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Univariate normal (Given Mean, Variance unknown)</td>
+<td></td>
+<td>Gamma</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Univariate normal (Both Variance and Mean unknown)</td>
+<td>$x\in\mathbb{R}$</td>
+<td>normal inverse gamma</td>
+<td>$p\left(\mu, \sigma^{2}\right)=\frac{\sqrt{\gamma}}{\sigma \sqrt{2 \pi}} \frac{\beta^{\alpha}}{\Gamma[\alpha]}\left(\frac{1}{\sigma^{2}}\right)^{\alpha+1} \exp \left[-\frac{2 \beta+\gamma(\delta-\mu)^{2}}{2 \sigma^{2}}\right]$</td>
+<td>$\alpha, \beta, \gamma&gt;0, \text{and}\ \delta\in\mathbb{R}$</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Multivariate normal</td>
+<td>$\mathbf{x}\in\mathbb{R}^k$</td>
+<td>normal inverse Wishart</td>
+<td>$p(\boldsymbol{\mu}, \boldsymbol{\Sigma})=\frac{\gamma^{D / 2}</td>
+<td>\mathbf{\Psi}</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>Gamma Function:</p>
+<p> $\Gamma(z)=\int_0^{\infty} t^{z-1}e^{-t} dt, \quad z\in \mathbb{C}$;  </p>
+<p>$\Gamma(n)=(n-1)!,\quad n\in\mathbb{Z}_{&gt;0}$ </p>
+</blockquote>
+<blockquote>
+<p>Binomial distribution: $p(x)=\left( \begin{array}{l}{n} \ {x}\end{array}\right) \lambda^{x}(1-\lambda)^{n-x}$</p>
+<p>Categorical distribution: $p(\mathbb{x})=\prod\limits_{k=1}^K \lambda_k^{x_k}=\lambda_k$</p>
+</blockquote>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/26638720">https://zhuanlan.zhihu.com/p/26638720</a></p>
+</blockquote>
+</li>
+</ul>
+<h1 id="Fitting-Probability-Models"><a href="#Fitting-Probability-Models" class="headerlink" title="Fitting Probability Models"></a>Fitting Probability Models</h1><p>we already know some common parametric probability distributions $p(x|\theta)$. </p>
+<p>Now, we need to know how to <u><strong>learn unknown parameters $\theta$</strong></u> from given data $\mathcal{D}={x[1],\cdots,x_[N]}$. Then, <u><strong>use these parameters to make prediction</strong></u>.</p>
+<h2 id="Learning"><a href="#Learning" class="headerlink" title="Learning"></a>Learning</h2><p><strong>Methods</strong> to learning the unknown parameters $\theta$ from data</p>
+<img src="https://ws3.sinaimg.cn/large/006tNc79gy1g1s5poa8zrj31qi0ssjvq.jpg" style="zoom:30%">
+
+<h3 id="Maximum-Likelihood-Estimation-MLE"><a href="#Maximum-Likelihood-Estimation-MLE" class="headerlink" title="Maximum Likelihood Estimation (MLE)"></a>Maximum Likelihood Estimation (MLE)</h3><ul>
+<li><p>Given data $\mathcal{D}={x[1],\cdots,x_[N]}$</p>
+</li>
+<li><p>Assume:</p>
+<ul>
+<li>distribution ${p_\theta : \theta \in \Theta}$ where $p(\theta)=p(x|\theta)$</li>
+<li>$\mathcal{D}$ is sampled from $X_{1}, X_{2}, \ldots, X_{N} \sim p_{\theta^{<em>}}$ for some $\theta^</em> \in \Theta$</li>
+<li>Random variables $X_{1}, X_{2}, \ldots, X_{N}$ are <u><em>i.i.d</em></u></li>
+</ul>
+</li>
+<li><p>Goal: estimate $\theta^*$</p>
+</li>
+<li><p>Method: estimate $\theta_{MLE}$ is a maximum likelihood estimate (MLE) for $\theta^*$ if  </p>
+<p>​    $$\begin{align} \theta_{M L E}&amp;=\underset{\theta \in \Theta}{\operatorname{argmax}}[p(\mathcal{D} | \theta)]\ &amp;=\underset{\theta \in \Theta}{\operatorname{argmax}}[p(x | \theta)]\  &amp;=\underset{\theta}{\operatorname{argmax}}\left[\prod_{i=1}^{N} p(x[i] | \theta)\right] \quad(\text { i.i.d }) \quad \longrightarrow \quad \text{decompose into products of likelihoods}  \end{align} $$</p>
+</li>
+<li><p>Solution: maximize the logarithm $\theta_{MLE}=\underset{\theta}{\operatorname{argmax}}\left[\log\left(\prod_{i=1}^{N} p(x[i] | \theta)\right)\right]$. Then, solve by taking derivative w.r.t. $\theta$ equal to 0.</p>
+</li>
+<li><p>Advantages:</p>
+<ul>
+<li><strong>Easy and fast</strong> to compute</li>
+<li>Nice Asymptotic properties**:** <ul>
+<li><strong>Consistent</strong>: if data generated from $f(\theta^*)$, MLE converges to its true value, $\hat{\theta}_{MLE} \rightarrow \theta^*$ as $n \rightarrow \infty$ </li>
+<li><strong>Efficient</strong>: there is no consistent estimator that has lower mean squared error than the MLE estimate</li>
+</ul>
+</li>
+<li><strong>Functional Invariance:</strong> if $\hat{\theta}$ is the MLE of $\theta^*$, and $g(\theta^*)$is a transformation of $\theta^*$ then the MLE for $\alpha=g(\theta^*)$ is $\hat{\alpha}=g(\hat{\theta})$</li>
+</ul>
+</li>
+<li><p>Disadvantages:</p>
+<ul>
+<li>MLE is a <u>point estimate</u> i.e., does not represent uncertainty over the estimate </li>
+<li>MLE may <u>overfit</u>. </li>
+<li>MLE does <u>not incorporate prior information</u>. </li>
+<li>Asymptotic results are for the limit and <u>assumes model is correct</u>. </li>
+<li>MLE <u>may not exist or may not be unique</u> </li>
+<li><strong>not know uncertainty of the parameter estimation</strong></li>
+</ul>
+</li>
+</ul>
+<h3 id="Bayesian-Approach"><a href="#Bayesian-Approach" class="headerlink" title="Bayesian Approach"></a>Bayesian Approach</h3><p>To model uncertainty of the parameter estimation</p>
+<p><strong>Fitting</strong>: Instead of a point estimate $\hat{\theta}$, compute the <u>posterior distribution</u> over all possible parameter values using Bayes’ rule: </p>
+<p>​        $$p(\theta | D)=\frac{\prod_{i=1}^{N} p(x[i] | \theta) p(\theta)}{p(D)}$$</p>
+<p><strong>Principle</strong>: why pick one set of parameters? There are many values that could have explained the data. Try to capture all of the possibilities.</p>
+<p><strong>Model:</strong></p>
+<ul>
+<li><p>Goal: Model Uncertainty over $\theta$ using prior distribution </p>
+</li>
+<li><p>Method: find posterior</p>
+<p>​         $p(\theta | D)=\frac{\prod_{i=1}^{N} p(x[i] | \theta) p(\theta)}{p(D)}$</p>
+<p>​        $p(\theta | x)=\frac{\prod_{i=1}^{N} p(x[i] | \theta) p(\theta)}{p(x)}=\frac{\prod_{i=1}^{N} p(x[i] | \theta) p(\theta)}{\int \prod_{i=1}^{N} p(x[i] | \theta) p(\theta) d \theta}$</p>
+<p>​    where</p>
+<p>​        $\prod_{i=1}^{N} p(x[i] | \theta) p(\theta)=\prod_{i=1}^{N} \operatorname{Norm}<em>{x[i]}\left[\mu, \sigma^{2}\right] \underbrace{\operatorname{NormlnvGam}</em>{\mu, \sigma^{2}}[\alpha, \beta, \gamma, \delta]}_{\text{conjugate prior}}$      if we use Guassian as our observation model, i.e. $p(x|\theta)$</p>
+</li>
+</ul>
+<p>Properties:</p>
+<ul>
+<li>models uncertainty over parameters.</li>
+<li>incorporating prior information</li>
+<li>can derive quantities of interest, $p(x&lt;10|D)$</li>
+<li>can perform model selection.</li>
+</ul>
+<p>Drawbacks:</p>
+<ul>
+<li>Need Prior</li>
+<li>Computationally intractable</li>
+<li>If initial belief not conjugate to normal likelihood.. bad</li>
+</ul>
+<h3 id="Maximum-a-Posterior-Estimation-MAP"><a href="#Maximum-a-Posterior-Estimation-MAP" class="headerlink" title="Maximum a Posterior Estimation (MAP)"></a>Maximum a Posterior Estimation (MAP)</h3><p>Given: data $D={x[1], \cdots, x[N]}$</p>
+<p>Assume:</p>
+<ul>
+<li>joint distribution $p(D,\theta)$</li>
+<li>$\theta$ is a random variable</li>
+</ul>
+<p>Goal: Choose “good” $\theta$</p>
+<p>Method:</p>
+<ul>
+<li><p>estimate $\theta_{MAP}$ is a maximum a posterior (MAP) estimation if </p>
+<p>$$\begin{align} \theta_{MAP}&amp;=\underset{\theta}{\operatorname{argmax}} [p(\theta|D)]\ &amp;=\underset{\theta}{\operatorname{argmax}}\left[\frac{p(D|\theta)p(\theta)}{p(D)} \right] \quad \text{Bayes’ rule}\&amp;=\underset{\theta}{\operatorname{argmax}}\left[\frac{\prod_{i=1}^N p(x[i]|\theta)p(\theta)}{p(D)} \right]\quad \text{i.i.d}\ &amp;=\underset{\theta}{\operatorname{argmax}}\left[ \prod_{i=1}^N p(x[i]|\theta)p(\theta) \right] \quad p(D)\ \text{ is removed since it is independent of}\ \theta \ \end{align}$$</p>
+</li>
+<li><p>$ \theta_{MAP} = \underset{\theta}{\operatorname{argmax}}\left[ \prod_{i=1}^N \underbrace{ p(x[i]|\theta)}<em>{\text{likelihood}} \underbrace{p(\theta)}</em>{\text{prior}} \right] $</p>
+</li>
+<li><p>maximize the logarithm. Then taking derivatieves and setting to zero $\longrightarrow$ parameters estimation</p>
+</li>
+</ul>
+<p>Results:</p>
+<ul>
+<li>more data points $\rightarrow$ MAP is closer to MLE</li>
+<li>Less data points $\rightarrow$ MAP is closer to Prior</li>
+</ul>
+<p><strong>key steps:</strong></p>
+<ol>
+<li><p>Prior distribution</p>
+</li>
+<li><p>Derive<br>$$<br>\mathcal{L}=\log p(D | \theta) p(\theta)=\log p(D | \theta)+\log p(\theta)<br>$$</p>
+</li>
+<li><p>Then set $\frac{\part L}{\part \theta_i}=0$ for each parameter $\theta_i$</p>
+</li>
+</ol>
+<p>Properties:</p>
+<ul>
+<li>Fast and easy</li>
+<li>incorporate prior information</li>
+<li><font color=#0099ff size=4 face="robot">Avoid overfitting (“regularization”) ?</font></li>
+<li>As $n \rightarrow \infty$, MAP tends to look like MLE, but not have same nice asympototic properties.</li>
+</ul>
+<p>Drawbacks:</p>
+<ul>
+<li><strong>Point estimation</strong> (like MLE)<ul>
+<li>not capture uncertainty over estimates</li>
+</ul>
+</li>
+<li>NEED to choose Prior.</li>
+<li>Not functionally invariant:<ul>
+<li>if $\hat{\theta}$ is the MLE of $\theta^*$, and $g(\theta^*)$ is a transformation of $\theta^*$, then the MAP for $\alpha = g(\theta^*)$ is not necessarily $\hat{\alpha} = g(\hat{\theta})$</li>
+</ul>
+</li>
+</ul>
+<h2 id="Prediction"><a href="#Prediction" class="headerlink" title="Prediction"></a>Prediction</h2><ul>
+<li><p>MLE / MAP: evaluate new data point under parameter learnt by MLE /MAP.</p>
+</li>
+<li><p>Bayesian: calculate weighted sum of predictions from all possible values of parameters:<br>$$<br>\begin{aligned} p\left(x^{<em>} | \mathcal{D}\right) &amp;=\frac{p\left(x^{</em>}, D\right)}{p(D)} \quad \text{(conditional probability)} \ &amp;=\frac{\int p\left(x^{<em>}, D, \theta\right) d \theta}{p(D)} \quad \text{(marginal probability)} \ &amp;=\frac{\int p\left(x^{</em>}, \theta | D\right) p(D) d \theta}{p(D)} \quad \text{(conditional probability)} \ &amp;=\int p\left(x^{<em>} | D, \theta\right) p(\theta | D) d \theta \quad \text{(conditional probability)} \ &amp;=\int p\left(x^{</em>} | D\right) p(\theta | D) d \theta  \quad \text{(conditional independence)} \end{aligned}<br>$$</p>
+</li>
+<li><p><strong>Predictive Density</strong></p>
+<ul>
+<li><p>$$<br>p\left(x^{<em>} | D\right)=\int \underbrace{p\left(x^{</em>} | \theta\right)}<em>{\text{weights}} \underbrace{p(\theta | D) d \theta}</em>{\text{prediction for each possible}\ \theta}<br>$$</p>
+<blockquote>
+<p>Make a prediction that is an infinite weighted sum (integral) of the predictions for each parameter value, where weights are probabilitys. </p>
+</blockquote>
+<blockquote>
+<p> consider MLE and MAP estimates as probability distributions with zero probability everywhere except at estimate </p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<p>Training data decrease, Bayesian become less certain, but MAP is wrongly overconfident.</p>
+<h2 id="Exponential-Family"><a href="#Exponential-Family" class="headerlink" title="Exponential Family"></a>Exponential Family</h2><p>exponential family:</p>
+<ul>
+<li><p>a set of probability distributions ${p_\theta: \theta \in \Theta}$ with the form<br>$$<br>p_{\theta}(x)=\frac{h(x) \exp \left[-\eta(\theta)^{\top} s(x)\right]}{Z(\theta)}<br>$$<br>Where </p>
+<ul>
+<li>$\theta \in \mathbb{R}^{k}, x \in \mathbb{R}^{d}$</li>
+<li>natural parameters $\eta(\theta) : \Theta \rightarrow \mathbb{R}^m$</li>
+<li>sufficient statistics: $s(x): \mathbb{R}^d \rightarrow \mathbb{R}^m$</li>
+<li>base measure (supporting and scaling) : $h(x):\mathbb{R}^d \rightarrow [0,\infty)$</li>
+<li>partition function: $Z(\theta):\Theta \rightarrow [0,\infty)$</li>
+</ul>
+</li>
+</ul>
+<p>an exponential family is in its <em><u><strong>natural (canonical 标准的) form</strong></u></em> if it is parameterized by its <u>natural parameters $\eta$ :</u><br>$$<br>p_{\eta}(x)=p(x | \eta)=\frac{h(x) \exp \left[-\eta^{\top} s(x)\right]}{Z(\eta)}<br>$$<br><u><em><strong>Normaliser</strong></em></u>: $Z(\eta)$<br>$$<br>Z(\eta)=\int h(x) \exp \left[-\eta^{\top} s(x)\right] d x<br>$$<br>Properties:</p>
+<ul>
+<li>has conjugate prior. </li>
+<li>fixed number of sufficient statistics that summarize iid data. 指数函数的充分统计量的可以从大量的i.i.d.数据中归结为估计的几个值（即 $s (x)$ )</li>
+<li>Posterior predictive distribution always has closed form solution </li>
+<li>共轭先验性质给出了后验概率分布的闭式解，否则我们需要求解复杂的积分。而且，共轭先验使得我们能够清楚的看到似然函数对概率分布的影响。</li>
+</ul>
+<p>For any ExpFam:<br>$$<br>\mathbb{E}[s(x)]=\nabla \log \mathrm{Z}(\eta)<br>$$</p>
+<ul>
+<li>通过对$Z(\eta)$求导，容易得到充分统计量$s(x)$的均值，方差和其他性质。</li>
+</ul>
+<p><strong>Important Properties:</strong> </p>
+<img src="https://ws1.sinaimg.cn/large/006tNc79gy1g1wgc7mwjuj30s108tn0d.jpg" style="zoom:80%">
+
+<p>Many distributions are Exponential Family:</p>
+<table>
+<thead>
+<tr>
+<th>PMF</th>
+<th>PDF</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>• Bernoulli<br/>• Binomial</td>
+<td></td>
+</tr>
+<tr>
+<td>• Categorical/Multinoulli</td>
+<td></td>
+</tr>
+<tr>
+<td>• Poisson</td>
+<td></td>
+</tr>
+<tr>
+<td>• Multinomial</td>
+<td></td>
+</tr>
+<tr>
+<td>• Negative Binomial<br/>• Negative Binomial</td>
+<td>• Normal<br/>• Gamma &amp; Inverse Gamma</td>
+</tr>
+<tr>
+<td>• Wishart &amp; Inverse Wishart</td>
+<td></td>
+</tr>
+<tr>
+<td>• Beta</td>
+<td></td>
+</tr>
+<tr>
+<td>• Dirichlet</td>
+<td></td>
+</tr>
+<tr>
+<td>• lognormal</td>
+<td></td>
+</tr>
+<tr>
+<td>• Exponential</td>
+<td></td>
+</tr>
+<tr>
+<td>•…</td>
+<td></td>
+</tr>
+</tbody></table>
+<h1 id="Bayesian-Networks"><a href="#Bayesian-Networks" class="headerlink" title="Bayesian Networks"></a>Bayesian Networks</h1><h2 id="Conditional-Independence"><a href="#Conditional-Independence" class="headerlink" title="Conditional Independence"></a>Conditional Independence</h2><p>Fitting probability models <font color=#0099ff size=2 face="黑体">(learning)</font> and predictive density <font color=#0099ff size=2 face="黑体">(inference)</font></p>
+<ul>
+<li>BUT just at the case of One random variables, i.e. $p(x|\theta)$</li>
+<li>How about joint probability with $N$ random variables?</li>
+</ul>
+<p><strong>Problem:</strong></p>
+<ul>
+<li><p>Assume $N$ discrete random variables $x_1, \cdots, x_N$, where $x_i\in{1,\cdots,K}$.  $\longrightarrow$ need $O(K^N)$ parameters to represent the joint distribution $p(x_1, \cdots, x_N)$ $\longrightarrow$ hard to infer, need huge amount of data to learn all parameters</p>
+</li>
+<li><p>If all random variables are independent  $\longrightarrow$  $O(NK)$ with $p(x_1,\cdots, x_N|\theta) = \prod_{i=1}^N p(x_i|\theta_i)$   $\longrightarrow$    can infer, smaller data</p>
+</li>
+</ul>
+<img src="https://ws2.sinaimg.cn/large/006tNc79gy1g1wivh3gerj31c50u043s.jpg" style="zoom:30%">
+
+<p>###<strong>Definition:</strong></p>
+<p>Two random variables $X_A$ and $X_C$ are conditionally independent given $X_B$, $X_{A} \perp X_{C} | X_{B}$  iff $p\left(x_{A}, x_{C} | x_{B}\right)=p\left(x_{A} | x_{B}\right) p\left(x_{C} | x_{B}\right)$  OR $p\left(x_{A} | x_{B}, x_{C}\right)=p\left(x_{A} | x_{B}\right), \quad \forall X_{B} : p\left(x_{B}\right)&gt;0$, which means learning $X_C$ does not change prediction of $X_A$ once we know the value of $X_B$.</p>
+<p>###<strong>Meanings</strong>:</p>
+<ul>
+<li>parameter reduction<ul>
+<li>let $m_i$ denotes the number of parents of node $X_i$, and each node takes on $K$ values.</li>
+<li>conditional probability of $X_i$ use $K^{m_i+1}$ parameters</li>
+<li>Sum for all nodes, parameter reduction from $O(K^N)$ to $O(K^{m+1})$, and $m \ll N$</li>
+</ul>
+</li>
+</ul>
+<h3 id="Learning-with-conditional-independence-MLE"><a href="#Learning-with-conditional-independence-MLE" class="headerlink" title="Learning  with conditional independence: MLE"></a>Learning  with conditional independence: MLE</h3><ol>
+<li><p>represent the joint probability distribution</p>
+</li>
+<li><p>Taking the logarithm of $p(x|\theta)$  converts the product into sums</p>
+</li>
+<li><p>find the maximum log-likelihood of each parameter $\theta_i$ .  this can be executed seperatively.</p>
+<p>$\underset{\theta_1}{\operatorname{argmax} \log p(x|\theta)}$,     $\underset{\theta_2}{\operatorname{argmax} \log p(x|\theta)}$,     $\cdots$,     <em>[other random varibles which independent of $\theta-1$ can be removed.]</em></p>
+</li>
+</ol>
+<h3 id="Learning-with-conditional-independence-MAP"><a href="#Learning-with-conditional-independence-MAP" class="headerlink" title="Learning with conditional independence: MAP"></a>Learning with conditional independence: MAP</h3><p>Similar as MLE:<br>$$<br>\begin{aligned} \underset{\theta_{i}}{\operatorname{argmax}} \log p(\theta | x) &amp;=\underset{\theta_{i}}{\operatorname{argmax}} \log p(x | \theta) p(\theta) \ &amp;=\underset{\theta_{i}}{\operatorname{argmax}}\left{\log p\left(x_{i} | x_{\pi_{i}}, \theta_{i}\right)+\log p\left(\theta_{i}\right)\right} \end{aligned}<br>$$<br>where $\theta=\left(\theta_{1}, \ldots, \theta_{M}\right)$</p>
+<h2 id="Bayesian-Networks-1"><a href="#Bayesian-Networks-1" class="headerlink" title="Bayesian Networks"></a>Bayesian Networks</h2><ul>
+<li><p>Bayesian Network is a DAG $\mathcal{G}$  (no cycle)</p>
+<ul>
+<li>node is variables $X_i$,   set of parent nodes $X_{\pi_i}$: all variables that are parents of $X_i$</li>
+<li>Topological ordering: if $X_i \rightarrow X_j$, then $i&lt;j$  [not unique]</li>
+</ul>
+</li>
+<li><p><strong>Path</strong>: {path follow the arrows cosidering direction}.      V.S.    <strong>Trail</strong>: {path follow the edges without considering the direction}</p>
+</li>
+<li><p><strong>Ancestors</strong>: parents, grand-parents , etc.     V.S.      <strong>Descendants</strong>: children, grand-children, etc.</p>
+</li>
+<li><p><em><strong>Local Markov assumption :</strong></em></p>
+<ul>
+<li><p>Each random variable  $X_i$ is independent of its non-descendants $X_{nonDesc(X_i)}$ given its parents $X_{\pi_i}$ </p>
+</li>
+<li><p>$$<br>\left{X_{i} \perp\left(X_{\text { nonDesc }\left(X_{i}\right)} \backslash X_{\pi_{i}}\right) | X_{\pi_{i}}\right}<br>$$</p>
+</li>
+<li><p>Given parents, $X_i$ 与 非后代 $X_{nonDesc(X_i)}$ 独立。</p>
+</li>
+<li><p>Then, <em><u>conditional probability</u></em>  $p\left(x_{i} | x_{\pi_{i}}\right), \quad i=1, \cdots,N$  [according to local parent-children relationship]</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>Joint probability: Product of all local conditional independence<br>$$<br>p\left(x_{1}, \ldots, x_{N}\right)=\prod_{i=1}^{N} p\left(x_{i} | x_{\pi_{i}}\right)<br>$$<br>​    because $p\left(x_{1}, \ldots, x_{N}\right)=p\left(x_{1}\right) \prod_{i=2}^{N} p\left(x_{i} | x_{x_{1}, \ldots, x_{i-1}}\right) \quad \text { (chain rule) }$</p>
+<blockquote>
+<p>a fully connected DAG can represent <em>any</em>  distribution over its random variables.  </p>
+<p>Interprete arrows as “<em>possible</em> dependence”</p>
+</blockquote>
+<h3 id="Interpreting-Analyzing-Bayesian-Networks"><a href="#Interpreting-Analyzing-Bayesian-Networks" class="headerlink" title="Interpreting/Analyzing Bayesian Networks"></a>Interpreting/Analyzing Bayesian Networks</h3><ul>
+<li>already know the conditional independence based on local parent-children relationship.</li>
+<li>hope to know other extra independece</li>
+</ul>
+<p>Methods：</p>
+<ol>
+<li>prove $p\left(x_{A}, x_{C} | x_{B}\right)=p\left(x_{A} | x_{B}\right) p\left(x_{C} | x_{B}\right)$  OR $p\left(x_{A} | x_{B}, x_{C}\right)=p\left(x_{A} | x_{B}\right), \quad \forall X_{B} : p\left(x_{B}\right)&gt;0$  for $X_{A} \perp X_{C} | X_{B}$  </li>
+<li>Graph seperation</li>
+</ol>
+<h3 id="Graph-seperation"><a href="#Graph-seperation" class="headerlink" title="Graph seperation"></a>Graph seperation</h3><p>Precise definition of <em><strong>“blocking”</strong></em> has to be done through the  <u>“three canonical 3-node graphs”</u>, and <u>“d-separation”</u>. </p>
+<p><u><strong>Three canonical 3-node graphs:</strong></u></p>
+<img src="https://ws3.sinaimg.cn/large/006tNc79gy1g1wr8wvaqnj316g0u0wip.jpg" style="zoom:30%">
+
+<ul>
+<li><p>Head-Tail</p>
+<ul>
+<li><p>if none variables are observed, A and B are not independent $A \notperp B | \emptyset$<br>$$<br>p(a, b)=p(a) \sum_{c} p(c | a) p(b | c)=p(a) p(b | a)<br>$$</p>
+</li>
+<li><p>if C observed, using Bayes’ rule, obtain $A \perp B | C$<br>$$<br>\begin{aligned} p(a, b | c) &amp;=\frac{p(a, b, c)}{p(c)} \ &amp;=\frac{p(a) p(c | a) p(b | c)}{p(c)} \ &amp;=p(a | c) p(b | c) \end{aligned} \quad \text { (Bayes rule) }<br>$$</p>
+<img src="https://ws3.sinaimg.cn/large/006tNc79gy1g1wrn49rwlj31r40hqdiq.jpg" style="zoom:30%"></li>
+<li><p>Intuition: past A is independent of future B given present C, $\rightarrow$  simple Markov Chain</p>
+</li>
+</ul>
+</li>
+<li><p>Tail-Tail</p>
+<ul>
+<li><p>If none variables are observed, NOT independent, $A \notperp B | \emptyset$</p>
+</li>
+<li><p>If C observed, obtain $A  \perp  B | C$ , because</p>
+</li>
+<li><p>$$<br>\begin{aligned} p(a, b | c) &amp;=\frac{p(a, b, c)}{p(c)} \ &amp;=p(a | c) p(b | c) \end{aligned}<br>$$</p>
+</li>
+<li><p>Then,</p>
+<img src="https://ws4.sinaimg.cn/large/006tNc79gy1g1wrvlq93nj31jc0ie41z.jpg" style="zoom:30%"></li>
+</ul>
+</li>
+<li><p>Head-Head</p>
+<ul>
+<li><p>if none variables observed, we obtain <strong>$A \perp B | \emptyset$</strong>  because<br>$$<br>p(a, b)=p(a) p(b)<br>$$</p>
+</li>
+<li><p>if C observed, we obtain $A \notperp B | C$ , because<br>$$<br>\begin{aligned} p(a, b | c) &amp;=\frac{p(a, b, c)}{p(c)} \ &amp;=\frac{p(a) p(b) p(c | a, b)}{p(c)} \end{aligned}<br>$$<br>​    can not obtain $p(a)p(b)$</p>
+<img src="https://ws3.sinaimg.cn/large/006tNc79gy1g1ws3foo57j31c20i80vy.jpg" style="zoom:30%"></li>
+<li><p>“V-structure”. </p>
+</li>
+<li><p>if C unobserved, “blocks”. If C observed, “unblocks”.</p>
+</li>
+<li><img src="https://ws4.sinaimg.cn/large/006tNc79gy1g1ws7oimc0j31aq0qm0ww.jpg" style="zoom:30%"></li>
+<li><p><u><strong>Observation of any descendent node of C “unblocks” the path from A to B.</strong></u></p>
+</li>
+</ul>
+<p>$A \perp B |C$ if <u>all trails</u> from nodes in A are “Blocked” from nodes in B when all C are observed. </p>
+<p>A is <u><strong>d-separated</strong></u> form B by C</p>
+</li>
+<li><p>Key: Independence:</p>
+<ol>
+<li>The arrows on the trail meet either <u>head-to-tail</u> or <u>tail-to-tail</u> at the node, and <em>the node</em> is in the set <em>C</em>, or </li>
+<li>The arrows meet <u>head-to-head</u> at the node, and <em>neither the node, nor any of its descendants</em>, is in the set <em>C</em>. </li>
+</ol>
+</li>
+</ul>
+<h3 id="Bayes-Ball"><a href="#Bayes-Ball" class="headerlink" title="Bayes Ball"></a>Bayes Ball</h3><ul>
+<li><p>it’s a <strong>“reachability” algorithm”:</strong></p>
+<ol>
+<li>shade the nodes in set $C$ (given nodes)</li>
+<li>Place a ball at each of the nodes in set $A$</li>
+<li>Let the balls “bounce around” the graph according to the d-separation rules:<ul>
+<li>if none of the balls reach B, then $A \perp B|C$</li>
+<li>Else $A \norperp B|C$</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p>can be implement as a <em>breadth-first search</em></p>
+</li>
+<li><p><strong>procedure of algorithm:</strong></p>
+<ul>
+<li>given Graph $G$ and sets of nodes $X, Y$, and $Z$</li>
+<li>Output True if $X\perp Y | Z$, False otherwise.</li>
+<li>2 Phases:<ul>
+<li>Phase 1: “Find all the unblocked v-structures”<ul>
+<li>traverse the graph from the leaves to the roots, marking all nodes that are in $Z$ or have descendants in $Z$.</li>
+</ul>
+</li>
+<li>Phase 2: “Traverse all the trails starting from $X$”<ul>
+<li>apply breadth-first-search, stopping a specific traversal when we hit a blocked node.</li>
+<li>If $Y$ is reached during. this traversal, return False. Else, return True.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Bayes-Network-Examples"><a href="#Bayes-Network-Examples" class="headerlink" title="Bayes Network Examples:"></a>Bayes Network Examples:</h2><h3 id="Linear-Regression"><a href="#Linear-Regression" class="headerlink" title="Linear Regression"></a>Linear Regression</h3><ul>
+<li><p>Model:</p>
+<ul>
+<li><p>$$<br>Y[i]=\mathbf{w}^{\top} \mathbf{x}[i]+\epsilon[i]<br>$$</p>
+</li>
+<li><p>where input vector: $\mathbf{x}[i]=\left[\mathrm{x}[i]<em>{1}, \mathrm{x}[i]</em>{2}, \ldots, \mathrm{x}[i]<em>{\mathrm{D}}\right]^{\top}$; coeffiecient vector: $\mathbf{w}=\left[w</em>{1}, w_{2}, \ldots, w_{D}\right]^{\top}$; noise: $\epsilon[i] \sim N\left(0, \sigma_{n}^{2}\right)$</p>
+</li>
+<li><p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g1z3hfsl4aj30eq0segmy.jpg" style="zoom:30%">   $\Longrightarrow$ <img src="https://ws1.sinaimg.cn/large/006tNc79gy1g1z3ldzy0gj30fu0lq3zg.jpg" style="zoom:30%"></p>
+</li>
+<li><p>if $\epsilon \sim N\left(0, \sigma_{n}^{2}\right)$ , then $Y \sim N\left(\mathbf{w}^{\top} \mathbf{x}, \sigma_{n}^{2}\right)$</p>
+</li>
+<li><p>Affine property of Gaussian:</p>
+<ul>
+<li>$f(x)=ax+b$ of Gaussian, $\rightarrow$ , new PDF $\mathcal{N}(a\mu+b,a^2\sigma^2)$</li>
+</ul>
+</li>
+<li><p>Independence assertion:<br>$$<br>Y[i] \perp Y[i+1] |\mathbb{x}[i], \mathbb{w}, \sigma_n^2<br>$$<br>write the factorization:<br>$$<br>p(y[1],\cdots,y[N])=\prod\limits_i^N p(y[i]| \mathbb{w}^\top\mathbb{x}[i], \sigma_n^2)<br>$$</p>
+</li>
+<li><p><strong>Problem: Assume we know $\sigma_n^2$, how to learn unknown parameter $\mathbb{w}$?</strong></p>
+<ul>
+<li>Approach 1: MLE</li>
+</ul>
+<p>$$<br>\theta_{MLE}=\underset{\theta}{\operatorname{argmax}}\left[\prod_{i=1}^{N} p(x[i] | \theta)\right] \quad \text{iid}<br>$$</p>
+<p>​        with $p\left(x | \mu, \sigma^{2}\right)=\operatorname{Norm}_{x}\left[\mu, \sigma^{2}\right]=\frac{1}{\sqrt{2 \pi \sigma^{2}}} \exp -\frac{(x-\mu)^{2}}{2 \sigma^{2}}$</p>
+<p>​    logarithm, and compute derivate for $\mathbb{w}$<br>$$<br>\log \prod_{i=1}^{N} p(y[i]| \mathbb{w}^\top\mathbb{x}[i], \sigma_n^2) = \sum_{i=1}^N \log \mathcal{N}([i]| \mathbb{w}^\top\mathbb{x}[i], \sigma_n^2)\<br>\propto-\sum_{i=1}^N \frac{(y[i]-\mathbb{w}^\top x[i])^2}{2\sigma_n^2}<br>$$<br>​    So,<br>$$<br>\underset{\theta}{\operatorname{argmin}} \sum\limits_{i=1}^N \frac{(y[i]-\mathbb{w}^\top x[i])^2}{2\sigma_n^2} = \frac{1}{2\sigma_n^2} \underset{\theta}{\operatorname{argmin}}(\mathbf{Y}-\mathbf{X}^\top \mathbb{w})^\top (\mathbf{Y}-\mathbf{X}^\top \mathbb{w})<br>$$<br>​    Set $\mathcal{L}(\mathbb{w})=\mathbf{Y}-\mathbf{X}^\top \mathbb{w})^\top (\mathbf{Y}-\mathbf{X}^\top \mathbb{w})$<br>$$<br>\nabla \mathcal{L}(\mathbb{w})=(\mathbb{w}^\top(\mathbf{X}^\top\mathbf{X})-\mathbf{Y}^\top\mathbf{X}) = 0\<br>\text{so,} \quad \mathbb{w}=(\mathbf{X}\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{Y}<br>$$<br><font color=#0099ff size=3 face="黑体">对ppt有疑问，手写的那一页， p41 </font></p>
+</li>
+</ul>
+</li>
+<li><p>**Model Uncertainty of $\mathbb{w}$ **</p>
+<ul>
+<li><p>Model:</p>
+<img src="https://ws3.sinaimg.cn/large/006tNc79gy1g1zu068f7cj30j00pu400.jpg" style="zoom:30%">
+
+<ul>
+<li><p>$p(\mathbf{w} | v)=N(\mathbf{0}, v \mathbf{I})$</p>
+</li>
+<li><p>Conditional independence assertation:<br>$$<br>p(y[1], \ldots, y[N], \mathbf{w}) =p(\mathbf{w} | v) \prod\limits_{i}^N p(y[i]| \mathbf{w}^{\top} \mathbf{x}[i], \sigma_{n}^{2} )<br>$$</p>
+</li>
+</ul>
+</li>
+<li><p><strong>Problem: assume know $\sigma_n^2$, MAP solution of $\mathbb{w}$</strong></p>
+<ul>
+<li><p>Same as MLE, derivative, equal to 0. </p>
+</li>
+<li><p>$$<br>\mathbb{w}=(\mathbf{Y}^\top\mathbf{X}+2\lambda)^{-1}\mathbf{X}^\top\mathbf{Y},\quad\text{where}\ \lambda=\frac{\sigma_n^2}{v}<br>$$</p>
+</li>
+<li><p>if prior is laplacian distribution: $p(\mathbb{w}|0,b)=\frac{1}{2b}\exp (-\frac{|w|}{b})$</p>
+<ul>
+<li>$\log p(\mathbb{w}|0,b)\propto -\frac{|w|}{b}$ , then, have $\lambda = -\frac{2\sigma_n^2}{b}$ , form $l_1$-norm. </li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<ul>
+<li><p>derivative of  $l_0$-norm: This is zero (as you pointed out), but only in places where it isn’t interesting. Where it is interesting it’s not differentiable (it has jump discontinuities).</p>
+</li>
+<li><p>derivative of $l_1$-norm: This norm is not differentiable with respect to a coordinate where that coordinate is zero. Elsewhere, the partial derivatives are just constants, $\pm 1$ depending on the quadrant.</p>
+</li>
+<li><p>derivative of $l_2$-norm: Usually people use the $l_2$-norm <em>squared</em> so that it’s differentiable even at zero. The gradient of $||x||^2$ is $2x$, but without the square it’s $\frac{x}{||x||}$ (i.e. it just points away from zero). The problem is that it’s not differentiable <em>at</em> zero.</p>
+</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>Predictive DGM Model</p>
+<img src="https://ws2.sinaimg.cn/large/006tNc79gy1g1zvgeth6yj30so0o80ur.jpg" style="zoom:30%"></li>
+</ul>
+<h3 id="Naiive-Bayes"><a href="#Naiive-Bayes" class="headerlink" title="Naiive Bayes"></a>Naiive Bayes</h3><ul>
+<li><p>Model:</p>
+<ul>
+<li><p>Class $c \in{1, \ldots, K}$, and input $\mathbf{x}=\left[x_{1}, x_{2}, \ldots, x_{D}\right]^{\top}$</p>
+</li>
+<li><p>naiive bayes assume that $p(\mathbf{x} | c)=\prod_{j} p\left(x_{j} | c\right)$.         <em>Naive assumption: all features are independent</em></p>
+<img src="https://ws1.sinaimg.cn/large/006tNc79gy1g1zzdepvxmj30wm0i8aba.jpg" style="zoom:40%"></li>
+<li><p>Filled dots are deterministic parameters.  If we have priors, we can make parameters random variables (open circles)</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1g1zzipmzg9j318q0r0jvl.jpg" style="zoom:30%">  $\Longrightarrow$  <img src="https://ws2.sinaimg.cn/large/006tNc79gy1g1zzl4degbj313w0ten0o.jpg" style="zoom:30%"></p>
+</li>
+<li><p>Even the assumption for naiive bayes is so strong, it still works well?</p>
+<ul>
+<li><strong>Key idea:</strong> it works well when the local feature dependencies between the two classes “cancel out”.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>##Properties of Bayesian network</p>
+<ul>
+<li><p>Independence-Maps (I-maps)</p>
+<ul>
+<li><p>Theorem:</p>
+<p>Let $P$ be a joint distribution over $\mathcal{X}$ and $G$ be a Bayesian Network structure over $\mathcal{X}$. If $P$ factories according to $G$, then the <em>local independence assertation</em> $\mathcal{J}_l(G)\subseteq \mathcal{J(P)}$.</p>
+<ul>
+<li>The <strong>local Markov independence</strong> $\mathcal{J}<em>l(G)$ is the set of all basic conditional independence assertions of the form $\left{X</em>{i} \perp\left(X_{\text { nondesc }\left(x_{i}\right)} \backslash X_{\pi_{i}}\right) | X_{\pi_{i}}\right}$</li>
+</ul>
+</li>
+<li><p>Proof: </p>
+<ul>
+<li><p>$\mathcal{J}<em>l(G)\subseteq \mathcal{J(P)}$ means $p(X_i|X\setminus X_i)=p(X_i|X</em>{\pi_i})$<br>$$<br>\begin{align}<br>p(X_i|X\setminus X_i)=&amp;\frac{p(X_1, \cdots,X_N)}{P({X_1,\cdots, X_N}\setminus X_i)}\<br>&amp;=\frac{\prod\limits_{i=1}^N p(X_i|X_{\pi_i})}{\sum\limits_{X_i} \prod\limits_j p(X_j|X_{\pi_j})}\<br>&amp;=\frac{p(X_i|X_{\pi_i}) \prod\limits_j p(X_j|X_{\pi_j})}{\sum\limits_{X_i}p(X_i|X_{\pi_i}) \prod\limits_j p(X_j|X_{\pi_j})}\<br>&amp;=\frac{p(X_i|X_{\pi_i})}{\sum\limits_{X_i}p(X_i|X_{\pi_i})} \quad \text{because}\left{\sum\limits_{X_i}p(X_i|X_{\pi_i})=1\right}\<br>&amp;=p(X_i|X_{\pi_i})<br>\end{align}<br>$$</p>
+</li>
+<li><p>So, $\left{X_{i} \perp\left(X_{\text { nondesc }\left(x_{i}\right)} \backslash X_{\pi_{i}}\right) | X_{\pi_{i}}\right}$</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>Global Markov independence:</strong> </p>
+<ul>
+<li><p>Definition: the set of all independencies that correspond to d-seperation in graph $G$ is the set of global Markov independencies:<br>$$<br>\mathcal{J}(G)=\left{(X \perp Y | Z) : \operatorname{dsep}_{\mathrm{G}}(X ; Y | Z)\right}<br>$$</p>
+</li>
+<li><p><strong>Soundness:</strong></p>
+<ul>
+<li>Definition: if a distribution $P$ factorizes according to $G$, then $\mathcal{J}_l(G)\subseteq \mathcal{J(P)}$.</li>
+<li>i.e. two nodes are d-separated given $Z$, they are conditionally independent given $Z$.</li>
+</ul>
+</li>
+<li><p><strong>Completeness:</strong></p>
+<ul>
+<li>Definition: $P$ is <strong>faithful</strong> to $G$ if for any conditional independence $(X \perp Y | Z) \in \mathcal{J}(P)$, then $\operatorname{dsep}_{G}(X ; Y | Z)$.</li>
+<li>i.e. any independence can be reflect as a d-separation.</li>
+<li>Definition: <strong>weak completeness</strong></li>
+<li>Definition: <strong>almost completeness</strong></li>
+</ul>
+</li>
+<li><p><strong>How Powerful:</strong></p>
+<p>Can find a Bayes network to $G$ represent all conditional independencies for a given $P$?</p>
+<ul>
+<li>Minimal I-map: “no redundant edges”</li>
+<li>perfect map: </li>
+</ul>
+<p><strong>No</strong></p>
+</li>
+</ul>
+<img src="https://ws1.sinaimg.cn/large/006tNc79gy1g212h03612j30wu0gp0xs.jpg" style="zoom:50%"></li>
+</ul>
+<h1 id="Undirected-Graphical-Models-Markov-Random-Fields"><a href="#Undirected-Graphical-Models-Markov-Random-Fields" class="headerlink" title="Undirected Graphical Models (Markov Random Fields)"></a>Undirected Graphical Models (Markov Random Fields)</h1><p>##Undirected Graphical Models:</p>
+<p>UGM (MRF) or (Markov Network) is graph $\mathcal{G}(\mathcal{V},\mathcal{E})$, set of nodes and set of <u><strong>undirected</strong></u> edges</p>
+<ul>
+<li><p>Parameterization: via <strong><u>factors</u></strong>.</p>
+<ul>
+<li>Factor $\varphi(\mathcal{C})$ function map from set of variables to non-negative numbers.</li>
+</ul>
+</li>
+<li><p>Factorization:</p>
+<ul>
+<li><p>$$<br>p\left(x_{1}, \ldots, x_{N}\right)=\frac{1}{Z} \prod_{j=1}^{M} \varphi_{j}\left(\mathcal{C}_{j}\right)<br>$$</p>
+<blockquote>
+<p>DGM is $p\left(x_{1}, \ldots, x_{N}\right)=\prod\limits_{i=1}^{N} p\left(x_{i} | x_{i}\right)$</p>
+</blockquote>
+</li>
+</ul>
+<img src="https://ws2.sinaimg.cn/large/006tNc79gy1g213c8ln66j317a0u0gwk.jpg" style="zoom:40%">
+
+
+
+<ul>
+<li>just like DGM, UGM encode a set of conditional independence assertions.</li>
+</ul>
+</li>
+<li><p>Conditional Independence:</p>
+<ul>
+<li><p>3 Markov properties of UGMs:</p>
+<ol>
+<li><p><strong>Global Markov Property</strong></p>
+<ul>
+<li>$X_{A} \perp X_{B} | X_{C}$ iff $C$ separates $A$ from $B$.</li>
+<li><u>NO trails connect $A$ and $B$ when remove all nodes in $C$.</u></li>
+</ul>
+</li>
+<li><p><strong>Local Markov Property</strong></p>
+<ul>
+<li><p>Markov Blanket $\operatorname{mb}(X_s)$: set of nodes that renders a node $X_s$ conditionally independent of all the other nodes:<br>$$<br>X_{S} \perp \overbrace{\mathcal{V} \backslash\left{\mathrm{mb}\left(X_{S}\right), X_{S}\right}}^{\text{all other nodes in}\ G} | \mathrm{mb}\left(X_{S}\right)<br>$$</p>
+</li>
+<li><p>Markov blanket in UGM is the set of immediate neighbors</p>
+<ul>
+<li>node 和除了本身以及neighbors 的其他node 都 conditionally independent.  {due to <em>global Markov property</em>}</li>
+</ul>
+<blockquote>
+<p>Markov Blankets for a node $X_s$ in a <u>DGM</u> is the set of node’s parents, children, and co-parents (other parents of children).</p>
+</blockquote>
+<p><font color=#0099ff size=3 face="黑体">对ppt有疑问， p35 </font></p>
+</li>
+</ul>
+</li>
+<li><p><strong>Pairwise Markov Property</strong></p>
+<ul>
+<li>two nodes $X_s$ and $X_t$ are conditionally independent given the rest if there is no direct edge between them<br>$$<br>X_{s} \perp X_{t} | \mathcal{V} \backslash\left{X_{S}, X_{t}\right}, \text { where } \mathcal{E}_{s t}=\emptyset<br>$$<br>移除其他nodes后无直接连线</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p>relationship among  three properties.</p>
+<ul>
+<li><p><strong>Interrelated.</strong></p>
+</li>
+<li><p><strong>Global Markov $\Longrightarrow$ local Markov $\Longrightarrow$ Pairwise Markov $\Longrightarrow$ Global Markov</strong></p>
+<img src="https://ws3.sinaimg.cn/large/006tNc79gy1g21aej5tedj31jj0u0gwy.jpg" style="zoom:10%">
+
+<ul>
+<li>for positive distribution $p(\mathbb{x})&gt;0$, the three Markov properties are equavalent.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Parameterization-of-MRFs"><a href="#Parameterization-of-MRFs" class="headerlink" title="Parameterization of MRFs"></a>Parameterization of MRFs</h2><p>Aim: obtain a local parameterization of UGMs.</p>
+<blockquote>
+<p>For DGM:</p>
+<ul>
+<li><p>Local conditional probabilities: $p(x_i|x_{\pi_i})$</p>
+</li>
+<li><p>Joint probability is product of local conditional probabilities: $p\left(x_{1}, \ldots, x_{N}\right)=\prod_{i=1}^{N} p\left(x_{i} | x_{\pi_{i}}\right)$</p>
+</li>
+</ul>
+</blockquote>
+<p>But for UGM, difficult to obtain conditional probabilities since no topological ordering. So, discard conditional probabilities.</p>
+<p><strong>Represent the joint as a product of local functions.</strong></p>
+<ul>
+<li>Normalize</li>
+<li>Factors NOT represent marginal/conditional distributions</li>
+</ul>
+<h3 id="Gibbs-distribution"><a href="#Gibbs-distribution" class="headerlink" title="Gibbs distribution"></a>Gibbs distribution</h3><ul>
+<li><p>Definition: A distribution $P$ is a <u>Gibbs distribution</u> parameterized by a set of <u>factors</u> ${\varphi_1(\mathcal{C}<em>1), \varphi_2(\mathcal{C}<em>2),\cdots, \varphi_m(\mathcal{C}<em>m)}$, where<br>$$<br>p\left(x</em>{1}, x</em>{2}, \ldots, x</em>{N}\right)=\frac{1}{Z} \prod_{j=1}^{M} \varphi_{j}\left(\mathcal{C}_{j}\right)<br>$$</p>
+</li>
+<li><p>Factor:</p>
+<blockquote>
+<p>Two nodes $X_i$ and $X_j$ that are not directly linked in UGM are <u>conditionally independent</u> given all other nodes. [不直接相连的nodes是条件独立的]</p>
+<p>$\rightarrow$ Factorization of joint probability that places $X_i$ and $X_j$ in different factors.</p>
+</blockquote>
+<p>All nodes $X_C$ in a maximal clique $C$ in UGM form factor (local function) $\varphi(X_C)$</p>
+<ul>
+<li>Clique: a fully connected subset of nodes.</li>
+<li>Maximal Clique $C$: cliques that cannot be extended to include additional nodes </li>
+</ul>
+<p><strong>Hammersley-Clifford:</strong> a positive distribution $p(y)&gt;0$ satisfies the CI properties of undirected graph $\mathcal{H}$ iff $p$ can be represented as a product of factors, one per maimal clique:</p>
+<ul>
+<li><p>$$<br>p(\mathbf{y} | \boldsymbol{\theta})=\frac{1}{Z(\boldsymbol{\theta})} \prod_{c \in \mathcal{C}} \psi_{c}\left(\mathbf{y}<em>{c} | \boldsymbol{\theta}</em>{c}\right)<br>$$</p>
+<p>where $\mathcal{C}$ is the set of all the maimal liques; $\varphi_C(\cdot)$ is the factor or potential function of clique $c$; $\theta$ is the parameter of factors $\varphi_C(\cdot)$ for $c\in\mathcal{C}$; $Z(\boldsymbol{\theta})$ is the partition function $Z(\boldsymbol{\theta}) \triangleq \sum \prod\limits_{c \in \mathcal{C}} \psi_{c}\left(\mathbf{y}<em>{c} | \boldsymbol{\theta}</em>{c}\right)$.</p>
+<blockquote>
+<p>UGM <strong>NOT</strong> specify a unique factorization.</p>
+<p>Hammersley-Clifford is just one type of factorization.</p>
+</blockquote>
+</li>
+</ul>
+<p><strong>Pairwise MRF</strong>:</p>
+<ul>
+<li>parameretization to the edges of the graph, rather than maximal cliques. [每条边作为factor，不考虑maximal clique]</li>
+<li>SIMPLE but not general.</li>
+</ul>
+</li>
+<li><p>Properties:</p>
+<ul>
+<li><p>Independent set; Independence map (I-map); </p>
+</li>
+<li><p>Soundness</p>
+<ul>
+<li>if $P$ is a Gibbs distribution over $H$, then $H$ is an I-map for $P$.<ul>
+<li>Hammersley-Clifford states that if $H$ is an I-map for $P$, then $P$ is a Gibbs distribution over $H$ (for positive distribution)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Weak completeness</p>
+<ul>
+<li>if $X$ and $Y$ are not separated in $H$, then there is some distribution $P$ that factories over $H$ where $X$ and $Y$ are dependent.</li>
+</ul>
+</li>
+<li><p>How Powerful: <em>? represent all conditional independencies ?</em></p>
+<ul>
+<li><p>Perfect map: $\mathcal{J}(G)=\mathcal{J}(P)$</p>
+<img src="https://ws3.sinaimg.cn/large/006tNc79gy1g21d9saz2bj30vl0lzgnm.jpg" style="zoom:30%"></li>
+<li><p>UGM are NOT “richer” or “more powerful” than DGM.</p>
+</li>
+</ul>
+</li>
+</ul>
+<img src="https://ws2.sinaimg.cn/large/006tNc79gy1g21ddcvle3j30x50heael.jpg" style="zoom:50%"></li>
+<li><p><strong>representing Potential (local) function</strong></p>
+<ul>
+<li><p>Log potentials is a linear function of parameters:</p>
+</li>
+<li><p>$$<br>\log \psi_{c}\left(\mathbf{y}<em>{c}\right) \triangleq \phi</em>{c}\left(\mathbf{y}<em>{c}\right)^{T} \boldsymbol{\theta}</em>{c}<br>$$</p>
+<p>$\phi_C(y_C)$ is a <u>feature vector</u> derived from the values of the variables $y_C.$</p>
+<p>Then, <strong>log probability</strong> is<br>$$<br>\log p(\mathbf{y} | \boldsymbol{\theta})=\sum_{c} \phi_{c}\left(\mathbf{y}<em>{c}\right)^{T} \boldsymbol{\theta}</em>{c}-\log Z(\theta)<br>$$<br>also called <strong>“maximum entropy” or “log-linear” model.</strong></p>
+</li>
+</ul>
+</li>
+<li><p>every MRF is an [exponential family](#Exponential Family).</p>
+</li>
+</ul>
+<h2 id="Example-of-MRF"><a href="#Example-of-MRF" class="headerlink" title="Example of MRF"></a>Example of MRF</h2><p>Model:</p>
+<ul>
+<li>Ising and Potts (Depth Map from Stereo Images (Multi) or Binary Image Denosing)</li>
+</ul>
+<img src="https://ws1.sinaimg.cn/large/006tNc79gy1g21e3c4a9cj30a407vaar.jpg" style="zoom:70%">
+$$
+\begin{aligned} p(y, x | J, \theta) =p(\mathbf{y} | J) \prod_{t} p\left(x_{t} | y_{t}, \boldsymbol{\theta}\right) =\left[\frac{1}{Z(J)} \underbrace{\prod_{s \sim t} \psi\left(y_{s}, y_{t} ; J\right)}_{\text{Pairwise Potential}}\right] \underbrace{\prod_{t} p\left(x_{t} | y_{t}, \theta\right)}_{\text{Unary potential}} \end{aligned}
+$$
+<font color=#0099ff size=3 face="黑体">其实不太懂why </font>
+
+<h2 id="Parameter-Learning"><a href="#Parameter-Learning" class="headerlink" title="Parameter Learning"></a>Parameter Learning</h2><p>UGM (MRF) in <strong>log-linear form</strong>, where $c$ indexes the cliques:<br>$$<br>p(\mathbf{y} | \boldsymbol{\theta})=\frac{1}{Z(\boldsymbol{\theta})} \exp \left(\sum_{c} \boldsymbol{\theta}<em>{c}^{T} \boldsymbol{\phi}</em>{c}(\mathbf{y})\right)<br>$$<br>The <strong><u>scaled log-likelihood</u></strong> is given by<br>$$<br>\ell(\boldsymbol{\theta}) \triangleq \frac{1}{N} \sum_{i}^{N} \log p\left(\mathbf{y}<em>{i} | \boldsymbol{\theta}\right)=\frac{1}{N} \sum</em>{i}^{N}\left[\sum_{c} \boldsymbol{\theta}<em>{c}^{T} \boldsymbol{\phi}</em>{c}\left(\mathbf{y}_{i}\right)-\log Z(\boldsymbol{\theta})\right]<br>$$</p>
+<ul>
+<li><p>belongs to exponential family, </p>
+</li>
+<li><p><em><strong>convex</strong></em> function in $\theta$, so can find unique global maximum by gradient-based optimizers.</p>
+</li>
+<li><p>$$<br>\frac{\partial \ell}{\partial \boldsymbol{\theta}<em>{c}}=\frac{1}{N} \sum</em>{i}^{N}\left[\boldsymbol{\phi}<em>{c}\left(\mathbf{y}</em>{i}\right)-\frac{\partial}{\partial \boldsymbol{\theta}_{c}} \log Z(\boldsymbol{\theta})\right]<br>$$</p>
+<p><font color=#0099ff size=3 face="黑体">对ppt有疑问， p96， 怎么求的导？ </font></p>
+</li>
+<li><p>for exponential family distribution:</p>
+<ul>
+<li><p>$$<br>\mathbb{E}[s(x)]=\nabla \log Z(\eta)<br>$$</p>
+</li>
+<li><p>if $s(x)=x$ (natural exponential family), we can find moments of $x$ simply by differentiation.</p>
+</li>
+<li><p>the derivative of the log partition function w.r.t. $\theta_c$ is the expectation of the $c^{th}$ feature under the model:</p>
+</li>
+<li><p>$$<br>\frac{\partial \log Z(\boldsymbol{\theta})}{\partial \theta_{c}}=\mathbb{E}\left[\phi_{c}(\mathbf{y}) | \boldsymbol{\theta}\right]=\sum_{\mathbf{y}} \phi_{c}(\mathbf{y}) p(\mathbf{y} | \boldsymbol{\theta})<br>$$</p>
+</li>
+<li><p>Proof: </p>
+</li>
+<li><p>$$<br>\begin{align}<br>\frac{\partial \log Z(\theta)}{\partial \theta_{c}} &amp;= \frac{1}{Z(\theta)} \frac{\partial Z(\theta)}{\partial \theta_{c}}, \quad \text { where } \quad Z(\theta) = \sum_{y} \exp \left(\sum_{c} \theta_{c}^{T} \phi_{c}(y)\right)\<br>\Rightarrow \frac{\partial Z(\theta)}{\partial \theta_{c}} &amp;= \sum_{y} \exp \left(\sum_{c} \theta_{c}^{T} \phi_{c}(y)\right) \phi_{c}(y)\<br>\Rightarrow \frac{\partial \log Z(\theta)}{\partial \theta_{c}} &amp;= \frac{1}{Z(\theta)} \sum_{y} \phi_{c}(y) \exp \left(\sum_{c} \theta_{c}^{T} \phi_{c}(y)\right) =\sum_{y} \phi_{c}(y) \underbrace{\frac{1}{Z(\theta)} \exp \left(\sum_{c} \theta_{c}^{T} \phi_{c}(y)\right)}<em>{p(y|\theta)} = \sum</em>{y} \phi_{c}(y) p(y | \theta)<br>\end{align}<br>$$</p>
+</li>
+<li><p>So, the gradient of the log-likelihood is </p>
+</li>
+<li><p>$$<br>\frac{\partial \ell}{\partial \boldsymbol{\theta}<em>{c}}=\left[\underbrace{\frac{1}{N} \sum</em>{i}^{N} \boldsymbol{\phi}<em>{c}\left(\mathbf{y}</em>{i}\right)}<em>{\text{Clamped term}}\right] - \underbrace{\mathbb{E}\left[\boldsymbol{\phi}</em>{c}(\mathbf{y})\right]}_{\text{Unclamped/contrastive term}}<br>$$</p>
+<p>Clamped term: $y$ is fixed to its observed values; Unclamped/contrastive term: $y$ is a free variable.</p>
+<p>Unclamped term requires <em><strong>inference</strong></em> in the model, <u>once per gradient step</u>, and this makes UGM learning much <u><strong>slower</strong></u> than DGM. </p>
+</li>
+<li><p>Gradient of log-likelihood rewrite:</p>
+</li>
+<li><p>$$<br>\frac{\partial l}{\partial \theta_{c}}=E_{p_{e m p}}\left[\phi_{c}(y)\right]-E_{p(y | \theta)}\left[\phi_{c}(y)\right]<br>$$</p>
+<ul>
+<li> $E_{p_{e m p}}\left[\phi_{c}(y)\right]=\frac{1}{N} \sum_{n=1}^{N} \phi_{c}\left(y_{i}\right)$ : Expected feature vector according to empirical distribution.</li>
+<li>$E_{p(y | \theta)}\left[\phi_{c}(y)\right]$ : Expected feature vector according to <u>model’s distribution.</u></li>
+</ul>
+<p>At optimum, gradient =0, i.e. $E_{p(y | \theta)}\left[\phi_{c}(y)\right]=\sum_{y} \phi_{c}(y) p(y | \theta)$. But this equation cannot solve for unknown $\theta$.</p>
+</li>
+<li><p><strong>Solution</strong>: Gradient-based optimizers.</p>
+</li>
+<li><p>$$<br>\frac{\partial l}{\partial \theta_{c}}=E_{p_{e m p}}\left[\phi_{c}(y)\right]-E_{p(y | \theta)}\left[\phi_{c}(y)\right]<br>$$</p>
+<p>But, when computing $E_{p(y | \theta)}\left[\phi_{c}(y)\right]$ requires sum over all states of $y$ , which is <u>intractable</u>.</p>
+</li>
+<li><p><strong>Solution:</strong> combine <u>approximate inference</u> with <u>gradient-based learning</u>. i.e. <strong>Stochastic Maximum Likelihood</strong></p>
+</li>
+</ul>
+</li>
+<li><p><strong>Stochastic Maximum Likelihood:</strong></p>
+<p><u>iteratively update</u>s the parameter $\theta_{k+1}$ at the $k$ step using the parameter and gradient from previous step:<br>$$<br>\theta_{k+1} \leftarrow \theta_{k}-\eta g_{k}<br>$$<br>where $\eta$ is step size or learning rate, $g_k\approx \frac{\part l}{\part \theta_C}$ is the gradient that can be approximated with <u><em>Markov Chain Monte Carlo (MCMC), sampling.</em></u></p>
+<img src="https://ws1.sinaimg.cn/large/006tNc79gy1g22b3j4or3j31p00u07wh.jpg" style="zoom:30%"></li>
+<li><p><strong>Maximum A posterior (MAP):</strong> </p>
+<ul>
+<li><p>add prior:</p>
+</li>
+<li><p>$$<br>\underset{\theta}{\operatorname{argmax}}\left{\sum_{i} \log p\left(y_{i} | \theta\right)+\log \underbrace{p(\theta)}_{\text{prior}}\right}<br>$$</p>
+<p>Choose prior with hyper-parameters.</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Conditional-Random-Fields-CRF"><a href="#Conditional-Random-Fields-CRF" class="headerlink" title="Conditional Random Fields (CRF)"></a>Conditional Random Fields (CRF)</h2><p>CRF or discriminative random field</p>
+<ul>
+<li><p>a version of MRF where <u>all the clique potentials are conditioned on input feature</u> $X$:</p>
+</li>
+<li><p>$$<br>p(\mathbf{y} | \mathbf{x}, \mathbf{w})=\frac{1}{Z(\mathbf{x}, \mathbf{w})} \prod_{c} \psi_{c}\left(\mathbf{y}_{c} | \mathbf{x}, \mathbf{w}\right)<br>$$</p>
+<ul>
+<li><p><u>Log-linear representation of potentials:</u> </p>
+</li>
+<li><p>$$<br>\psi_{c}\left(\mathbf{y}<em>{c} | \mathbf{x}, \mathbf{w}\right)=\exp \left(\mathbf{w}</em>{c}^{T} \boldsymbol{\phi}\left(\mathbf{x}, \mathbf{y}_{c}\right)\right)<br>$$</p>
+<p>where $\phi(\mathbb{x}, y_C)$ is a feature vector derived from the global inputs $X$ and the local set of labels $Y_C$.</p>
+</li>
+</ul>
+<img src="https://ws1.sinaimg.cn/large/006tNc79gy1g22bmtv4dqj31kc0u04q6.jpg" style="zoom:30%"></li>
+<li><p>Advantages: (compare to generative models)</p>
+<ul>
+<li>No need to waste resources, i.e. modelling things that we can always observe.<ul>
+<li>Focus our attention on modeling what we care about, i.e. the distribution of labels given the data. </li>
+</ul>
+</li>
+<li>We can make the potentials (or factors) of the model be data-dependent. <ul>
+<li>e.g., in natural language processing problems, we can make the latent labels depend on global properties of the sentence, such as which language it is written in. </li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Disadvantages:</p>
+<ul>
+<li>require labeled training data</li>
+<li>learning is slower.</li>
+</ul>
+</li>
+<li><p>Parameter learning:</p>
+<p>Consider CRF in log-linear form:<br>$$<br>p(\mathbf{y} | \mathbf{x}, \mathbf{w})=\frac{1}{Z(\mathbf{x}, \mathbf{w})} \prod_{c} \exp \left(\mathbf{w}<em>{c}^{T} \phi</em>{c}\left(\mathbf{x}, \mathbf{y}<em>{c}\right)\right)<br>$$<br>where $\phi</em>{c}\left(\mathrm{x}, y_{c}\right)$ is a feature vector derived from the global inputs $\mathbb{x}$ and the local set of labels $y_c$.</p>
+<p>Scaled log-likelihood:<br>$$<br>\begin{aligned} \ell(\mathbf{w}) &amp; \triangleq \frac{1}{N} \sum_{i}^{N} \log p\left(\mathbf{y}<em>{i} | \mathbf{x}</em>{i}, \mathbf{w}\right) =\frac{1}{N} \sum_{i}^{N}\left[\sum_{c} \mathbf{w}<em>{c}^{T} \boldsymbol{\phi}</em>{c}\left(\mathbf{y}<em>{i}, \mathbf{x}</em>{i}\right)-\log Z\left(\mathbf{w}, \mathbf{x}<em>{i}\right)\right] \end{aligned}<br>$$<br>Gradient:<br>$$<br>\frac{\partial \ell}{\partial \mathbf{w}</em>{c}} =\frac{1}{N} \sum_{i}^{N}\left[\boldsymbol{\phi}<em>{c}\left(\mathbf{y}</em>{i}, \mathbf{x}<em>{i}\right)-\frac{\partial}{\partial \mathbf{w}</em>{c}} \log Z\left(\mathbf{w}, \mathbf{x}<em>{i}\right)\right] =\frac{1}{N} \sum</em>{i}^{N}\left[\boldsymbol{\phi}<em>{c}\left(\mathbf{y}</em>{i}, \mathbf{x}<em>{i}\right)-\mathbb{E}\left[\boldsymbol{\phi}</em>{c}\left(\mathbf{y}, \mathbf{x}<em>{i}\right)\right]\right]<br>$$<br>​                                                    Need labeled pairs of data $(y_i,x_i)</em>{i=1}^N$ for learning. And $\mathbb{E}\left[\boldsymbol{\phi}<em>{c}\left(\mathbf{y}, \mathbf{x}</em>{i}\right)\right] =\sum_{\mathbb{y}, \mathbb{x}<em>{i}} p\left(\mathbb{y} | \mathbb{x}</em>{i}, \mathbb{w}\right) \boldsymbol{\phi}<em>{c}\left(\mathbb{y}, \mathbb{x}</em>{i}\right)$</p>
+<ul>
+<li>depend on inputs $\mathbb{x}_i$</li>
+<li>Need <em>inference</em> for every single training case inside each gradient step, which is $O(N)$ times slower than MRF.</li>
+<li>Also use MAP to estimate unknown parameter $\underset{w}{\operatorname{argmax}}\left{\sum \log p\left(y_{i} | x_{i}, w\right)+\log p(w)\right}$ by choosing a prior.</li>
+</ul>
+</li>
+</ul>
+<h2 id="Probabilistic-inference"><a href="#Probabilistic-inference" class="headerlink" title="Probabilistic inference"></a>Probabilistic inference</h2><p>calculate $p(X_F|X_E)$ for arbitrary subset $E$ and $F$</p>
+<hr>
+<p><font color=#0099ff size=3 face="黑体">黑体 </font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>Xiaoxue Zhang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://zhang-xiaoxue.github.io/2020/06/30/Machine%20Learning/Uncertainty_Modelling_in_AI/" title="Uncertainty Modelling in AI">https://zhang-xiaoxue.github.io/2020/06/30/Machine Learning/Uncertainty_Modelling_in_AI/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/04/30/Reinforcement%20Learning/3_RL_algorithms/" rel="prev" title="3. RL algorithms">
+                  <i class="fa fa-chevron-left"></i> 3. RL algorithms
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/06/30/Chance%20Constraints/Chance%20Constrained%20Problem/" rel="next" title="Chance Constrained Problem">
+                  Chance Constrained Problem <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+<script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xiaoxue Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div><script color="0,0,255" opacity="0.5" zIndex="-1" count="199" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{&quot;enable&quot;:true,&quot;tags&quot;:&quot;none&quot;,&quot;single_dollars&quot;:true,&quot;cjk_width&quot;:0.9,&quot;normal_width&quot;:0.6,&quot;append_css&quot;:true,&quot;js&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;mathjax@3.1.4&#x2F;es5&#x2F;tex-mml-chtml.js&quot;}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

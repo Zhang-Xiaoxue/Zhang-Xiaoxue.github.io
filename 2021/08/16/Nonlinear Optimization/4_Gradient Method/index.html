@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/Academy-favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Academy-favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/Academy-favicon.png">
+  <link rel="mask-icon" href="/images/Academy-favicon" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;zhang-xiaoxue.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Muse&quot;,&quot;version&quot;:&quot;8.4.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;right&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;Searching...&quot;,&quot;empty&quot;:&quot;We didn&#39;t find any results for the search: ${query}&quot;,&quot;hits_time&quot;:&quot;${hits} results found in ${time} ms&quot;,&quot;hits&quot;:&quot;${hits} results found&quot;}}</script>
+<meta name="description" content="4.1 Unconstrained OptimizationDescent direction: direction $\mathbf d$ such that $\langle \nabla f(x^*), d\rangle &lt;0 $. Steepest decent direction: direction $\mathbf d$ such that $\mathbf d^* &#x3D; - \">
+<meta property="og:type" content="article">
+<meta property="og:title" content="4. Gradient Method">
+<meta property="og:url" content="https://zhang-xiaoxue.github.io/2021/08/16/Nonlinear%20Optimization/4_Gradient%20Method/index.html">
+<meta property="og:site_name" content="Xiaoxue Zhang - NUS">
+<meta property="og:description" content="4.1 Unconstrained OptimizationDescent direction: direction $\mathbf d$ such that $\langle \nabla f(x^*), d\rangle &lt;0 $. Steepest decent direction: direction $\mathbf d$ such that $\mathbf d^* &#x3D; - \">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-08-16T04:00:00.000Z">
+<meta property="article:modified_time" content="2021-08-16T07:01:06.560Z">
+<meta property="article:author" content="Xiaoxue Zhang">
+<meta property="article:tag" content="Reinforcement Learning, Optimization and Control, Intellegent Systems">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zhang-xiaoxue.github.io/2021/08/16/Nonlinear%20Optimization/4_Gradient%20Method/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;en&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;zhang-xiaoxue.github.io&#x2F;2021&#x2F;08&#x2F;16&#x2F;Nonlinear%20Optimization&#x2F;4_Gradient%20Method&#x2F;&quot;,&quot;path&quot;:&quot;2021&#x2F;08&#x2F;16&#x2F;Nonlinear Optimization&#x2F;4_Gradient Method&#x2F;&quot;,&quot;title&quot;:&quot;4. Gradient Method&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>4. Gradient Method | Xiaoxue Zhang - NUS</title><script src="/js/config.js"></script>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Xiaoxue Zhang - NUS</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">NUS Ph.D.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#4-1-Unconstrained-Optimization"><span class="nav-number">1.</span> <span class="nav-text">4.1 Unconstrained Optimization</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-1-convergence-rate-for-unconstrained-quadratic-minimization"><span class="nav-number">1.1.</span> <span class="nav-text">4.1.1 convergence rate for unconstrained quadratic minimization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-2-Convergence-rate-for-strongly-convex-function"><span class="nav-number">1.2.</span> <span class="nav-text">4.1.2 Convergence  rate for strongly convex function</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-2Line-search-strategies"><span class="nav-number">2.</span> <span class="nav-text">4.2Line search strategies</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-3-Accelerated-proximal-gradient"><span class="nav-number">3.</span> <span class="nav-text">4.3 Accelerated proximal gradient</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Xiaoxue Zhang"
+      src="/images/photo_blue.jpg">
+  <p class="site-author-name" itemprop="name">Xiaoxue Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Zhang-Xiaoxue" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Zhang-Xiaoxue" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:xiaoxuezhang@u.nus.edu" title="E-Mail → mailto:xiaoxuezhang@u.nus.edu" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.linkedin.com/in/xiaoxue-zhang-5233b611a/" title="https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;xiaoxue-zhang-5233b611a&#x2F;" rel="noopener" target="_blank">Linkedin</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.zhihu.com/people/lisnol" title="https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;lisnol" rel="noopener" target="_blank">知乎</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/Zhang-Xiaoxue" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zhang-xiaoxue.github.io/2021/08/16/Nonlinear%20Optimization/4_Gradient%20Method/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/photo_blue.jpg">
+      <meta itemprop="name" content="Xiaoxue Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Xiaoxue Zhang - NUS">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          4. Gradient Method
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-08-16 12:00:00 / Modified: 15:01:06" itemprop="dateCreated datePublished" datetime="2021-08-16T12:00:00+08:00">2021-08-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Nonlinear-Optimization/" itemprop="url" rel="index"><span itemprop="name">Nonlinear Optimization</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="4-1-Unconstrained-Optimization"><a href="#4-1-Unconstrained-Optimization" class="headerlink" title="4.1 Unconstrained Optimization"></a>4.1 Unconstrained Optimization</h1><p>Descent direction: direction $\mathbf d$ such that $\langle \nabla f(x^*), d\rangle &lt;0 $.</p>
+<p>Steepest decent direction: direction $\mathbf d$ such that $\mathbf d^* = - \nabla f(x^*)$.</p>
+<p><strong>Steepest descent method with exact line search:</strong></p>
+<p>[step 0]</p>
+<p>[step k]</p>
+<p>steepest descent method follows a zig-zag path towards $\mathbf x^*$ with the right angle at each turn. $\longrightarrow$ slow</p>
+<p>Theorem:</p>
+<p>Steepest descent method with exact line search moves in perpendicular steps. More precisely, if $\mathbf x^{(k)}$ is a steepest descent sequence for a function $f(\mathbf x)$, then for each $k$, the vector joining $\mathbf x^{(k)}$ to $\mathbf x^{(k+1)}$ (i.e. $\mathbf x^{(k+1)} - \mathbf x^{(k)}$) is orthogonal (perpendicular) to the vector joining $\mathbf x^{(k+1)}$ to $\mathbf x^{(k+2)}$ (i.e. $\mathbf x^{(k+2)}-\mathbf x^{(k+1)}$).</p>
+<p>Property:</p>
+<ul>
+<li>monotonic decreasing property</li>
+<li>convergence<ul>
+<li>limit of  any convergent subsequence of ${\mathbf x^{(k)}}$ is a critical point of $f(\mathbf x)$.</li>
+</ul>
+</li>
+</ul>
+<h2 id="4-1-1-convergence-rate-for-unconstrained-quadratic-minimization"><a href="#4-1-1-convergence-rate-for-unconstrained-quadratic-minimization" class="headerlink" title="4.1.1 convergence rate for unconstrained quadratic minimization"></a>4.1.1 convergence rate for unconstrained quadratic minimization</h2><p>$$<br>\min_{\mathbf x\in \mathbb R^n} q(\mathbf x)=\frac{1}{2}\mathbf x^T \mathbf Q \mathbf x<br>$$</p>
+<p>Proposition:</p>
+<p>$\mathbf Q$ is symmetric and positive definite, use steepest descent method with exact line search,</p>
+<ol>
+<li><p>Let $\mathbf d^k = \nabla q(\mathbf x^k)=\mathbf Q \mathbf x^k$.<br>$$<br>\frac{q\left(\mathrm{x}^{k+1}\right)}{q\left(\mathrm{x}^{k}\right)}= 1-\frac{\left\langle\mathrm{d}^{k}, \mathrm{d}^{k}\right\rangle^{2}}{\left\langle\mathrm{d}^{k}, \mathrm{Qd}^{k}\right\rangle\left\langle\mathrm{d}^{k}, \mathrm{Q}^{-1} \mathrm{d}^{k}\right\rangle}<br>$$</p>
+</li>
+<li><p>$$<br>\frac{q\left(\mathrm{x}^{(k+1)}\right)}{q\left(\mathrm{x}^{(k)}\right)} \leq\left[\frac{\kappa(\mathrm{Q})-1}{\kappa(\mathrm{Q})+1}\right]^{2}=: \rho(\mathrm{Q})<br>$$</p>
+<p>where $\kappa(\mathrm{Q})=\lambda_n / \lambda_1$, $\lambda_n, \lambda_1$ are the largest and smallest eigenvalues of $\mathbf Q$.  </p>
+</li>
+</ol>
+<p>Remark.</p>
+<ul>
+<li><p>the convergence rate $\rho(\mathbf Q)$ depends on $\kappa(\mathbf Q)$. When $\kappa(\mathbf Q)$ is large, the convergence rate<br>$$<br>\rho(\mathbf Q) \approx 1-\frac{4}{\kappa(\mathbf Q)}<br>$$</p>
+</li>
+<li><p>In $\mathbb R^2$, the contours of $q(\mathbf x)$ are ellipses. And $\kappa(\mathbf Q)$ is the ratio between the length of the principal axes of the ellipses. Thus the larger the value of $\kappa(\mathbf Q)$, the more elongated the ellipses are.</p>
+</li>
+<li><p>The number of iterations needed to reduce the relative error $q(\mathbf x^k)/q(\mathbf x^0)$ to smaller than $\epsilon$ is given by<br>$$<br>k=\left[ \frac{\log \epsilon}{\log \rho(\mathbf Q)} \right] + 1<br>$$<br>where $[a]$ denotes the largest integer less than or equal to $a$.</p>
+</li>
+</ul>
+<h2 id="4-1-2-Convergence-rate-for-strongly-convex-function"><a href="#4-1-2-Convergence-rate-for-strongly-convex-function" class="headerlink" title="4.1.2 Convergence  rate for strongly convex function"></a>4.1.2 Convergence  rate for strongly convex function</h2><p>$f$: strongly convex with parameter $m$ and has $M$-Lipschitz continuous gradient. Its Hessian:<br>$$<br>mI \preceq H_f (\mathbf x) \preceq MI, \forall \mathbf x\in S<br>$$<br>Lemma:</p>
+<p>$\mathbf x^*$ is minimizer of $\min{f(\mathbf x)| \mathbf x \in S}$. Then<br>$$<br>f(\mathrm{x})-\frac{1}{2 m}|\nabla f(\mathrm{x})|^{2} \leq f\left(\mathrm{x}^{*}\right) \leq f(\mathrm{x})-\frac{1}{2 M}|\nabla f(\mathrm{x})|^{2} \quad \forall \mathrm{x} \in S<br>$$<br>Theorem:</p>
+<p>Let $\mathbf x^*$ be unique minimizer. $E_k = f(\mathbf x^k) - f(\mathbf x^*)$. Then<br>$$<br>\begin{aligned} E_{k+1} &amp; \leq E_{k}-\frac{1}{2 M}\left|\nabla f\left(\mathrm{x}^{k}\right)\right|^{2} \quad \text { (descent inequality) } \ E_{k+1} &amp; \leq E_{k}\left(1-\frac{m}{M}\right) \end{aligned}<br>$$<br>Remark:</p>
+<p>based on this theorem, we have<br>$$<br>{\qquad E\left(\mathrm{x}^{k+1}\right) / E\left(\mathrm{x}^{1}\right) \leq(1-m / M)^{k} \leq \varepsilon}<br>$$<br>implies that we need the number of iterations $k$ to satisfy<br>$$<br>{\left.\qquad k \geq \frac{\log \varepsilon^{-1}}{\log \rho^{-1}} \approx \frac{m}{M} \log \varepsilon^{-1} \quad \text { (if } m / M \ll 1\right)}<br>$$<br>where $\rho = 1-m/M$.</p>
+<h1 id="4-2Line-search-strategies"><a href="#4-2Line-search-strategies" class="headerlink" title="4.2Line search strategies"></a>4.2Line search strategies</h1><ol>
+<li>minimization rule = exact line search</li>
+<li>Armijo rule</li>
+<li>nonmonotone line search</li>
+<li>monotone line search , BB stepsize</li>
+</ol>
+<h1 id="4-3-Accelerated-proximal-gradient"><a href="#4-3-Accelerated-proximal-gradient" class="headerlink" title="4.3 Accelerated proximal gradient"></a>4.3 Accelerated proximal gradient</h1><p>smooth convex function $f$ with $L$-Lipstchitz continuous gradient<br>$$<br>\min { F(x):= f(x)+g(x) | x\in \mathbb R^n }<br>$$<br>$g$ is proper closed convex function (maybe non-differentiable).</p>
+<p>Problem:<br>$$<br>\hat x = \mathrm{argmin} {g(x)+q(x;\bar x) | x\in \mathbb R^n }<br>$$<br>where $q(x;\bar x) =  f(\bar x) + \langle \nabla f(\bar x), x-\bar x\rangle + \frac{1}{2} \langle x-\bar x, H(x-\bar x) \rangle $.</p>
+<p>APG method</p>
+<p>[step 1]</p>
+<p>[step 2]</p>
+<p>Lemma:</p>
+<p>Assume $f(\hat x) \le q(\hat x; \bar x)$. The descent property:<br>$$<br>F(x)+\frac{1}{2}|x-\bar{x}|<em>{H}^{2} \geq F(\hat{x})+\frac{1}{2}|x-\hat{x}|</em>{H}^{2} \quad \forall x \in \mathbb{R}^{n}<br>$$<br>(the assumption $\Longrightarrow$ 1-Lipschitz continuous )</p>
+<p><strong>Theorem</strong></p>
+<p>Error</p>
+<p>complexity</p>
+<p>Two for PG and APG</p>
+<blockquote>
+<p>example:</p>
+<ol>
+<li><p>Sparse regression problem $\min{\frac{1}{2} |Ax-b|^2 + \rho|x|_1 | x\in \mathbb R^n }$. Let $f(x) = \frac{1}{2} |Ax-b|^2$ and $g(x) = \rho|x|<em>1$. $\nabla f(x) = A^T(Ax-b)$ is Lipschitz continuous with modulus $L=\lambda</em>{\max}(AA^T)$. Let $H=LI_n$, the APG method subproblem is given by<br>$$<br>x^{k+1}=\operatorname{argmin}\left{g(x)+\left\langle\nabla f\left(\bar{x}^{k}\right), x-\bar{x}^{k}\right\rangle+\frac{L}{2}\left|x-\bar{x}^{k}\right|^{2} | x \in \mathbb{R}^{n}\right}<br>$$</p>
+</li>
+<li><p>given $G\in \mathbb S^n$. Projection onto the closed convex cone $\mathrm{DNN}<em>n^* = \mathbb S</em>+^n + \mathcal N^n$:<br>$$<br>\begin{array}{l}{\min \left{\frac{1}{2}|S+Z-G|^{2} | S \in \mathbb{S}<em>{+}^{n}, Z \in \mathcal{N}^n \right} }\ {=\min \left{\frac{1}{2}\left|\Pi</em>{\mathcal{N}^{n}}(S-G)\right|^{2} | S \in \mathbb{S}<em>{+}^{n}\right}} \ {=\min \left{f(S)+\delta</em>{\mathrm{S}<em>{+}^{n}}(S) | S \in \mathbb{S}^{n}\right}}\end{array}<br>$$<br>where $f(S)=\frac{1}{2} | \Pi</em>{\mathcal N^n} (S-G) |^2$. The optimality condition for a minimizer $\bar S$ of the last minimization problem is given as follows:<br>$$<br>\begin{array}{l}{0 \in \partial\left(f+\delta_{\mathrm{S}<em>{+}^{n}}\right)(\bar{S})=\partial f(\bar{S})+\partial \delta</em>{\mathrm{S}<em>{+}}^{\mathrm{n}}(\bar{S})} \ {\Leftrightarrow-\nabla f(\bar{S}) \in \partial \delta</em>{\mathrm{S}<em>{+}}^{n}(\bar{S})} \ {\Leftrightarrow-\nabla f(\bar{S}) \in\left(I+\partial \delta</em>{\mathrm{S}<em>{+}}\right)(\bar{S})} \ {\Leftrightarrow \bar{S}=\left(I+\partial \delta</em>{\mathrm{S}<em>{+}}\right)^{-1}(\bar{S}-\nabla f(\bar{S}))=\Pi</em>{\mathrm{S}<em>{+}^{n}}(\bar{S}-\nabla f(\bar{S}))} \<br>\end{array}<br>$$<br>we have $\nabla f(S) = \Pi</em>{mathcal N^n}(S-G)$, and<br>$$<br>{\begin{aligned}|\nabla f(S)-\nabla f(S)| &amp;=\left|\Pi_{N^{n}}(S-G)-\Pi_{\mathcal{N}^{n}}\left(S^{\prime}-G\right)\right| \ &amp; \leq\left|(S-G)-\left(S^{\prime}-G\right)\right|=\left|S-S^{\prime}\right| \end{aligned}}<br>$$<br>Thus $∇f(·)$ is Lipschitz continuous with modulus $L = 1$. Pick $H = LI_n$, the APG subproblem is given by<br>$$<br>\begin{aligned} S^{k+1} &amp;=\operatorname{argmin}\left{\delta_{\mathrm{S}<em>{+}^{n}}(S)+\left\langle\nabla f\left(\bar{S}^{k}\right), S-\bar{S}^{k}\right\rangle+\frac{1}{2}\left|S-\bar{S}^{k}\right|^{2} | S \in \mathbb{S}^{n}\right} \ &amp;=\operatorname{argmin}\left{\frac{1}{2}\left|S-\bar{S}^{k}+\nabla f\left(\bar{S}^{k}\right)\right|^{2} | S \in \mathbb{S}</em>{+}^{n}\right} \ &amp;=\prod_{\mathrm{S}_{+}^{n}}\left(\bar{S}^{k}-\nabla f\left(\bar{S}^{k}\right)\right) \end{aligned}<br>$$<br>Observe that the subproblem is like carrying out a fixed-point iteration on the optimality condition.</p>
+</li>
+</ol>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>Xiaoxue Zhang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://zhang-xiaoxue.github.io/2021/08/16/Nonlinear%20Optimization/4_Gradient%20Method/" title="4. Gradient Method">https://zhang-xiaoxue.github.io/2021/08/16/Nonlinear Optimization/4_Gradient Method/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/08/16/Nonlinear%20Optimization/5_Basic%20Nonlinear%20Programming/" rel="prev" title="5. Basic Nonlinear Programming">
+                  <i class="fa fa-chevron-left"></i> 5. Basic Nonlinear Programming
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/08/16/Nonlinear%20Optimization/2_Introduction/" rel="next" title="2. Introduction">
+                  2. Introduction <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+<script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xiaoxue Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div><script color="0,0,255" opacity="0.5" zIndex="-1" count="199" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{&quot;enable&quot;:true,&quot;tags&quot;:&quot;none&quot;,&quot;single_dollars&quot;:true,&quot;cjk_width&quot;:0.9,&quot;normal_width&quot;:0.6,&quot;append_css&quot;:true,&quot;js&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;mathjax@3.1.4&#x2F;es5&#x2F;tex-mml-chtml.js&quot;}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

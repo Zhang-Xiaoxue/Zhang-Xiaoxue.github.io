@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/Academy-favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Academy-favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/Academy-favicon.png">
+  <link rel="mask-icon" href="/images/Academy-favicon" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;zhang-xiaoxue.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Muse&quot;,&quot;version&quot;:&quot;8.4.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;right&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;Searching...&quot;,&quot;empty&quot;:&quot;We didn&#39;t find any results for the search: ${query}&quot;,&quot;hits_time&quot;:&quot;${hits} results found in ${time} ms&quot;,&quot;hits&quot;:&quot;${hits} results found&quot;}}</script>
+<meta name="description" content="3.1 Convex setTo prove a given set C is convex  For any two arbitrary points $\mathbb x, \mathbb y$ in $C$, and any $λ ∈ [0, 1]$.  Method is to argue that $λx + (1 − λ)y ∈ C$ If $C_1, C_2, \cdots, C_m">
+<meta property="og:type" content="article">
+<meta property="og:title" content="3. Convex Analysis">
+<meta property="og:url" content="https://zhang-xiaoxue.github.io/2021/08/16/Nonlinear%20Optimization/3_Basic%20Convex%20Analysis/index.html">
+<meta property="og:site_name" content="Xiaoxue Zhang - NUS">
+<meta property="og:description" content="3.1 Convex setTo prove a given set C is convex  For any two arbitrary points $\mathbb x, \mathbb y$ in $C$, and any $λ ∈ [0, 1]$.  Method is to argue that $λx + (1 − λ)y ∈ C$ If $C_1, C_2, \cdots, C_m">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/006y8mN6gy1g8bm0hlukmj31ac0quadl.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/006y8mN6gy1g8bxmx5c3yj30ty0myjuf.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/006y8mN6gy1g8bzu9dz8xj31aq0dqq6s.jpg">
+<meta property="article:published_time" content="2021-08-16T04:00:00.000Z">
+<meta property="article:modified_time" content="2021-08-16T07:00:44.741Z">
+<meta property="article:author" content="Xiaoxue Zhang">
+<meta property="article:tag" content="Reinforcement Learning, Optimization and Control, Intellegent Systems">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/006y8mN6gy1g8bm0hlukmj31ac0quadl.jpg">
+
+
+<link rel="canonical" href="https://zhang-xiaoxue.github.io/2021/08/16/Nonlinear%20Optimization/3_Basic%20Convex%20Analysis/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;en&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;zhang-xiaoxue.github.io&#x2F;2021&#x2F;08&#x2F;16&#x2F;Nonlinear%20Optimization&#x2F;3_Basic%20Convex%20Analysis&#x2F;&quot;,&quot;path&quot;:&quot;2021&#x2F;08&#x2F;16&#x2F;Nonlinear Optimization&#x2F;3_Basic Convex Analysis&#x2F;&quot;,&quot;title&quot;:&quot;3. Convex Analysis&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>3. Convex Analysis | Xiaoxue Zhang - NUS</title><script src="/js/config.js"></script>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Xiaoxue Zhang - NUS</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">NUS Ph.D.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#3-1-Convex-set"><span class="nav-number">1.</span> <span class="nav-text">3.1 Convex set</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-2-Convex-function"><span class="nav-number">2.</span> <span class="nav-text">3.2 Convex function</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-1-Prove-convexity-of-a-function"><span class="nav-number">2.1.</span> <span class="nav-text">3.2.1 Prove convexity of a function</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-2-Equivalent-statement-of-convex-function"><span class="nav-number">2.2.</span> <span class="nav-text">3.2.2 Equivalent statement of convex function</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-3-Strongly-Convex-Function"><span class="nav-number">2.3.</span> <span class="nav-text">3.2.3 Strongly Convex Function</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-3-Unconstrained-Programming"><span class="nav-number">3.</span> <span class="nav-text">3.3 Unconstrained Programming</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-1-Unconstrained-Convex-Programming"><span class="nav-number">3.1.</span> <span class="nav-text">3.3.1 Unconstrained Convex Programming</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-2-Unconstrained-Convex-Quadratic-Programming"><span class="nav-number">3.2.</span> <span class="nav-text">3.3.2 Unconstrained Convex Quadratic Programming</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-4-Constrained-Convex-Programming"><span class="nav-number">4.</span> <span class="nav-text">3.4 Constrained Convex Programming</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-1-Minimizer"><span class="nav-number">4.1.</span> <span class="nav-text">3.4.1 Minimizer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-2-Projection"><span class="nav-number">4.2.</span> <span class="nav-text">3.4.2 Projection</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-3-Frechet-differentiable"><span class="nav-number">4.3.</span> <span class="nav-text">3.4.3 Frechet differentiable</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-5-Convex-Separation"><span class="nav-number">5.</span> <span class="nav-text">3.5 Convex Separation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-6-Cones"><span class="nav-number">6.</span> <span class="nav-text">3.6 Cones</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-7-Normal-Cones"><span class="nav-number">7.</span> <span class="nav-text">3.7 Normal Cones</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-8-Subgradient"><span class="nav-number">8.</span> <span class="nav-text">3.8 Subgradient</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-9-Fenchel-conjugate"><span class="nav-number">9.</span> <span class="nav-text">3.9 Fenchel conjugate</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-10-Semismoothness"><span class="nav-number">10.</span> <span class="nav-text">3.10 Semismoothness</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-11-Moreau-Yosida-regularization-and-proximal"><span class="nav-number">11.</span> <span class="nav-text">3.11 Moreau-Yosida regularization and proximal</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-12-Directional-Derivatives-of-matrix-valued-function"><span class="nav-number">12.</span> <span class="nav-text">3.12 Directional Derivatives of matrix-valued function</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Xiaoxue Zhang"
+      src="/images/photo_blue.jpg">
+  <p class="site-author-name" itemprop="name">Xiaoxue Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Zhang-Xiaoxue" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Zhang-Xiaoxue" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:xiaoxuezhang@u.nus.edu" title="E-Mail → mailto:xiaoxuezhang@u.nus.edu" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.linkedin.com/in/xiaoxue-zhang-5233b611a/" title="https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;xiaoxue-zhang-5233b611a&#x2F;" rel="noopener" target="_blank">Linkedin</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.zhihu.com/people/lisnol" title="https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;lisnol" rel="noopener" target="_blank">知乎</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/Zhang-Xiaoxue" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zhang-xiaoxue.github.io/2021/08/16/Nonlinear%20Optimization/3_Basic%20Convex%20Analysis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/photo_blue.jpg">
+      <meta itemprop="name" content="Xiaoxue Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Xiaoxue Zhang - NUS">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          3. Convex Analysis
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-08-16 12:00:00 / Modified: 15:00:44" itemprop="dateCreated datePublished" datetime="2021-08-16T12:00:00+08:00">2021-08-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Nonlinear-Optimization/" itemprop="url" rel="index"><span itemprop="name">Nonlinear Optimization</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="3-1-Convex-set"><a href="#3-1-Convex-set" class="headerlink" title="3.1 Convex set"></a>3.1 Convex set</h1><p>To prove a given set C is convex</p>
+<ol>
+<li>For any two arbitrary points $\mathbb x, \mathbb y$ in $C$, and any $λ ∈ [0, 1]$.  Method is to argue that $λx + (1 − λ)y ∈ C$</li>
+<li>If $C_1, C_2, \cdots, C_m$ are convex set, then $C= \cap_{i=1}^m C_i$ is also convex.</li>
+</ol>
+<blockquote>
+<p>for any $m\times n$ matrix $\mathbf A$ and an m-column vector $\mathbb b$, the polyhedron or polyhedral set ${\mathbb x\in\mathbb R^n | \mathbf A \mathbb x \leq \mathbb b}$ is convex.</p>
+</blockquote>
+<ol start="3">
+<li>Suppose $D\subset \mathbb R^n$ is convex, If $f:D\rightarrow \mathbb R$ is convex, then for any $\alpha \in \mathbb R$, the set $S_\alpha = { \mathbb x \in D | f(\mathbb x) \le \alpha}$ is convex. </li>
+<li>Epigraph of $f$ : $E_f={[\mathbb x; \alpha] ; \mathbb x\in D, \alpha \in \mathbb R, f(\mathbb x) \leq \alpha }$ is convex set $\iff$ $f$ is convex function.</li>
+</ol>
+<h1 id="3-2-Convex-function"><a href="#3-2-Convex-function" class="headerlink" title="3.2 Convex function"></a>3.2 Convex function</h1><h2 id="3-2-1-Prove-convexity-of-a-function"><a href="#3-2-1-Prove-convexity-of-a-function" class="headerlink" title="3.2.1 Prove convexity of a function"></a>3.2.1 Prove convexity of a function</h2><ul>
+<li><p>Definition: </p>
+<ul>
+<li><p>$f(\lambda \mathbb x + (1-\lambda)\mathbb y) \leq \lambda f(\mathbb x) + (1-\lambda) f(\mathbb y)$.</p>
+</li>
+<li><p>if $f_1, f_2 : D\rightarrow \mathbb R$ are convex functions on a convex set $D \subset \mathbb R^n$, then $f_1 + f_2$ is convex. $\alpha f_1$ is convex if $\alpha &gt;0$.</p>
+</li>
+<li><p>Let $f_1, f_2, \cdots, f_k: D\rightarrow \mathbb R$ be convex on a convex set $D \subset \mathbb R^n$, then if $\alpha_j \ge 0, \forall j$,  $f(\mathbb x)=\sum\limits_{j=1}^k \alpha_j f_j(\mathbb x)$ is convex, </p>
+</li>
+<li><p>$h: D\rightarrow \mathbb R$ is convex. $g:\mathcal X \rightarrow \mathbb R$ is nondecreasing convex function. The composite function $f=g \circ h$ is convex.</p>
+<blockquote>
+<p>Objective function $f(\mathbb x) = \frac{1}{2} | A\mathbb x-\mathbb b |^2 + \lambda |\mathbb x |_1$ for sparse regression problem is convex.</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>Epigraph:</p>
+<ul>
+<li>Epigraph of $f$ : $E_f={[\mathbb x; \alpha] ; \mathbb x\in D, \alpha \in \mathbb R, f(\mathbb x) \leq \alpha }$ is convex set $\iff$ $f$ is convex function.</li>
+</ul>
+</li>
+<li><p><strong>Jensen’s inequality:</strong> </p>
+<ul>
+<li>$f$ is convex function on convex set $S$, let $\mathbb x = \sum\limits_{j=1}^k \lambda_j \mathbb x^{(j)}$, where $\sum\limits_{j=1}^k \lambda_j =1, \lambda_j \ge 0$. Then<br>$$<br>f(\mathbb x) \leq \sum\limits_{j=1}^k \lambda_kf(\mathbb x^{(j)})<br>$$<br>When function is twice differentiable, some ways to check convexity.</li>
+</ul>
+</li>
+<li><p><em>Tangent plane characterization:</em></p>
+<ul>
+<li><p>$f(\mathbb x)$ has continuous first partial derivatives on an open convex set $S$. Then the function $f$ is convex $\iff$<br>$$<br>\underbrace{f(\mathbb x) + \nabla f(\mathbb x)^T (\mathbb y - \mathbb x)}_{\text{tangent plane}} \leq f(\mathbb y)<br>$$<br>means that the tangent plane is below the surface for a convex function.</p>
+</li>
+<li><p>$f(\mathbb x)$ is differentiable on the open convex subset $S$. Then $f$ is convex on $S$ $\iff$<br>$$<br>\text{(monotone gradient condition)} \quad \langle \nabla f(\mathbb y)-\nabla f(\mathbb x), \mathbb y - \mathbb x \rangle \ge 0, \quad \forall \mathbb x, \mathbb y \in S<br>$$</p>
+<blockquote>
+<p>(方向基本相同，在0-90之间)</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>Test for convexity of a differentiable function (second partial derivatives)</p>
+<ul>
+<li><p>$f(\mathbb x)$ has continuous second partial derivatives on an open convex set $D$ in $\mathbb R^n$. </p>
+<ol>
+<li><p>$f$ is convex on $D$ $\iff$ the Hessian matrix $H_f(\mathbb x)$ is positive semidefinite </p>
+</li>
+<li><p>If $H_f(\mathbb x)$ is positive definite, then $f$ is strictly convex.</p>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-2-2-Equivalent-statement-of-convex-function"><a href="#3-2-2-Equivalent-statement-of-convex-function" class="headerlink" title="3.2.2 Equivalent statement of convex function"></a>3.2.2 Equivalent statement of convex function</h2><p>(i) $f(\mathbb{y}) \ge f(\mathbb{x})+\triangledown f(\mathbb{x})^T(\mathbb{y}-\mathbb{x}) $ Tangent plane characterization</p>
+<p>(ii) $\langle \triangledown f(\mathbf{y}) - \triangledown f(\mathbf{x}), \mathbf{y}-\mathbf{x} \rangle \ge 0, \forall  \mathbf{x}, \mathbf{y} \in S \quad \text{monotone gradient condition}$</p>
+<p>(iv) $f (λx + (1 − λ)y) ≤ λf (x) + (1 − λ)f (y)$ convex</p>
+<h2 id="3-2-3-Strongly-Convex-Function"><a href="#3-2-3-Strongly-Convex-Function" class="headerlink" title="3.2.3 Strongly Convex Function"></a>3.2.3 Strongly Convex Function</h2><p>Strong Convex Function:<br>$$<br>f(\lambda \mathbf{x}+(1-\lambda) \mathbf{y}) \leq \lambda f(\mathbf{x})+(1-\lambda) f(\mathbf{y})-\frac{c}{2} \lambda(1-\lambda)|\mathbf{x}-\mathbf{y}|^{2}<br>$$<br>Theorem 3.3:</p>
+<p>Suppose $f : D → R$ is a differentiable function. Then following statements are equivalent:</p>
+<p>(i) ${f(\mathbf{y}) \geq f(\mathbf{x})+\langle\nabla f(\mathbf{x}), \mathbf{y}-\mathbf{x}\rangle+\frac{c}{2}|\mathbf{y}-\mathbf{x}|^{2}, \quad \forall \mathbf{x}, \mathbf{y} \in D}$</p>
+<p>(ii) ${g(\mathbf{x})=f(\mathbf{x})-\frac{c}{2}|\mathbf{x}|^{2}}$ is convex</p>
+<p>(iii) ${\langle\nabla f(\mathbf{x})-\nabla f(\mathbf{y}), \mathbf{x}-\mathbf{y}\rangle \geq c|\mathbf{x}-\mathbf{y}|^{2}}$</p>
+<p>(iv) $f$ is strongly convex.</p>
+<blockquote>
+<p>Proof:</p>
+<p>( (i) $\iff$ (ii) )</p>
+<p>“ $\Longleftarrow$ “ </p>
+<p>If ${g(\mathbf{x})=f(\mathbf{x})-\frac{c}{2}|\mathbf{x}|^{2}}$ is convex, then we have<br>$$<br>g(\mathbb y) \geq g(\mathbb x) + \nabla g(\mathbb x)(\mathbb y - \mathbb x)\<br>\Rightarrow f(\mathbb y) -\frac{c}{2}|\mathbb{y}|^{2} \ge f(\mathbb{x})-\frac{c}{2}|\mathbb{x}|^{2} + (\nabla f(\mathbb x) - c \mathbb x)^T (\mathbb y - \mathbb x)\<br>\Rightarrow f(\mathbb y) \ge f(\mathbb x) + \nabla f(\mathbb x)^T(\mathbb y - \mathbb x) - \frac{c}{2}|\mathbb{x}|^{2} - c\mathbb x^T(\mathbb y - \mathbb x) + \frac{c}{2}|\mathbb{y}|^{2} \<br>\Rightarrow f(\mathbb y) \ge f(\mathbb x) + \nabla f(\mathbb x)^T(\mathbb y - \mathbb x) - \frac{c}{2} (|\mathbb{y}|^{2} - 2\mathbb x^T \mathbb y + |\mathbb{x}|^{2})\<br>\Rightarrow f(\mathbb y) \ge f(\mathbb x) + \langle\nabla f(\mathbf{x}), \mathbf{y}-\mathbf{x}\rangle+\frac{c}{2}|\mathbf{y}-\mathbf{x}|^{2}<br>$$</p>
+<p>“ $\Longrightarrow$ “</p>
+<p>can easily proved by using tangent plane characterization.</p>
+<p>( (ii) $\iff$ (iii) )</p>
+<p>prove by monotone gradient condition</p>
+<p>( (ii) $\iff$ (iv) )</p>
+<p>proved by definition of convexicity</p>
+</blockquote>
+<p>Let $\mathbb{x}^*$ be minimizer of $f$ over $D$<br>$$<br>\begin{array}{l}{\text { (a) } \frac{1}{2 c}|\nabla f(\mathrm{x})|^{2} \geq f(\mathrm{x})-f\left(\mathrm{x}^{*}\right)} \ {\text { (b) }|\nabla f(\mathrm{x})-\nabla f(\mathrm{y})| \geq c|\mathrm{x}-\mathrm{y}|} \ {\text { (c) } f(\mathrm{y}) \leq f(\mathrm{x})+\langle\nabla f(\mathrm{x}), \mathrm{y}-\mathrm{x}\rangle+\frac{1}{2 c}|\nabla f(\mathrm{y})-\nabla f(\mathrm{x})|^{2}} \ {\text { (d) }\langle\nabla f(\mathrm{x})-\nabla f(\mathrm{y}), \mathrm{x}-\mathrm{y}\rangle \leq \frac{1}{c}|\nabla f(\mathrm{x})-\nabla f(\mathrm{y})|^{2}}\end{array}<br>$$</p>
+<blockquote>
+<p>Proof.</p>
+<p>(a)</p>
+<p>We already have $f(\mathbf{y}) \geq f(\mathbf{x})+\langle\nabla f(\mathbf{x}), \mathbf{y}-\mathbf{x}\rangle+\frac{c}{2}|\mathbf{y}-\mathbf{x}|^{2}$.  For a fixed $\mathbb x$, we can obtain the minimum value of the RHS, which is $f(\mathbf{x})+\langle\nabla f(\mathbf{x}), \mathbf{y}-\mathbf{x}\rangle+\frac{c}{2}|\mathbf{y}-\mathbf{x}|^{2} \ge f(\mathbb x) - \frac{1}{2c} |\nabla f(\mathbb x)|^2$. Then, we have $f(\mathbf{y}) \ge f(\mathbb x) - \frac{1}{2c} |\nabla f(\mathbb x)|^2$. Let $\mathbb y = \mathbb x^*$, we can have (a). Q.E.D.</p>
+<p>This means when the gradient value is smaller, the current function value is getting closer to the optimal value.</p>
+<p>(b)</p>
+<p>follows from the (iii) by Cauchy-Schwartz inequality</p>
+<p>(c)</p>
+<p>Define a function $\phi_\mathbb x (\mathbb z) = f(\mathbb z) - \langle \nabla f(\mathbb x), \mathbb z \rangle$. FInd the minimizer of this function as </p>
+<p>$\nabla \phi_\mathbb x(\mathbb z) = \nabla f(\mathbb z) - \nabla f(\mathbb x) = 0 \Longrightarrow \mathbb z^* = x$. Then, we can use the (a), have $\frac{1}{2 c}|\nabla f(\mathrm{y}) - \nabla f(\mathrm{x})|^{2} \geq f(\mathrm{y}) - \langle\nabla f(\mathbb x), \mathbb x - \mathbb y \rangle - f\left(\mathrm{x}\right)$ .</p>
+<p>(d)</p>
+<p>interchanging $\mathbb x$ and $\mathbb y$ in (c), we get<br>$$<br>f(\mathrm{x}) \leq f(\mathrm{y})+\langle\nabla f(\mathrm{y}), \mathrm{x}-\mathrm{y}\rangle+\frac{1}{2 c}|\nabla f(\mathrm{x})-\nabla f(\mathrm{y})|^{2}<br>$$<br>Combining the two inequalities, we can get (d).  Q.E.D.</p>
+</blockquote>
+<h1 id="3-3-Unconstrained-Programming"><a href="#3-3-Unconstrained-Programming" class="headerlink" title="3.3 Unconstrained Programming"></a>3.3 Unconstrained Programming</h1><h2 id="3-3-1-Unconstrained-Convex-Programming"><a href="#3-3-1-Unconstrained-Convex-Programming" class="headerlink" title="3.3.1 Unconstrained Convex Programming"></a>3.3.1 Unconstrained Convex Programming</h2><p>For a convex programming, a local minimizer is also a global minimizer. </p>
+<p>Suppose $\mathbb x^*$ is a stationary pointm i.e. $\nabla f(\mathbb x^*)=0$. For any $\mathbb y\in D$, we have $f(\mathbb y) \ge f(\mathbb x^*)+\nabla f(\mathbb x^*)^T(\mathbb y - \mathbb x^*) = f(\mathbb x^*)$. Hence, $\mathbb x^*$ us a global minimizer.</p>
+<h2 id="3-3-2-Unconstrained-Convex-Quadratic-Programming"><a href="#3-3-2-Unconstrained-Convex-Quadratic-Programming" class="headerlink" title="3.3.2 Unconstrained Convex Quadratic Programming"></a>3.3.2 Unconstrained Convex Quadratic Programming</h2><p>Let $\mathbf Q$ be an $n\times n$ <u>symmetric</u> matrix and $\mathbf c \in \mathbb R^n$. The quadratic function<br>$$<br>q(\mathbb{x})=\frac{1}{2} \mathbb{x}^T \mathbf{Q} \mathbb{x} + \mathbb{c}^T \mathbb{x}<br>$$</p>
+<p>is a convex function $\iff$ $\mathbf{Q}$ is positive semidefinite.</p>
+<p><u>***global minimizer <em><em><em></u> $\mathbb{x}^</em>$ $\iff$  $\mathbf{Q}\mathbb{x}^</em>=-\mathbb{c}$.   if $\mathbf{Q}^{-1}$ exists, $\mathbb{x}^</em>=-\mathbf{Q}^{-1}\mathbb{c}$.</p>
+<blockquote>
+<p>==Exercise:== How to prove it? </p>
+<p>Show that<br>$$<br>\inf_{\mathbb x\in \mathbb R^n} \left{ \frac{1}{2}\langle\mathbb x, \mathbf Q\mathbb x \rangle - \langle \mathbf c, \mathbb x \rangle \right} =<br>\begin{cases}<br>-\infty \quad &amp; \text{if } c\notin \operatorname{Range}(\mathbf Q) \<br>\frac{1}{2} \langle \mathbb w, \mathbf Q \mathbb w \rangle \quad &amp; \text{if } \mathbb c=\mathbf Q \mathbb w<br>\end{cases}<br>$$<br>The latter is achieved for any $\mathbb x$ s.t.<br>$$<br>\mathbf Q (\mathbb x - \mathbb w) = 0 \iff \mathbb x \in \mathbb w + \operatorname{Null}(\mathbf Q)<br>$$</p>
+</blockquote>
+<h1 id="3-4-Constrained-Convex-Programming"><a href="#3-4-Constrained-Convex-Programming" class="headerlink" title="3.4 Constrained Convex Programming"></a>3.4 Constrained Convex Programming</h1><h2 id="3-4-1-Minimizer"><a href="#3-4-1-Minimizer" class="headerlink" title="3.4.1 Minimizer"></a>3.4.1 Minimizer</h2><p><strong>Theorem 3.7.</strong> </p>
+<p>Let $f : C → R$ be a convex and continuously differentiable function on the convex set $C ⊂ \mathcal{E}$. Consider the constrained minimization problem<br>$$<br>\min { f(x) \vert c\in C}<br>$$<br>Then, $x^<em>\in C$ is a global minimizer $\iff$<br>$$<br>\langle \triangledown f(x^</em>), x-x^* \rangle &gt; 0, \forall x \in C<br>$$<br>Using <strong>Normal cone</strong> to rephrase it, </p>
+<p>​        $x^*$ is a global minimizer of $\min { f(x) \vert c\in C}$ $\iff$  $-\triangledown f(x^*) \in N_C (x^*)$</p>
+<h2 id="3-4-2-Projection"><a href="#3-4-2-Projection" class="headerlink" title="3.4.2 Projection"></a>3.4.2 Projection</h2><p><strong>Theorem 3.8. (Projection Theorem)</strong></p>
+<p> Let $C$ be a closed convex set in $\mathcal{E}$. </p>
+<p>(a) For every $z ∈ \mathcal{E}$, there exists a unique minimizer (denoted as $Π_C(z)$ and called as the <strong>projection</strong> of $z$ onto $C$) of<br>$$<br>\min { \frac{1}{2} |x-z|^2 \vert x\in C }<br>$$<br>(b) $x^* := \Pi_C (z)$ is projection of $z$ onto $C$ iff<br>$$<br>\langle z-x^*, x-x^* \rangle \leq 0, \forall x\in C<br>$$<br>(c) <u>[firmly non-expensive property</u>] For any $z, w \in \mathcal{E}$<br>$$<br>| \Pi_C(z) - \Pi_C(w) |^2 \leq \langle z-w, \Pi_C(z) - \Pi_C(w) \rangle<br>$$<br>Hence $| \Pi_C(z) - \Pi_C(w) |^2 \leq |z-w |$, i.e. $\Pi_C(\cdot)$ is Lipschitz continuous with modulus 1.</p>
+<blockquote>
+<p>Proof. </p>
+<p>(a).</p>
+<p>Let $\bar x \in C$. set $S = {x\in C| f(x)\le f(\bar x) }$. Obviously, the set $S$ is closed and bounded. By using Weierstrass’s Theorem, there exists $x^* \in S$ such that $f(x^*) \le f(x), \quad \forall x\in S$. If $\bar x \in S$, then we can also have $f(x^*)\le f(\bar x)$. </p>
+<p>Besides, we can also have<br>$$<br>f(x)&gt;f(\bar x)\ge f(x^*), \quad \forall x\in C\backslash S<br>$$<br>Thus we have shown that $f(x^*)\le f(x)$ for all $x\in S \cup (C\backslash S) = C$. </p>
+<p>Since the function $f(x)= \frac{1}{2} |x-z|^2$ is strictly convex on $C$, the minimizer is unique. </p>
+<p>(b).</p>
+<p>Based on Theorem 3.7, we have that<br>$$<br>0\le \langle f(x^*), x-x^* \rangle = \langle x^*-z, x-x^* \rangle \quad \forall x\in C<br>$$<br>(c).</p>
+<p>Based on (b), $w,z \in \mathcal E$, we hanve<br>$$<br>\langle z-\Pi_C(z), \Pi_C(w)-\Pi_C(z)\rangle \le 0 \<br>\langle w-\Pi_C(w), \Pi_C(z)-\Pi_C(w)\rangle \le 0 \<br>$$<br>superposition the two inequalities, we can have (c)</p>
+</blockquote>
+<p>Remark.</p>
+<p>If $C$ is linear subspace of $\mathbb R^n$, then $z-x^*\perp C$. This means<br>$$<br>z = \Pi_C(z) + (z-\Pi_C(z)), \quad \text{and } \quad \langle z-\Pi_C(z), \Pi_C(z)\rangle = 0<br>$$<br>More generally, If $C$ is a closed convex cone, we have<br>$$<br>\langle z-\Pi_C(z), \Pi_C(z)\rangle = 0<br>$$<br><img src="https://tva1.sinaimg.cn/large/006y8mN6gy1g8bm0hlukmj31ac0quadl.jpg" style="zoom: 40%"></p>
+<blockquote>
+<p>Example:</p>
+<ol>
+<li><p>$C = \mathbb R_+^n$. For any $z\in \mathbb R^n$, $\Pi_C(z)=\max {z,0}$.</p>
+<p>Proof. </p>
+<p>$\Pi_C(z)$ is minimizer of $\min { \frac{1}{2} |x-z|^2 | x\in \mathbb R_+^n }$. We have<br>$$<br>|x-z|^2=(x_1^2-2z_1x_1 + z_1^2) + \cdots + (x_n^2 -2z_nx_n + z_n^2)<br>$$<br>Each part should be minimized. So, we have $\Pi_C(z)=\max {z,0}$.</p>
+</li>
+<li><p>$C={ x\in \mathbb R^n | \sum_{i=1}^n x_i = 1, x \ge 0 }$ is a simplex. Suppose $z\in \mathbb R^n$ satisfies the condition that $z_1 \ge z_2 \ge \cdots \ge z_n$. Let $k$ be the maximum index in the set ${ 1\leq j \leq n | z_j + \frac{1}{j} (1-\sum_{i=1}^jz_i)&gt;0 }$. Set<br>$$<br>\lambda = z_k + \frac{1}{k}(1-\sum_{i=1}^kz_i)<br>$$<br>Then the projection onto the simplex $C$ is given by<br>$$<br>\Pi_C(z) = \max {z+\lambda e, 0} \quad (e \text{ is the vector of all ones})<br>$$<br>Proof. </p>
+<p>In the later Chaper. Also in Assignment 1.</p>
+</li>
+<li><p>$C=\mathbb S_+^n$, the cone of $n\times n$ symmetric positive semidefinite matrices. For a given $A\in \mathbb S^n$, let the eigenvalue decomposition of $A$ be $A=U \operatorname{diag}(d) U^T$. Then<br>$$<br>\Pi_C(A) = U \operatorname{diag}(\max{d,0}) U^T<br>$$<br>Proof.</p>
+<p>Note that $U$ is orthogonal. $|UY|_F = |YU|_F$ for any $Y\in \mathbb S^n$.<br>$$<br>\begin{aligned}<br>\min\left{ \frac{1}{2} |X-A|<em>F^2 \vert X\in \mathbb S</em>+^n \right} &amp;= \min\left{ \frac{1}{2} |U(U^TXU-\operatorname{diag}(d))U^T|<em>F^2 \vert X\in \mathbb S</em>+^n \right}\<br>&amp;= \min\left{ \frac{1}{2} |\bar X-\operatorname{diag}(d)|<em>F^2 \vert \bar X\in \mathbb S</em>+^n \right} (\text{ where} \bar X = U^TXU)\<br>&amp;= \min\left{ \frac{1}{2} |\operatorname{diag}(x)-\operatorname{diag}(d)|_F^2 \vert x\ge0 \right} (\text{ off-diagonal elements of optimal} \bar X \text{ should be 0, so } \bar X= \operatorname{diag}(x))\<br>&amp;= \min\left{ \frac{1}{2} |x-d|_F^2 \vert x\ge0 \right}\<br>\end{aligned}<br>$$<br>Then, we have $x^* = \max{d,0}$</p>
+<p>Optimal $\bar X^* = \operatorname{diag}(x^*) = \operatorname{diag}(\max{d,0})$. Hence optimal $X^*=U\bar X^* U^T = U\operatorname{diag}(\max{d,0}) U^T$.</p>
+</li>
+</ol>
+</blockquote>
+<h2 id="3-4-3-Frechet-differentiable"><a href="#3-4-3-Frechet-differentiable" class="headerlink" title="3.4.3 Frechet differentiable"></a>3.4.3 Frechet differentiable</h2><p>Let $\mathcal E_1,\mathcal E_2$ be two finite-dimensional real Euclidean spaces. A function $f : \mathcal E_1 → \mathcal E_2$ is said to be <strong>Frechet differentiable</strong> at $x ∈ \mathcal E_1$ if there exists a linear map $f′(x): \mathcal E_1 →\mathcal E_2$ such that for any $h→0$,<br>$$<br>f(x + h) − f(x) − f′(x)[h] = o(|h|).<br>$$<br>This means<br>$$<br>\lim_{h\rightarrow 0 } \frac{f(x+h)-f(x)}{h} = f’(x)\<br>\iff \lim_{h\rightarrow 0 } \frac{f(x+h)-f(x) - f’(x)h}{h} = 0\<br>\iff f(x + h) − f(x) − f′(x)[h] = o(|h|)<br>$$<br><strong>Proposition</strong></p>
+<p>Let $C$ be a nonempty closed convex set in $\mathcal E$. For any $x$, let $\theta (x) = \frac{1}{2} | x-\Pi_C(x)|^2$. The $\theta(\cdot)$ is a continuously differentiable convex function and<br>$$<br>\nabla \theta(x) = x-\Pi_C(x)<br>$$</p>
+<h1 id="3-5-Convex-Separation"><a href="#3-5-Convex-Separation" class="headerlink" title="3.5 Convex Separation"></a>3.5 Convex Separation</h1><p><strong>Definition :</strong></p>
+<ol>
+<li><p><strong>affine hull:</strong> $\operatorname{aff}(S)$<br>$$<br>\operatorname{aff}(S) = \left{ \sum_{i=1}^k \alpha_ix_i \vert \sum_{i=1}^k \alpha_i=1, x_i\in S, \alpha_i\in \mathbb R, k&gt;0 \right}<br>$$</p>
+</li>
+<li><p><strong>convex hull</strong>: $\operatorname{conv} (S)$:<br>$$<br>\operatorname{conv}(S)=\left{\sum_{i=1}^{k} \alpha_{i} x_{i} | \sum_{i=1}^{k} \alpha_{i}=1, x_{i} \in S, \alpha_{i} \geq 0, k&gt;0\right}<br>$$</p>
+</li>
+<li><p><strong>relative interior point</strong>: $\operatorname{ri}(S)$:<br>$$<br>\operatorname{ri} S=\left{x \in \operatorname{aff} S | \exists \varepsilon&gt;0, B_{\varepsilon}(x) \cap \operatorname{aff} S \subset S\right}<br>$$</p>
+</li>
+</ol>
+<blockquote>
+<p>Example:</p>
+<ul>
+<li>The affine hull of a singleton (a set made of one single element) is the singleton itself. </li>
+<li>The affine hull of a set of two different points is the line through them. </li>
+<li>The affine hull of a set of three points not on one line is the plane going through them. </li>
+<li>The affine hull of a set of four points not in a plane in $\mathbb R^3$ is the entire space $\mathbb R^3$. </li>
+<li>$\operatorname{aff}(\mathbb R_+^n) = \mathbb R^n$. </li>
+</ul>
+</blockquote>
+<p><strong>Proposition:</strong> </p>
+<p>$C$ Is a subset of Euclidean space $\mathcal E$. If $C$ is convex, then<br>$$<br>\operatorname{aff}(\mathrm{ri} C)=\operatorname{aff} C=\operatorname{aff}(\mathrm{cl}(C))<br>$$<br>where $\operatorname{cl}(C)$ us the closure.</p>
+<p><u><em><strong>Any point outside a closed convex set can be separated from a set with a hyperplane.</strong></em></u></p>
+<p><strong>Proposition:</strong></p>
+<p>Let $\Omega\in \mathbb R^n$ be a nonempty closed convex set and let $\bar x \notin \Omega$. Then exists a nonzero vector $v\in \Omega $  such that<br>$$<br>\sup { \langle v,x \rangle | x\in\Omega } &lt; \langle v, \bar x \rangle<br>$$</p>
+<blockquote>
+<p>In fact, $v=\bar x - \Pi_\Omega(\bar x)$. </p>
+</blockquote>
+<p><strong>Proposition:</strong> </p>
+<p>Let $Ω_1$ and $Ω_2$ be nonempty, closed, convex subsets of $\mathbb R^n$ with $Ω_1 ∩ Ω_2 = ∅$. If $Ω_1$ or $Ω_2$ is bounded, then there is a nonzero element $v ∈ \mathbb R^n$ such that<br>$$<br>\sup { \langle v,x \rangle | x\in\Omega_1 } &lt; \inf { \langle v,y \rangle | y\in\Omega_2 }<br>$$<br><u><em><strong>Separation property in subspace of $\mathbb R^n$, instead of in $\mathbb R^n$.</strong></em></u></p>
+<p>$L$ is subspace of $\mathbb R^n$ and let $\Omega \subset L$ be nonempty convex set with $\bar x\in L$ and $\bar x \notin \bar \Omega$ (the closure of $\Omega$). Then there exists a nonzero $v\in L$ such that<br>$$<br>\sup { \langle v,x \rangle | x\in \Omega} &lt; \langle v, \bar x \rangle<br>$$<br><strong>Definition (properly separated):</strong></p>
+<p>We say that two nonempty convex sets $\Omega_1$ and $\Omega_2$ can be <strong>properly separated</strong> if there exists a nonzero vector $v \in \mathbb R^n$ such that<br>$$<br>\begin{array}{rcl}<br>\sup \left{ \langle v, x\rangle | x \in \Omega_{1} \right} &amp;\leq&amp;  \ \inf \left{ \langle v, y\rangle | y \in \Omega_{2}\right} \<br>\inf \left{ \langle v, x\rangle | x \in \Omega_{1}\right } &amp;  &lt; &amp; \sup \left{ \langle v, y\rangle | y \in \Omega_{2}\right}.<br>\end{array}<br>$$<br><strong>Proposition:</strong></p>
+<p>$\Omega$ is a nonempty convex set. Then $0\notin \operatorname{ri}(\Omega)$ $\iff$ the set $\Omega$ and ${0}$ can be properly separated, i.e., there exists a nonzero $v\in \mathbb R^n$ such that<br>$$<br>\begin{array}{l}{\qquad \begin{array}{c}{\sup \left{\langle v, x\rangle | x \in \Omega \right} \leq 0 } \<br>{\inf \left{\langle v, x\rangle | x \in \Omega \right}&lt;0}\end{array}}\end{array}<br>$$<br>Theorem:</p>
+<p>Let $\Omega_1$ and $\Omega_2$ are two nonempty convex subset of $\mathbb R^n$. Then $\Omega_1$ and $\Omega_2$ can be properly separated $\iff$<br>$$<br>\operatorname{ri}(\Omega_1) \cap \operatorname{ri}(\Omega_2) = \empty<br>$$</p>
+<p><strong>Definition (Affine independence):</strong></p>
+<p>Elements $v_0, \cdots, v_m \in \mathbb R^n, m\ge 1$ are affinely independent, if<br>$$<br>\sum_{i=1}^m \lambda_i v_i = 0,\quad \sum_{i=1}^m \lambda_i = 0 \Longrightarrow \lambda_i = 0, \forall i=0, \cdots,m<br>$$</p>
+<blockquote>
+<p>Like linear independence but without the restriction that the subset of lower dimension the points lies in contains the origin. So, three points are affinely independent if the smallest flat thing containing them is a plane. They are affinely dependent if they lie on a line (or are the same point)</p>
+</blockquote>
+<p><strong>Proposition</strong></p>
+<ol>
+<li>Set $\Omega$ is affine $\iff$ $\Omega$ contains all affine combinations of its elements.</li>
+<li>$\Omega_1, \Omega_2$ are affine set, $\Longrightarrow$ $\Omega_1 \times \Omega_2$ is affine set.</li>
+<li>Sum and scalar product of an affine set is still affine</li>
+<li>Set $\Omega$ is linear subspace of $\mathbb R^n$  $\iff$  $\Omega$ is an affine set containing the origin.</li>
+</ol>
+<h1 id="3-6-Cones"><a href="#3-6-Cones" class="headerlink" title="3.6 Cones"></a>3.6 Cones</h1><p>Consider $p : \mathcal E → (−∞, ∞]$.<br> (a) $p$ is said to be a <strong>proper function</strong> if $p(x)$ is not identically equal to $∞$. </p>
+<p>(b) $p$ is said to be <strong>closed</strong> if its epi-graph $\operatorname{epi}(p) := {(α, x) ∈ \mathbb R×\mathcal E | p(x) &lt; α}$ is a closed subset of $\mathbb R×\mathcal E$. </p>
+<p>(c) The domain of $p$ is defined to be the set $\operatorname{dom}(p)={x∈\mathbb R^n |f(x)&lt;∞}$. </p>
+<p><strong>[Linearity space] :</strong></p>
+<p>$C$ is a closed convex cone. The linearity space of $C$ is the set<br>$$<br>\operatorname{lin}(C) = C \cap (-C)<br>$$<br>It’s the largest linear subspace of $\mathcal E$ contained in $C$.</p>
+<p><strong>[Dual and polar cone] :</strong> </p>
+<p>Dual cone : $S^* = { y\in S | \langle x,y \rangle \ge 0, \forall x\in S }$</p>
+<p>Polar cone: $S^\circ = -S^*$</p>
+<p>if $C^*=C$, the it’s self-dual.</p>
+<img src="https://tva1.sinaimg.cn/large/006y8mN6gy1g8bxmx5c3yj30ty0myjuf.jpg" style="zoom: 40%">
+
+<p><strong>Proposition:</strong></p>
+<p>If $C$ be a cone in $\mathcal E$.</p>
+<p>(a). $C^*$ is a closed convex cone.</p>
+<p>(b). If $C$ is a nonempty closed convex cone, then $(C^*)^* = C$</p>
+<blockquote>
+<p>Example.</p>
+<p>If $C = \mathbb R_+^n$. Then</p>
+<ul>
+<li>$\operatorname{aff} (C) = \mathbb R^n$</li>
+<li>$\operatorname{lin} (C) = {0}$</li>
+<li>$C^* = C$</li>
+</ul>
+</blockquote>
+<h1 id="3-7-Normal-Cones"><a href="#3-7-Normal-Cones" class="headerlink" title="3.7 Normal Cones"></a>3.7 Normal Cones</h1><p>Normal cone of $C$ at $bar x \in C$ is<br>$$<br>N_C(\bar x) = {z\in \mathcal E | \langle z, x-\bar x \rangle \leq 0, \forall x\in C}<br>$$<br><img src="https://tva1.sinaimg.cn/large/006y8mN6gy1g8bzu9dz8xj31aq0dqq6s.jpg" style="zoom: 40%"></p>
+<p>Proposition:</p>
+<p>$C$ is convex set and $\bar x \in C$.</p>
+<ul>
+<li>$N_C(\bar x)$ is a closed and convex cone.</li>
+<li>If $\bar x\in \operatorname{int}(C)$, then $N_C(\bar x) = {0}$</li>
+<li>If $C$ is also a cone, then $N_C(\bar x) \subset C^\circ$.</li>
+</ul>
+<p>Proposition:</p>
+<p>$C\subset \mathbb R^n$ is closed convex set. For any $u,y\in C$,<br>$$<br>u\in N_C(y) \iff y=\Pi_C(y+u)<br>$$<br>Proposition:</p>
+<p>Let $C_1, C_2 \subset \mathbb R^n$ be convex sets such that $\bar x \in C_1 \cap C_2$.</p>
+<ul>
+<li><p>$N_{C_1} (\bar x) + N_{C_2} (\bar x) \subset N_{C_1\cap C_2} (\bar x)$</p>
+</li>
+<li><p>If the relative interior condition holds $\operatorname{ri}(C_1) \cap \operatorname{ri}(C_2) \neq \empty$, then we have<br>$$<br>N_{c_!\cap C_2} (\bar x) \subset N_{C_1}(\bar x) + N_{C_2}(\bar x)<br>$$</p>
+</li>
+</ul>
+<h1 id="3-8-Subgradient"><a href="#3-8-Subgradient" class="headerlink" title="3.8 Subgradient"></a>3.8 Subgradient</h1><p><strong>Definition:</strong></p>
+<p>a vector $v$ is a subgradient of $f$ at $x\in \operatorname{dom}(f)$ if<br>$$<br>f(z) \ge f(x)+\langle v,z-x \rangle, \quad \forall z\in \mathcal E<br>$$<br>denoted as $\part f(x)$. If $x\notin \operatorname{dom}(f)$, $\part f(x) = \empty$.</p>
+<p><strong>Proposition</strong>:</p>
+<p>$\part f$ is a monotone mapping $\longrightarrow$<br>$$<br>\langle v-u, y-x \rangle \ge 0, \quad \forall u\in \part f(x), v\in \part f(y)<br>$$</p>
+<blockquote>
+<p>example:</p>
+<ul>
+<li><p>if $f$ is differentiable at $x$, then $\part f(x) = {\nabla f(x)}$</p>
+</li>
+<li><p>$C$ is a convex subset of $\mathbb R^n$, then<br>$$<br>\part \delta_C(x) = \begin{cases}<br>\empty \quad &amp; \text{if }x\notin C \<br>\mathcal N_C(x)= \text{normal cone of $C$ at $x$} \quad &amp; \text{if }x\in C<br>\end{cases}<br>$$</p>
+</li>
+<li><p>Let $f(x) = | x |_1$ for $x \in \mathbb R^n$. Then, $\part f(0) = { y\in \mathbb R^n | |y|_\infty \le 1 }$</p>
+<p>Proof.</p>
+<p>“$\Longrightarrow$”:</p>
+<p>Assume $|y|_\infty \le 1$. We need to prove<br>$$<br>f(z)\ge f(0) + \langle y, z-0 \rangle, \forall z\in \mathbb R^n \iff |z|_1 \ge \langle y,z \rangle, \forall z\in \mathbb R^n<br>$$</p>
+<p>$$<br>\langle y,z \rangle = y_1z_1 + \cdots + y_nz_n \le |y_1z_1| + \cdots + |y_nz_n| \le |y_1||z_1| + \cdots + |y_n||z_n| \le |z_1|+\cdots+|z_n| = |z|_1.<br>$$</p>
+<p>“$\Longleftarrow$”:</p>
+<p>Assume $|z|_1 \ge \langle y,z \rangle, \forall z\in \mathbb R^n$. We need to prove $|y|_\infty \le 1$. Prove it by contradiction.</p>
+<p>Assume $|y|_\infty &gt;1$. Let $z$ be a set, the $i$th element be $\max(y)$ where $i$ is the index of the max element. Then we have the contradiction.</p>
+</li>
+</ul>
+</blockquote>
+<p><strong>Definition:</strong> </p>
+<p> Let $f:\mathcal E→(−∞,∞]$ be an extended real-valued function. Define epigraph and effective domain as<br>$$<br>\begin{aligned} \mathrm{epi} f &amp;={(x, \mu) \in \mathcal{E} \times \mathbb{R} | f(x) \leq \mu} \ \mathrm{dom} f &amp;={x \in \mathcal{E} | f(x)&lt;\infty} \end{aligned}<br>$$</p>
+<ol>
+<li>$f$ is said to be convex (closed) if $\mathrm{epi} f$ is convex (closed).</li>
+<li>$f$ is said to be proper if $\mathrm{dom} f$ is nonempty.</li>
+<li>$f$ is said to be <u>positively homogeneous</u> if $f(λx) = λf(x)$ for all $x ∈ \mathcal E$ and $λ &gt; 0$. </li>
+<li>Any norm function on $\mathcal E$ is <u>positively homogenous</u>.</li>
+</ol>
+<p><strong>Definition: (Lipschitz)</strong></p>
+<p><strong>Theorem (Rademarcher’s theorem)</strong></p>
+<p>Let $\mathcal O$ be a open subset of $\mathcal E_1$ and $F:\mathcal O→\mathcal E_2$ is locally Lipschitz on $\mathcal O$, then $F$ is almost everywhere Fréchet differentiable on $\mathcal O$. </p>
+<p><strong>Proposition:</strong></p>
+<h1 id="3-9-Fenchel-conjugate"><a href="#3-9-Fenchel-conjugate" class="headerlink" title="3.9 Fenchel conjugate"></a>3.9 Fenchel conjugate</h1><p>Fenchel conjugate:<br>$$<br>f^*(y) = \sup { \langle y,x \rangle - f(x) | x\in \mathcal E }, y\in \mathcal \ E<br>$$<br><em><em>$f^</em>$ is always closed and convex, even if $f$ is non-convex or not closed.</em>* </p>
+<p><strong>Proposition:</strong></p>
+<p>Let $f$ be a closed proper convex function on $\mathcal E$. For any $x\in \mathcal E$, we have the following equivalent conditions for a verctor $x^* \in \mathcal E$:</p>
+<ol>
+<li>$f(x) + f^*(x^*) = \langle x, x^* \rangle$</li>
+<li>$x^* \in \part f(x)$</li>
+<li>$x \in \part f^*(x^*)$</li>
+<li>$\langle x, x^* \rangle - f(x) =\max_{z\in \mathcal E} {\langle z, x^* \rangle - f(z)}$</li>
+<li>$\langle x, x^* \rangle - f^*(x^*) =\max_{z^<em>\in \mathcal E} {\langle x, z^</em> \rangle - f^*(z^*)}$</li>
+</ol>
+<p><strong>Remark</strong>:</p>
+<ul>
+<li>$C$  convex set. $\delta_C^*(x) = \sup { \langle x,y \rangle - \delta_C(y) | y\in \mathcal E } = \sup { \langle x,y \rangle | y\in C }$.</li>
+<li>if $f:\mathcal E \rightarrow (-\infty, \infty]$ is a proper closed convex function, then $(f^*)^* = f$.</li>
+<li>if $f:\mathcal E \rightarrow (-\infty, \infty]$ is a proper closed convex function, positively homogeneous and $f(0)=0$, then $f^* = \delta_C$, where $C=\part f(0)$.</li>
+</ul>
+<p>Example.</p>
+<blockquote>
+<ol>
+<li><p>$f(x) = |x|<em>#$ is any norm function defined on $\mathcal E$ and $| \cdot|</em><em>$ is the dual norm of $| \cdot |<em>#$, i.e., for any $x\in \mathcal S, |x|</em></em> = \sup_{y\in \mathcal E} {\langle x, y \rangle | |y|<em># \le 1 }$. Since $f$ is a postively homogeneous closed convex function, $f^*=\delta_C$ where<br>$$<br>C:= \part f(0) = B</em>* := {x\in \mathcal E | |x|_*\le 1 }.<br>$$</p>
+</li>
+<li><p>$f:\mathbb R^n \rightarrow \mathbb R$ is  defined by $f(x)=\max_{i=1,\cdots,n} x_i$. Then<br>$$<br>S:= \part f(0) = { x\in \mathbb R^n | \sum_{i=1}^n x_i = 1, x\ge 0 }.<br>$$<br>since $f$ is positively homogeneous and convex, $f^* =  \delta_S$. It is known that the projection of $x$ onto $S$ admits a fast algorithm with computational complexity $O(n)$.</p>
+</li>
+<li><p>$g(x) = \max_{i=1,\cdots, n}x_i$ and $f(x)=g(x)+\delta_{\mathbb R_+^n}(x)$. $f(\cdot)$ is a positively homogeneous convex function. Then<br>$$<br>\partial f(0)=\partial g(0)+\partial \delta_{\mathbb{R}<em>{+}^{n}}(0)= S-\mathbb{R}</em>{+}^{n}=\left{x \in \mathbb{R}^{n} | e^{T} x^{+} \leq 1\right}<br>$$<br>where $S:= \part f(0) = { x\in \mathbb R^n | \sum_{i=1}^n x_i = 1, x\ge 0 }$ and $x_{i}^{+}:=\max \left(x_{i}, 0\right)$. Let $x \in \mathbb{R}^{n}$ be given. Define $\ I_{+}=\left{i: x_{i} \geq 0\right}$, $I_{-}=\left{i | x_{i}&lt;0\right}$, and $C=\left{\xi \in \mathbb{R}^{\left|I_{+}\right|} | e^{T} \xi \leq 1, \xi \geq 0\right}$. The projection $\bar{x}=\Pi_{\partial f(0)}(x)$  is given by<br>$$<br>\bar{x}<em>{I</em>{+}}=\Pi_{C}\left(x_{I_{+}}\right)\<br>\bar{x}<em>{I</em>{-}}=x_{I_{-}}<br>$$</p>
+</li>
+</ol>
+</blockquote>
+<h1 id="3-10-Semismoothness"><a href="#3-10-Semismoothness" class="headerlink" title="3.10 Semismoothness"></a>3.10 Semismoothness</h1><p>Definition (semismoothness)</p>
+<p>semismooth: </p>
+<p>strongly semismooth</p>
+<p>Theorem.</p>
+<p>Any convex function is semismooth</p>
+<p>Piecewise smooth functions are semismooth functions.</p>
+<h1 id="3-11-Moreau-Yosida-regularization-and-proximal"><a href="#3-11-Moreau-Yosida-regularization-and-proximal" class="headerlink" title="3.11 Moreau-Yosida regularization and proximal"></a>3.11 Moreau-Yosida regularization and proximal</h1><p>mapping</p>
+<p><strong>Definition:</strong></p>
+<p>$f: \mathcal E \rightarrow (-\infty, \infty]$ is a closed proper convex function.<br>$$<br>\begin{array}{ll}{\text { MY regularization of } f \text { at } x:} &amp; {M_{f}(x)=\min <em>{y \in \mathcal{E}}\left{\phi(y ; x):=f(y)+\frac{1}{2}|y-x|^{2}\right}} \ {\text { Proximal mapping } f \text { at } x:} &amp; {P</em>{f}(x)=\operatorname{argmin}<em>{y \in \mathcal{E}}{\phi(y ; x):=f(y)+\frac{1}{2}|y-x|^{2}}}\end{array}<br>$$<br>We also have<br>$$<br>\begin{array}{ll} {M</em>{\lambda f}(x)=\min <em>{y \in \mathcal{E}}\left{\phi(y ; x):=f(y)+\frac{1}{2\lambda}|y-x|^{2}\right}} \ {P</em>{\lambda f}(x)=\operatorname{argmin}_{y \in \mathcal{E}}{\phi(y ; x):=f(y)+\frac{1}{2\lambda}|y-x|^{2}}}\end{array}<br>$$<br><strong>Proposition</strong> </p>
+<ol>
+<li>$P_f(x)$ exists and it unique.</li>
+<li>$M_f(x)\le f(x)$ for all $x\in \mathcal E$.</li>
+</ol>
+<p><strong>Description:</strong></p>
+<ul>
+<li><p><strong>MY regularization</strong> is also referred to as the <strong>Moreau envelope</strong> of $f$ with parameter $λ$.</p>
+</li>
+<li><p>The Moreau envelope $M_f$ is essentially a <strong>smoothed</strong> or <strong>regularized</strong> form of $f$, it has <strong>domain</strong> $\mathbb R^n$ even when $f$ does not.</p>
+</li>
+<li><p>It is <strong>continuously differentiable</strong>, even when $f$ is not. </p>
+</li>
+<li><p>The sets of minimizer of $f$ and $M_f$ are the same. The problems of minimizing $f$ and $M_f$ are thus equivalent, and the latter is always a smooth optimization problem ($M_f$ may be difficult to evaluate).<br>$$<br>\mathrm {argmin} {f(x)|x\in \mathcal E} = \mathrm{argmin} {M_f(x)|x\in\mathcal E}<br>$$</p>
+</li>
+<li><p>To see why $M_f$ is a smoothed form of $f$, we have<br>$$<br>M_f = (f^* + \frac{1}{2} |\cdot|_2^2)^*<br>$$<br>Because we have $M_f^{**} = M_f$, it can be interpreted as obtaining a smooth approximation to a function by taking its conjugate, adding regulation and then taking the conjugate again. With no regularization, it would simply give the original function. With the quadratic regularization, it gives a smooth approximation.</p>
+</li>
+</ul>
+<p><strong>Basic Operations:</strong></p>
+<p><strong>Theorem (Moreau decomposition)</strong></p>
+<p>Let $f$ be closed proper convex function and $f^*$ be its conjugate. Then<br>$$<br>\begin{aligned}<br>x&amp;=P_f(x)+P_{f^*}(x), \forall x\in \mathcal E \<br>\frac{1}{2} |x|^2 &amp;= M_f(x) + M_{f^*}(x)<br>\end{aligned}<br>$$<br>For any $t&gt;0$,<br>$$<br>\begin{aligned}<br>x&amp;=P_{tf}(x)+tP_{tf^*}(\frac{x}{t}), \forall x\in \mathcal E \<br>\frac{1}{2} |x|^2 &amp;= M_{tf}(x) + tM_{tf^*}(\frac{x}{t})<br>\end{aligned}<br>$$</p>
+<blockquote>
+<p><strong>Examples:</strong></p>
+<ol>
+<li><p>$f(x)=\lambda |x|_1$, $f^*(z)=\delta_C(z)$ where $C=\part f(0)={z\in \mathbb R^n | |z|_\infty \le \lambda }$</p>
+</li>
+<li><p>$C$ is closed and convex. $f=\delta_C$,<br>$$<br>P_{\delta_{C}}(x)=\operatorname{argmin}<em>{y \in \mathcal{E}}\left{\delta</em>{C}(y)+\frac{1}{2}|y-x|\right}=\operatorname{argmin}<em>{y \in C} \frac{1}{2}|y-x|^{2}=\Pi</em>{C}(x)<br>$$<br>Suppose $C=\mathbb S_+^n$, the cone of $n\times n$ symmetric PSD matrices. Then<br>$$<br>\Pi_C(x)=Q\mathrm{diag}d_+ Q^T \quad \text{using spectral decomposition } x=Q \mathrm{diag}dQ^T<br>$$</p>
+</li>
+</ol>
+</blockquote>
+<p><strong>Theorem:</strong></p>
+<ol>
+<li><p>Proximal mapping is nonexpansive, like projection.</p>
+<p>$P_f$ and $Q_f:=I-P_f$ are firmly nonexpansive, i.e.,<br>$$<br>|P_f(x)-P_f(y)|^2 \le \langle P_f(x)-P_f(y), x-y \rangle, \quad \forall x,y\in \mathcal E \<br>|Q_f(x)-Q_f(y)|^2 \le \langle Q_f(x)-Q_f(y), x-y \rangle, \quad \forall x,y\in \mathcal E<br>$$<br>Hence $|P_f(x)-P_f(y)| \le |x-y|$. That is, $P_f$ and $Q_f$ are lipstchitz continuous with modulus 1.</p>
+</li>
+<li><p>$M_f$ is continuously differentiable and $\nabla M_f(x) = x-P_f(x), \forall x\in \mathcal E$.</p>
+</li>
+<li><p>$\nabla M_{tf}(x)=tP_{f^*/t}(x/t)$ and $\nabla M_{f^*/t}(x)=t^{-1}P_{tf}(tx)$</p>
+</li>
+</ol>
+<p><strong>Proposition:</strong></p>
+<p>$\part P_f(x)$ has the following properties:</p>
+<ol>
+<li>any $V\in \part P_f(x)$ is self-adjoint.</li>
+<li>$\langle Vd,d \rangle \ge |Vd|^2$ for any $V\in \part P_f(x)$ and $d\in \mathcal E$.</li>
+</ol>
+<h1 id="3-12-Directional-Derivatives-of-matrix-valued-function"><a href="#3-12-Directional-Derivatives-of-matrix-valued-function" class="headerlink" title="3.12 Directional Derivatives of matrix-valued function"></a>3.12 Directional Derivatives of matrix-valued function</h1><p>​    </p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>Xiaoxue Zhang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://zhang-xiaoxue.github.io/2021/08/16/Nonlinear%20Optimization/3_Basic%20Convex%20Analysis/" title="3. Convex Analysis">https://zhang-xiaoxue.github.io/2021/08/16/Nonlinear Optimization/3_Basic Convex Analysis/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/08/16/Nonlinear%20Optimization/7_Nonlinear%20Conic%20Programming/" rel="prev" title="7. Nonlinear Conic Programming">
+                  <i class="fa fa-chevron-left"></i> 7. Nonlinear Conic Programming
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/08/16/Nonlinear%20Optimization/8_ADMM_DMPC/" rel="next" title="9. ADMM-DMPC">
+                  9. ADMM-DMPC <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+<script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xiaoxue Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div><script color="0,0,255" opacity="0.5" zIndex="-1" count="199" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{&quot;enable&quot;:true,&quot;tags&quot;:&quot;none&quot;,&quot;single_dollars&quot;:true,&quot;cjk_width&quot;:0.9,&quot;normal_width&quot;:0.6,&quot;append_css&quot;:true,&quot;js&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;mathjax@3.1.4&#x2F;es5&#x2F;tex-mml-chtml.js&quot;}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
